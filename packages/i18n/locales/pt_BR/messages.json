@@ -37,9 +37,7 @@
   "nav_back_a11y": {
     "message": "Voltar para o chat"
   },
-  "welcome_title": {
-    "message": "Bem-vindo ao Nanobrowser!"
-  },
+
   "welcome_instruction": {
     "message": "Para começar, por favor, configure suas chaves de API na página de configurações."
   },

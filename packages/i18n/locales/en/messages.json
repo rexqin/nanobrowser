@@ -37,9 +37,7 @@
   "nav_back_a11y": {
     "message": "Back to chat"
   },
-  "welcome_title": {
-    "message": "Welcome to iBB8"
-  },
+
   "welcome_instruction": {
     "message": "To get started, please configure your API keys in the settings page."
   },

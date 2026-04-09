@@ -1010,7 +1010,7 @@ const SidePanel = () => {
               </button>
             ) : (
               <img
-                src="https://login.ibb8.store/static/logo.png"
+                src="/landscape.png"
                 alt="Extension Logo"
                 className="size-6 rounded-sm ring-1 ring-[#fd9b41]/40 shadow-[0_0_14px_rgba(253,155,65,0.35)]"
               />
@@ -1077,8 +1077,8 @@ const SidePanel = () => {
             {hasConfiguredModels === false && (
               <div className={`flex flex-1 items-center justify-center p-8 ${helperTextClassName}`}>
                 <div className="max-w-md text-center">
-                  <img src="/icon-128.png" alt="Nanobrowser Logo" className="mx-auto mb-4 size-12" />
-                  <h3 className={`mb-2 text-lg font-semibold ${''}`}>{t('welcome_title')}</h3>
+                  <img src="/landscape.png" alt="Nanobrowser Logo" className="mx-auto mb-4 h-16" />
+
                   <p className="mb-4">{t('welcome_instruction')}</p>
                   <button
                     onClick={() => chrome.runtime.openOptionsPage()}

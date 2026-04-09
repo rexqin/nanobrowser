@@ -37,9 +37,7 @@
   "nav_back_a11y": {
     "message": "回到對話"
   },
-  "welcome_title": {
-    "message": "歡迎使用 Nanobrowser！"
-  },
+
   "welcome_instruction": {
     "message": "開始使用前，請先完成 API 金鑰的設定。"
   },
