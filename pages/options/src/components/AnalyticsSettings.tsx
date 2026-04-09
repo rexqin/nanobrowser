@@ -74,7 +74,7 @@ export const AnalyticsSettings: React.FC = () => {
           <div className="my-6 rounded-lg border border-[#fd9b41]/20 bg-[#fff4e8] p-4">
             <div className="flex items-center justify-between">
               <label htmlFor="analytics-enabled" className="text-base font-medium text-[#8a490d]">
-                Help improve Nanobrowser
+                Help improve iBB8
               </label>
               <div className="relative inline-block w-12 select-none">
                 <input
@@ -123,7 +123,7 @@ export const AnalyticsSettings: React.FC = () => {
           {!settings.enabled && (
             <div className="rounded-md border border-yellow-200 bg-yellow-50 p-4">
               <p className="text-sm text-yellow-700">
-                Analytics disabled. You can re-enable it anytime to help improve Nanobrowser.
+                Analytics disabled. You can re-enable it anytime to help improve iBB8.
               </p>
             </div>
           )}

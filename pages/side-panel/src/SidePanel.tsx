@@ -1009,11 +1009,7 @@ const SidePanel = () => {
                 {t('nav_back')}
               </button>
             ) : (
-              <img
-                src="/landscape.png"
-                alt="Extension Logo"
-                className="size-6 rounded-sm ring-1 ring-[#fd9b41]/40 shadow-[0_0_14px_rgba(253,155,65,0.35)]"
-              />
+              <img src="/landscape.png" alt="Extension Logo" className="h-6" />
             )}
           </div>
           <div className="header-icons">
@@ -1077,7 +1073,7 @@ const SidePanel = () => {
             {hasConfiguredModels === false && (
               <div className={`flex flex-1 items-center justify-center p-8 ${helperTextClassName}`}>
                 <div className="max-w-md text-center">
-                  <img src="/landscape.png" alt="Nanobrowser Logo" className="mx-auto mb-4 h-16" />
+                  <img src="/landscape.png" alt="iBB8 Logo" className="mx-auto mb-4 h-16" />
 
                   <p className="mb-4">{t('welcome_instruction')}</p>
                   <button
