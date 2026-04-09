@@ -9,6 +9,7 @@ export enum AgentNameEnum {
 // For custom providers, we will create ChatModel instances with the ChatOpenAI class
 export enum ProviderTypeEnum {
   OpenAI = 'openai',
+  Qwen = 'qwen',
   Anthropic = 'anthropic',
   DeepSeek = 'deepseek',
   Gemini = 'gemini',
@@ -34,6 +35,7 @@ export const llmProviderModelNames = {
     'gpt-4.1-mini',
     'gpt-4o',
   ],
+  [ProviderTypeEnum.Qwen]: ['qwen-max-latest', 'qwen-plus-latest', 'qwen-turbo-latest'],
   [ProviderTypeEnum.Anthropic]: ['claude-sonnet-4-5', 'claude-haiku-4-5', 'claude-opus-4-1'],
   [ProviderTypeEnum.DeepSeek]: ['deepseek-chat', 'deepseek-reasoner'],
   [ProviderTypeEnum.Gemini]: ['gemini-3-pro-preview', 'gemini-2.5-flash', 'gemini-2.5-pro'],
@@ -55,6 +57,16 @@ export const llmProviderModelNames = {
 // Default parameters for each agent per provider, for providers not specified, use OpenAI parameters
 export const llmProviderParameters = {
   [ProviderTypeEnum.OpenAI]: {
+    [AgentNameEnum.Planner]: {
+      temperature: 0.7,
+      topP: 0.9,
+    },
+    [AgentNameEnum.Navigator]: {
+      temperature: 0.3,
+      topP: 0.85,
+    },
+  },
+  [ProviderTypeEnum.Qwen]: {
     [AgentNameEnum.Planner]: {
       temperature: 0.7,
       topP: 0.9,

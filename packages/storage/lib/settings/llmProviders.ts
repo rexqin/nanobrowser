@@ -59,6 +59,7 @@ export function getProviderTypeByProviderId(providerId: string): ProviderTypeEnu
   // Handle standard provider types
   switch (providerId) {
     case ProviderTypeEnum.OpenAI:
+    case ProviderTypeEnum.Qwen:
     case ProviderTypeEnum.Anthropic:
     case ProviderTypeEnum.DeepSeek:
     case ProviderTypeEnum.Gemini:
@@ -79,6 +80,8 @@ export function getDefaultDisplayNameFromProviderId(providerId: string): string 
   switch (providerId) {
     case ProviderTypeEnum.OpenAI:
       return 'OpenAI';
+    case ProviderTypeEnum.Qwen:
+      return 'Qwen';
     case ProviderTypeEnum.Anthropic:
       return 'Anthropic';
     case ProviderTypeEnum.DeepSeek:
@@ -108,6 +111,7 @@ export function getDefaultDisplayNameFromProviderId(providerId: string): string 
 export function getDefaultProviderConfig(providerId: string): ProviderConfig {
   switch (providerId) {
     case ProviderTypeEnum.OpenAI:
+    case ProviderTypeEnum.Qwen:
     case ProviderTypeEnum.Anthropic:
     case ProviderTypeEnum.DeepSeek:
     case ProviderTypeEnum.Gemini:
@@ -125,7 +129,9 @@ export function getDefaultProviderConfig(providerId: string): ProviderConfig {
             ? 'https://openrouter.ai/api/v1'
             : providerId === ProviderTypeEnum.Llama
               ? 'https://api.llama.com/v1'
-              : undefined,
+              : providerId === ProviderTypeEnum.Qwen
+                ? 'https://dashscope.aliyuncs.com/compatible-mode/v1'
+                : undefined,
         modelNames: [...(llmProviderModelNames[providerId] || [])],
         createdAt: Date.now(),
       };

@@ -259,6 +259,10 @@ export function createChatModel(providerConfig: ProviderConfig, modelConfig: Mod
       // Call helper without extra options
       return createOpenAIChatModel(providerConfig, modelConfig, undefined);
     }
+    case ProviderTypeEnum.Qwen: {
+      // Qwen follows OpenAI-compatible API
+      return createOpenAIChatModel(providerConfig, modelConfig, undefined);
+    }
     case ProviderTypeEnum.Anthropic: {
       // For Opus models, only support temperature, not topP
       // For 4.5 models, only support either temperature or topP, not both, so we only use temperature to align with Opus

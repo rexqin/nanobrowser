@@ -80,7 +80,7 @@
     "message": "快速入门"
   },
   "chat_bookmarks_saveEdit": {
-    "message": "储存变更"
+    "message": "保存变更"
   },
   "chat_bookmarks_cancelEdit": {
     "message": "取消变更"
@@ -251,7 +251,7 @@
     "message": "回放历史任务（实验性功能）"
   },
   "options_general_replayHistoricalTasks_desc": {
-    "message": "启用储存与回放代理程式的步骤历史记录 (此为实验性功能，可能存在问题)"
+    "message": "启用保存与回放代理程式的步骤历史记录 (此为实验性功能，可能存在问题)"
   },
   "options_models_providers_header": {
     "message": "LLM 提供者"
@@ -263,19 +263,19 @@
     "message": "取消"
   },
   "options_models_providers_btnSave": {
-    "message": "储存"
+    "message": "保存"
   },
   "options_models_providers_btnDelete": {
     "message": "删除"
   },
   "options_models_providers_setupInstructions": {
-    "message": "请输入您的 API 密钥，然后点选 [储存] 进行设置。"
+    "message": "请输入您的 API 密钥，然后点选 [保存] 进行设置。"
   },
   "options_models_providers_custom_name": {
     "message": "名称"
   },
   "options_models_providers_custom_name_desc": {
-    "message": "提供者名称 (储存时不允许使用空格)"
+    "message": "提供者名称 (保存时不允许使用空格)"
   },
   "options_models_providers_custom_name_placeholder": {
     "message": "提供者名称"
