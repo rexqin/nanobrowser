@@ -54,8 +54,8 @@ const ChatHistoryList: React.FC<ChatHistoryListProps> = ({
                   }}
                   className={`absolute right-2 top-2 rounded p-1 opacity-0 transition-opacity group-hover:opacity-100 ${
                     false
-                      ? 'bg-slate-700 text-[#fd9b41] hover:bg-slate-600'
-                      : 'bg-white text-[#fd9b41] hover:bg-[#fff4e8]'
+                      ? 'bg-slate-700 text-[#fdb56f] hover:bg-slate-600'
+                      : 'bg-white text-[#fdb56f] hover:bg-[#fff4e8]'
                   }`}
                   aria-label={t('chat_history_bookmark')}
                   type="button">

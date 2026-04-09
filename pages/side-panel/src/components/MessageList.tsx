@@ -36,7 +36,7 @@ function MessageBlock({ message, isSameActor }: MessageBlockProps) {
   return (
     <div
       className={`flex max-w-full gap-3 ${
-        !isSameActor ? 'mt-4 border-t border-[#fd9b41]/25 pt-4 first:mt-0 first:border-t-0 first:pt-0' : ''
+        !isSameActor ? 'mt-4 border-t border-[#fdb56f]/25 pt-4 first:mt-0 first:border-t-0 first:pt-0' : ''
       }`}>
       {!isSameActor && (
         <div
@@ -54,7 +54,7 @@ function MessageBlock({ message, isSameActor }: MessageBlockProps) {
           <div className="whitespace-pre-wrap break-words text-sm text-gray-700">
             {isProgress ? (
               <div className="h-1 overflow-hidden rounded bg-gray-200">
-                <div className="h-full animate-progress bg-[#fd9b41]" />
+                <div className="h-full animate-progress bg-[#fdb56f]" />
               </div>
             ) : (
               message.content

@@ -101,7 +101,7 @@ const BookmarkList: React.FC<BookmarkListProps> = ({
                   className={`mr-2 grow rounded px-2 py-1 text-sm ${
                     false
                       ? 'border-slate-600 bg-slate-700 text-gray-200'
-                      : 'border-[#fd9b41]/25 bg-[#fffaf5] text-[#7f420b]'
+                      : 'border-[#fdb56f]/25 bg-[#fffaf5] text-[#7f420b]'
                   } border`}
                 />
                 <button
@@ -153,8 +153,8 @@ const BookmarkList: React.FC<BookmarkListProps> = ({
                   }}
                   className={`absolute right-[28px] top-1/2 z-10 -translate-y-1/2 rounded p-1 opacity-0 transition-opacity duration-200 group-hover:opacity-100 ${
                     false
-                      ? 'bg-slate-700 text-[#fd9b41] hover:bg-slate-600'
-                      : 'bg-white text-[#fd9b41] hover:bg-[#fff4e8]'
+                      ? 'bg-slate-700 text-[#fdb56f] hover:bg-slate-600'
+                      : 'bg-white text-[#fdb56f] hover:bg-[#fff4e8]'
                   }`}
                   aria-label={t('chat_bookmarks_edit')}
                   type="button">

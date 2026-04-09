@@ -1133,7 +1133,7 @@ export const ModelSettings = () => {
                       {modifiedProviders.has(providerId) && !providersFromStorage.has(providerId) && (
                         <Button
                           variant="secondary"
-                          className="border-[#fd9b41]/20 bg-[#fff3e6] text-[#b56a24] hover:bg-[#ffe7cf] hover:text-[#8a490d]"
+                          className="border-[#fdb56f]/20 bg-[#fff3e6] text-[#b56a24] hover:bg-[#ffe7cf] hover:text-[#8a490d]"
                           onClick={() => handleCancelProvider(providerId)}>
                           {t('options_models_providers_btnCancel')}
                         </Button>
@@ -1142,7 +1142,7 @@ export const ModelSettings = () => {
                         variant={getButtonProps(providerId).variant}
                         className={
                           getButtonProps(providerId).variant === 'primary'
-                            ? 'border-[#fd9b41] bg-[#fd9b41] text-white hover:bg-[#e98023]'
+                            ? 'border-[#fdb56f] bg-[#fdb56f] text-white hover:bg-[#ee9b47]'
                             : undefined
                         }
                         disabled={getButtonProps(providerId).disabled}
@@ -1186,8 +1186,8 @@ export const ModelSettings = () => {
                                   ? 'border-red-700 bg-slate-700 text-gray-200 focus:border-red-600 focus:ring-2 focus:ring-red-900'
                                   : 'border-red-300 bg-gray-50 focus:border-red-400 focus:ring-2 focus:ring-red-200'
                                 : false
-                                  ? 'border-[#fd9b41]/45 bg-slate-700 text-gray-200 focus:border-[#fd9b41] focus:ring-2 focus:ring-[#fd9b41]/35'
-                                  : 'border-[#fd9b41]/35 bg-[#fffaf5] focus:border-[#fd9b41] focus:ring-2 focus:ring-[#fd9b41]/25'
+                                  ? 'border-[#fdb56f]/45 bg-slate-700 text-gray-200 focus:border-[#fdb56f] focus:ring-2 focus:ring-[#fdb56f]/35'
+                                  : 'border-[#fdb56f]/35 bg-[#fffaf5] focus:border-[#fdb56f] focus:ring-2 focus:ring-[#fdb56f]/25'
                             } outline-none`}
                           />
                         </div>
@@ -1508,8 +1508,8 @@ export const ModelSettings = () => {
               onClick={() => setIsProviderSelectorOpen(prev => !prev)}
               className={`flex w-full items-center justify-center font-medium ${
                 false
-                  ? 'border-[#fd9b41]/45 bg-[#fd9b41] text-white hover:bg-[#e98023]'
-                  : 'border-[#fd9b41]/35 bg-[#ffe3c6] text-[#8a490d] hover:bg-[#ffd6ad]'
+                  ? 'border-[#fdb56f]/45 bg-[#fdb56f] text-white hover:bg-[#ee9b47]'
+                  : 'border-[#fdb56f]/35 bg-[#ffe3c6] text-[#8a490d] hover:bg-[#ffd6ad]'
               }`}>
               <span className="mr-2 text-sm">+</span>{' '}
               <span className="text-sm">{t('options_models_addNewProvider')}</span>
@@ -1519,8 +1519,8 @@ export const ModelSettings = () => {
               <div
                 className={`absolute z-10 mt-2 w-full overflow-hidden rounded-md border ${
                   false
-                    ? 'border-[#fd9b41]/45 bg-slate-700 shadow-lg shadow-slate-900/50'
-                    : 'border-[#fd9b41]/25 bg-white shadow-xl shadow-[#fd9b41]/20'
+                    ? 'border-[#fdb56f]/45 bg-slate-700 shadow-lg shadow-slate-900/50'
+                    : 'border-[#fdb56f]/25 bg-white shadow-xl shadow-[#fdb56f]/20'
                 }`}>
                 <div className="py-1">
                   {/* Map through provider types to create buttons */}
@@ -1539,7 +1539,7 @@ export const ModelSettings = () => {
                         type="button"
                         className={`flex w-full items-center px-4 py-3 text-left text-sm ${
                           false
-                            ? 'text-[#ffd7ad] hover:bg-[#fd9b41]/25 hover:text-white'
+                            ? 'text-[#ffd7ad] hover:bg-[#fdb56f]/25 hover:text-white'
                             : 'text-[#8a490d] hover:bg-[#ffe3c6] hover:text-[#6f3909]'
                         } transition-colors duration-150`}
                         onClick={() => handleProviderSelection(type)}>
@@ -1552,7 +1552,7 @@ export const ModelSettings = () => {
                     type="button"
                     className={`flex w-full items-center px-4 py-3 text-left text-sm ${
                       false
-                        ? 'text-[#ffd7ad] hover:bg-[#fd9b41]/25 hover:text-white'
+                        ? 'text-[#ffd7ad] hover:bg-[#fdb56f]/25 hover:text-white'
                         : 'text-[#8a490d] hover:bg-[#ffe3c6] hover:text-[#6f3909]'
                     } transition-colors duration-150`}
                     onClick={() => handleProviderSelection(ProviderTypeEnum.CustomOpenAI)}>

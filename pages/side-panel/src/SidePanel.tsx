@@ -912,12 +912,12 @@ const SidePanel = () => {
   };
 
   const panelClassName =
-    'bg-gradient-to-b from-[#fff4e8] via-[#ffedd9] to-[#ffe3c6] border-[#fd9b41]/35 shadow-[0_0_0_1px_rgba(253,155,65,0.15),0_10px_28px_rgba(253,155,65,0.18)]';
-  const iconClassName = 'text-[#fd9b41] hover:text-[#e98023]';
+    'bg-gradient-to-b from-[#fff4e8] via-[#ffedd9] to-[#ffe3c6] border-[#fdb56f]/35 shadow-[0_0_0_1px_rgba(253,181,111,0.15),0_10px_28px_rgba(253,181,111,0.18)]';
+  const iconClassName = 'text-[#fdb56f] hover:text-[#ee9b47]';
   const contentBorderClassName = '';
   const helperTextClassName = '';
   const spinnerBorderClassName = '';
-  const setupButtonClassName = 'bg-[#fd9b41] text-white hover:bg-[#e98023]';
+  const setupButtonClassName = 'bg-[#fdb56f] text-white hover:bg-[#ee9b47]';
   const panelBackgroundStyle = { backgroundColor: '#fff1e3' };
 
   return (

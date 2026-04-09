@@ -48,7 +48,7 @@ const Options = () => {
   return (
     <div className="flex min-h-screen min-w-[768px] bg-gradient-to-b from-[#fff4e8] via-[#ffedd9] to-[#ffe3c6] text-[#5f3207]">
       {/* Vertical Navigation Bar */}
-      <nav className="w-48 border-r border-[#fd9b41]/25 bg-[#fd9b41]/12 backdrop-blur-sm">
+      <nav className="w-48 border-r border-[#fdb56f]/25 bg-[#fdb56f]/12 backdrop-blur-sm">
         <div className="p-4">
           <h1 className="mb-6 text-xl font-bold text-[#7f420b]">{t('options_nav_header')}</h1>
           <ul className="space-y-2">
@@ -59,8 +59,8 @@ const Options = () => {
                   className={`flex w-full items-center space-x-2 rounded-lg px-4 py-2 text-left text-base 
                     ${
                       activeTab !== item.id
-                        ? 'bg-[#fd9b41]/16 font-medium text-[#7f420b] hover:text-[#5e2f06] backdrop-blur-sm'
-                        : 'bg-[#fd9b41] text-white backdrop-blur-sm'
+                        ? 'bg-[#fdb56f]/16 font-medium text-[#7f420b] hover:text-[#5e2f06] backdrop-blur-sm'
+                        : 'bg-[#fdb56f] text-white backdrop-blur-sm'
                     }`}>
                   <item.icon className="h-4 w-4" />
                   <span>{item.label}</span>

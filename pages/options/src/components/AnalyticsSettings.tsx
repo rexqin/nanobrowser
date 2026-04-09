@@ -42,7 +42,7 @@ export const AnalyticsSettings: React.FC = () => {
   if (loading) {
     return (
       <section className="space-y-6">
-        <div className="rounded-lg border border-[#fd9b41]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
+        <div className="rounded-lg border border-[#fdb56f]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
           <h2 className="mb-4 text-xl font-semibold text-[#7f420b]">Analytics Settings</h2>
           <div className="animate-pulse">
             <div className="mb-2 h-4 w-3/4 rounded bg-[#ffe3c6]"></div>
@@ -56,7 +56,7 @@ export const AnalyticsSettings: React.FC = () => {
   if (!settings) {
     return (
       <section className="space-y-6">
-        <div className="rounded-lg border border-[#fd9b41]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
+        <div className="rounded-lg border border-[#fdb56f]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
           <h2 className="mb-4 text-xl font-semibold text-[#7f420b]">Analytics Settings</h2>
           <p className="text-red-600">Failed to load analytics settings.</p>
         </div>
@@ -66,12 +66,12 @@ export const AnalyticsSettings: React.FC = () => {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-lg border border-[#fd9b41]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
+      <div className="rounded-lg border border-[#fdb56f]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
         <h2 className="mb-4 text-xl font-semibold text-[#7f420b]">Analytics Settings</h2>
 
         <div className="space-y-6">
           {/* Main toggle */}
-          <div className="my-6 rounded-lg border border-[#fd9b41]/20 bg-[#fff4e8] p-4">
+          <div className="my-6 rounded-lg border border-[#fdb56f]/20 bg-[#fff4e8] p-4">
             <div className="flex items-center justify-between">
               <label htmlFor="analytics-enabled" className="text-base font-medium text-[#8a490d]">
                 Help improve iBB8
@@ -86,7 +86,7 @@ export const AnalyticsSettings: React.FC = () => {
                 />
                 <label
                   htmlFor="analytics-enabled"
-                  className={`block h-6 cursor-pointer overflow-hidden rounded-full ${settings.enabled ? 'bg-[#fd9b41]' : 'bg-gray-300'}`}>
+                  className={`block h-6 cursor-pointer overflow-hidden rounded-full ${settings.enabled ? 'bg-[#fdb56f]' : 'bg-gray-300'}`}>
                   <span className="sr-only">Toggle analytics</span>
                   <span
                     className={`block size-6 rounded-full bg-white shadow transition-transform ${
@@ -100,7 +100,7 @@ export const AnalyticsSettings: React.FC = () => {
           </div>
 
           {/* Information about what we collect */}
-          <div className="rounded-md border border-[#fd9b41]/20 bg-[#fff4e8] p-4">
+          <div className="rounded-md border border-[#fdb56f]/20 bg-[#fff4e8] p-4">
             <h3 className="mb-4 text-base font-medium text-[#8a490d]">What we collect:</h3>
             <ul className="list-disc space-y-2 pl-5 text-left text-sm text-[#8a490d]">
               <li>Task execution metrics (start, completion, failure counts and duration)</li>

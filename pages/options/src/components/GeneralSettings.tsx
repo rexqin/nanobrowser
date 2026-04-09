@@ -25,7 +25,7 @@ export const GeneralSettings = () => {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-lg border border-[#fd9b41]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
+      <div className="rounded-lg border border-[#fdb56f]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
         <h2 className="mb-4 text-left text-xl font-semibold text-[#7f420b]">{t('options_general_header')}</h2>
 
         <div className="space-y-4">
@@ -44,7 +44,7 @@ export const GeneralSettings = () => {
               max={50}
               value={settings.maxSteps}
               onChange={e => updateSetting('maxSteps', Number.parseInt(e.target.value, 10))}
-              className="w-20 rounded-md border border-[#fd9b41]/30 bg-white px-3 py-2 text-[#6f3909]"
+              className="w-20 rounded-md border border-[#fdb56f]/30 bg-white px-3 py-2 text-[#6f3909]"
             />
           </div>
 
@@ -63,7 +63,7 @@ export const GeneralSettings = () => {
               max={50}
               value={settings.maxActionsPerStep}
               onChange={e => updateSetting('maxActionsPerStep', Number.parseInt(e.target.value, 10))}
-              className="w-20 rounded-md border border-[#fd9b41]/30 bg-white px-3 py-2 text-[#6f3909]"
+              className="w-20 rounded-md border border-[#fdb56f]/30 bg-white px-3 py-2 text-[#6f3909]"
             />
           </div>
 
@@ -82,7 +82,7 @@ export const GeneralSettings = () => {
               max={10}
               value={settings.maxFailures}
               onChange={e => updateSetting('maxFailures', Number.parseInt(e.target.value, 10))}
-              className="w-20 rounded-md border border-[#fd9b41]/30 bg-white px-3 py-2 text-[#6f3909]"
+              className="w-20 rounded-md border border-[#fdb56f]/30 bg-white px-3 py-2 text-[#6f3909]"
             />
           </div>
 
@@ -101,7 +101,7 @@ export const GeneralSettings = () => {
               />
               <label
                 htmlFor="useVision"
-                className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#fd9b41] peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#fd9b41]/30">
+                className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#fdb56f] peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#fdb56f]/30">
                 <span className="sr-only">{t('options_general_enableVision')}</span>
               </label>
             </div>
@@ -122,7 +122,7 @@ export const GeneralSettings = () => {
               />
               <label
                 htmlFor="displayHighlights"
-                className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#fd9b41] peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#fd9b41]/30">
+                className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#fdb56f] peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#fdb56f]/30">
                 <span className="sr-only">{t('options_general_displayHighlights')}</span>
               </label>
             </div>
@@ -143,7 +143,7 @@ export const GeneralSettings = () => {
               max={20}
               value={settings.planningInterval}
               onChange={e => updateSetting('planningInterval', Number.parseInt(e.target.value, 10))}
-              className="w-20 rounded-md border border-[#fd9b41]/30 bg-white px-3 py-2 text-[#6f3909]"
+              className="w-20 rounded-md border border-[#fdb56f]/30 bg-white px-3 py-2 text-[#6f3909]"
             />
           </div>
 
@@ -164,7 +164,7 @@ export const GeneralSettings = () => {
                 step={50}
                 value={settings.minWaitPageLoad}
                 onChange={e => updateSetting('minWaitPageLoad', Number.parseInt(e.target.value, 10))}
-                className="w-20 rounded-md border border-[#fd9b41]/30 bg-white px-3 py-2 text-[#6f3909]"
+                className="w-20 rounded-md border border-[#fdb56f]/30 bg-white px-3 py-2 text-[#6f3909]"
               />
             </div>
           </div>
@@ -184,7 +184,7 @@ export const GeneralSettings = () => {
               />
               <label
                 htmlFor="replayHistoricalTasks"
-                className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#fd9b41] peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#fd9b41]/30">
+                className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#fdb56f] peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#fdb56f]/30">
                 <span className="sr-only">{t('options_general_replayHistoricalTasks')}</span>
               </label>
             </div>

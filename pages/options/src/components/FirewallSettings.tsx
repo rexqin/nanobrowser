@@ -51,11 +51,11 @@ export const FirewallSettings = () => {
 
   return (
     <section className="space-y-6">
-      <div className="rounded-lg border border-[#fd9b41]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
+      <div className="rounded-lg border border-[#fdb56f]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
         <h2 className="mb-4 text-xl font-semibold text-[#7f420b]">{t('options_firewall_header')}</h2>
 
         <div className="space-y-6">
-          <div className="my-6 rounded-lg border border-[#fd9b41]/20 bg-[#fff4e8] p-4">
+          <div className="my-6 rounded-lg border border-[#fdb56f]/20 bg-[#fff4e8] p-4">
             <div className="flex items-center justify-between">
               <label htmlFor="toggle-firewall" className="text-base font-medium text-[#8a490d]">
                 {t('options_firewall_enableToggle')}
@@ -70,7 +70,7 @@ export const FirewallSettings = () => {
                 />
                 <label
                   htmlFor="toggle-firewall"
-                  className={`block h-6 cursor-pointer overflow-hidden rounded-full ${isEnabled ? 'bg-[#fd9b41]' : 'bg-gray-300'}`}>
+                  className={`block h-6 cursor-pointer overflow-hidden rounded-full ${isEnabled ? 'bg-[#fdb56f]' : 'bg-gray-300'}`}>
                   <span className="sr-only">{t('options_firewall_toggleFirewall_a11y')}</span>
                   <span
                     className={`block size-6 rounded-full bg-white shadow transition-transform ${
@@ -87,14 +87,14 @@ export const FirewallSettings = () => {
               <Button
                 onClick={() => setActiveList('allow')}
                 className={`px-4 py-2 text-base ${
-                  activeList === 'allow' ? 'bg-[#fd9b41] text-white' : 'bg-[#ffe3c6] text-[#8a490d]'
+                  activeList === 'allow' ? 'bg-[#fdb56f] text-white' : 'bg-[#ffe3c6] text-[#8a490d]'
                 }`}>
                 {t('options_firewall_allowList_header')}
               </Button>
               <Button
                 onClick={() => setActiveList('deny')}
                 className={`px-4 py-2 text-base ${
-                  activeList === 'deny' ? 'bg-[#fd9b41] text-white' : 'bg-[#ffe3c6] text-[#8a490d]'
+                  activeList === 'deny' ? 'bg-[#fdb56f] text-white' : 'bg-[#ffe3c6] text-[#8a490d]'
                 }`}>
                 {t('options_firewall_denyList_header')}
               </Button>
@@ -113,9 +113,9 @@ export const FirewallSettings = () => {
                 }
               }}
               placeholder={t('options_firewall_placeholders_domainUrl')}
-              className="flex-1 rounded-md border border-[#fd9b41]/30 bg-white px-3 py-2 text-sm text-[#6f3909]"
+              className="flex-1 rounded-md border border-[#fdb56f]/30 bg-white px-3 py-2 text-sm text-[#6f3909]"
             />
-            <Button onClick={handleAddUrl} className="bg-[#fd9b41] px-4 py-2 text-sm text-white hover:bg-[#e98023]">
+            <Button onClick={handleAddUrl} className="bg-[#fdb56f] px-4 py-2 text-sm text-white hover:bg-[#ee9b47]">
               {t('options_firewall_btnAdd')}
             </Button>
           </div>
@@ -158,7 +158,7 @@ export const FirewallSettings = () => {
         </div>
       </div>
 
-      <div className="rounded-lg border border-[#fd9b41]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
+      <div className="rounded-lg border border-[#fdb56f]/25 bg-[#fffaf5] p-6 text-left shadow-sm">
         <h2 className="mb-4 text-xl font-semibold text-[#7f420b]">{t('options_firewall_howItWorks_header')}</h2>
         <ul className="list-disc space-y-2 pl-5 text-left text-sm text-[#8a490d]">
           {t('options_firewall_howItWorks')
