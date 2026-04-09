@@ -1131,12 +1131,20 @@ export const ModelSettings = () => {
                     <div className="flex space-x-2">
                       {/* Show Cancel button for newly added providers */}
                       {modifiedProviders.has(providerId) && !providersFromStorage.has(providerId) && (
-                        <Button variant="secondary" onClick={() => handleCancelProvider(providerId)}>
+                        <Button
+                          variant="secondary"
+                          className="border-[#fd9b41]/20 bg-[#fff3e6] text-[#b56a24] hover:bg-[#ffe7cf] hover:text-[#8a490d]"
+                          onClick={() => handleCancelProvider(providerId)}>
                           {t('options_models_providers_btnCancel')}
                         </Button>
                       )}
                       <Button
                         variant={getButtonProps(providerId).variant}
+                        className={
+                          getButtonProps(providerId).variant === 'primary'
+                            ? 'border-[#fd9b41] bg-[#fd9b41] text-white hover:bg-[#e98023]'
+                            : undefined
+                        }
                         disabled={getButtonProps(providerId).disabled}
                         onClick={() =>
                           providersFromStorage.has(providerId) && !modifiedProviders.has(providerId)
