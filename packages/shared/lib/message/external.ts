@@ -6,7 +6,7 @@ export const externalPingMessageSchema = z.object({
 
 export const externalPublishMessageSchema = z.object({
   type: z.literal('publish'),
-  touchpointUrl: z.string().optional(),
+  touchpointUrl: z.string().url().optional(),
   markdown: z.string().optional(),
 });
 

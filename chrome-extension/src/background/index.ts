@@ -10,8 +10,10 @@ import {
 import { t } from '@extension/i18n';
 import {
   externalIncomingMessageSchema,
+  ExternalPublishMessage,
+  externalPublishMessageSchema,
   type ExternalIncomingMessage,
-  type SidePanelExternalPublishReceivedMessage,
+  type SidePanelPublishReceivedMessage,
 } from '@extension/shared';
 import BrowserContext from './browser/context';
 import { Executor } from './agent/executor';
@@ -41,7 +43,7 @@ function isHzgmTechSenderUrl(urlStr: string | undefined): boolean {
 const browserContext = new BrowserContext({});
 let currentExecutor: Executor | null = null;
 let currentPort: chrome.runtime.Port | null = null;
-const pendingSidePanelMessages: SidePanelExternalPublishReceivedMessage[] = [];
+const pendingSidePanelMessages: SidePanelPublishReceivedMessage[] = [];
 const SIDE_PANEL_URL = chrome.runtime.getURL('side-panel/index.html');
 
 // Setup side panel behavior
@@ -113,27 +115,33 @@ chrome.runtime.onMessageExternal.addListener(async (message, sender, sendRespons
   }
 
   if (externalMessage && externalMessage.type === 'publish') {
-    logger.info('External publish message from hzgm.tech', { url: sender.url, message: externalMessage });
+    const parsedExternalPublishMessage = externalPublishMessageSchema.safeParse(externalMessage);
+    if (!parsedExternalPublishMessage.success) {
+      logger.warning('Invalid external publish message payload', parsedExternalPublishMessage.error.flatten());
+      sendResponse({ ok: false, error: 'invalid_message' });
+      return false;
+    }
+    const externalPublishMessage: ExternalPublishMessage = parsedExternalPublishMessage.data;
     try {
-      const targetTabId = sender.tab?.id;
-      if (targetTabId) {
-        await chrome.sidePanel.open({ tabId: targetTabId });
-      } else {
-        const [activeTab] = await chrome.tabs.query({ active: true, currentWindow: true });
-        if (activeTab?.id) {
-          await chrome.sidePanel.open({ tabId: activeTab.id });
-        }
+      const targetUrl = externalPublishMessage.touchpointUrl || sender.url;
+      const createdTab = await chrome.tabs.create({
+        url: targetUrl,
+        active: true,
+      });
+      if (createdTab.id) {
+        await chrome.sidePanel.open({ tabId: createdTab.id });
       }
     } catch (error) {
       logger.warning('Failed to auto-open side panel for external publish message', error);
     }
-    const sidePanelMessage: SidePanelExternalPublishReceivedMessage = {
+    const sidePanelMessage: SidePanelPublishReceivedMessage = {
       type: 'external_publish_received',
       message: '收到发布指令',
       payload: externalMessage,
       from: sender.url,
       timestamp: Date.now(),
     };
+
     if (currentPort) {
       currentPort.postMessage(sidePanelMessage);
     } else {
