@@ -27,6 +27,11 @@ export const externalForbiddenResponseSchema = z.object({
   error: z.literal('forbidden'),
 });
 
+export const externalInvalidMessageResponseSchema = z.object({
+  ok: z.literal(false),
+  error: z.literal('invalid_message'),
+});
+
 export const externalDefaultResponseSchema = z.object({
   ok: z.literal(true),
   received: z.literal(true),
@@ -36,6 +41,7 @@ export const externalResponseSchema = z.union([
   externalPongResponseSchema,
   externalPublishReceivedResponseSchema,
   externalForbiddenResponseSchema,
+  externalInvalidMessageResponseSchema,
   externalDefaultResponseSchema,
 ]);
 
@@ -45,5 +51,6 @@ export type ExternalIncomingMessage = z.infer<typeof externalIncomingMessageSche
 export type ExternalPongResponse = z.infer<typeof externalPongResponseSchema>;
 export type ExternalPublishReceivedResponse = z.infer<typeof externalPublishReceivedResponseSchema>;
 export type ExternalForbiddenResponse = z.infer<typeof externalForbiddenResponseSchema>;
+export type ExternalInvalidMessageResponse = z.infer<typeof externalInvalidMessageResponseSchema>;
 export type ExternalDefaultResponse = z.infer<typeof externalDefaultResponseSchema>;
 export type ExternalResponse = z.infer<typeof externalResponseSchema>;

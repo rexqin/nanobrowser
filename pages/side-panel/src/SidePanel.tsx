@@ -15,6 +15,7 @@ import {
   type PlanSessionMetadata,
   type PlanStep,
 } from '@extension/storage';
+import { sidePanelExecutionAgentEventSchema, sidePanelInternalMessageSchema } from '@extension/shared';
 import type { SidePanelInternalMessage } from '@extension/shared';
 import favoritesStorage from '@extension/storage/lib/prompt/favorites';
 import { t } from '@extension/i18n';
@@ -332,11 +333,27 @@ const SidePanel = () => {
     try {
       portRef.current = chrome.runtime.connect({ name: 'side-panel-connection' });
 
-      portRef.current.onMessage.addListener((message: SidePanelInternalMessage) => {
-        // Add type checking for message
-        if (message && message.type === EventType.EXECUTION) {
-          handleTaskState(message as unknown as AgentEvent);
-        } else if (message && message.type === 'error') {
+      portRef.current.onMessage.addListener((rawMessage: unknown) => {
+        const parsed = sidePanelInternalMessageSchema.safeParse(rawMessage);
+        if (!parsed.success) {
+          console.warn('Ignoring unknown side-panel internal message', rawMessage);
+          return;
+        }
+        const message: SidePanelInternalMessage = parsed.data;
+
+        if (message.type === EventType.EXECUTION) {
+          const parsedExecution = sidePanelExecutionAgentEventSchema.safeParse(message);
+          if (!parsedExecution.success) {
+            appendMessage({
+              actor: Actors.SYSTEM,
+              content: t('errors_unknown'),
+              timestamp: Date.now(),
+            });
+            console.error('Invalid execution message payload', parsedExecution.error.flatten());
+            return;
+          }
+          handleTaskState(parsedExecution.data as unknown as AgentEvent);
+        } else if (message.type === 'error') {
           // Handle error messages from service worker
           appendMessage({
             actor: Actors.SYSTEM,
@@ -345,13 +362,13 @@ const SidePanel = () => {
           });
           setInputEnabled(true);
           setShowStopButton(false);
-        } else if (message && message.type === 'speech_to_text_result') {
+        } else if (message.type === 'speech_to_text_result') {
           // Handle speech-to-text result
           if (message.text && setInputTextRef.current) {
             setInputTextRef.current(message.text);
           }
           setIsProcessingSpeech(false);
-        } else if (message && message.type === 'speech_to_text_error') {
+        } else if (message.type === 'speech_to_text_error') {
           // Handle speech-to-text error
           appendMessage({
             actor: Actors.SYSTEM,
@@ -359,7 +376,7 @@ const SidePanel = () => {
             timestamp: Date.now(),
           });
           setIsProcessingSpeech(false);
-        } else if (message && message.type === 'external_publish_received') {
+        } else if (message.type === 'external_publish_received') {
           setMode('chat');
           setShowHistory(false);
           appendMessage({
@@ -367,7 +384,7 @@ const SidePanel = () => {
             content: message.message || '收到发布指令',
             timestamp: message.timestamp || Date.now(),
           });
-        } else if (message && message.type === 'heartbeat_ack') {
+        } else if (message.type === 'heartbeat_ack') {
           console.log('Heartbeat acknowledged');
         }
       });

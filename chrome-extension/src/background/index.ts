@@ -8,7 +8,11 @@ import {
   analyticsSettingsStore,
 } from '@extension/storage';
 import { t } from '@extension/i18n';
-import type { ExternalIncomingMessage, SidePanelExternalPublishReceivedMessage } from '@extension/shared';
+import {
+  externalIncomingMessageSchema,
+  type ExternalIncomingMessage,
+  type SidePanelExternalPublishReceivedMessage,
+} from '@extension/shared';
 import BrowserContext from './browser/context';
 import { Executor } from './agent/executor';
 import { createLogger } from './log';
@@ -89,7 +93,13 @@ chrome.runtime.onMessage.addListener(() => {
 
 // Web pages under https://*.hzgm.tech (see manifest externally_connectable)
 chrome.runtime.onMessageExternal.addListener(async (message, sender, sendResponse) => {
-  const externalMessage = message as ExternalIncomingMessage;
+  const parsedExternalMessage = externalIncomingMessageSchema.safeParse(message);
+  if (!parsedExternalMessage.success) {
+    logger.warning('Invalid external message payload', parsedExternalMessage.error.flatten());
+    sendResponse({ ok: false, error: 'invalid_message' });
+    return false;
+  }
+  const externalMessage: ExternalIncomingMessage = parsedExternalMessage.data;
 
   if (!isHzgmTechSenderUrl(sender.url)) {
     logger.warning('Blocked external message', sender.url);

@@ -7,6 +7,33 @@ export const sidePanelExecutionMessageSchema = z
   })
   .passthrough();
 
+export const sidePanelExecutionAgentEventSchema = z.object({
+  type: z.literal('execution'),
+  actor: z.enum(['system', 'user', 'planner', 'navigator', 'validator']),
+  state: z.enum([
+    'task.start',
+    'task.ok',
+    'task.fail',
+    'task.pause',
+    'task.resume',
+    'task.cancel',
+    'step.start',
+    'step.ok',
+    'step.fail',
+    'step.cancel',
+    'act.start',
+    'act.ok',
+    'act.fail',
+  ]),
+  data: z.object({
+    taskId: z.string(),
+    step: z.number(),
+    maxSteps: z.number(),
+    details: z.string(),
+  }),
+  timestamp: z.number(),
+});
+
 export const sidePanelErrorMessageSchema = z.object({
   type: z.literal('error'),
   error: z.string().optional(),
@@ -44,6 +71,7 @@ export const sidePanelInternalMessageSchema = z.union([
 ]);
 
 export type SidePanelExecutionMessage = z.infer<typeof sidePanelExecutionMessageSchema>;
+export type SidePanelExecutionAgentEventMessage = z.infer<typeof sidePanelExecutionAgentEventSchema>;
 export type SidePanelErrorMessage = z.infer<typeof sidePanelErrorMessageSchema>;
 export type SidePanelSpeechToTextResultMessage = z.infer<typeof sidePanelSpeechToTextResultMessageSchema>;
 export type SidePanelSpeechToTextErrorMessage = z.infer<typeof sidePanelSpeechToTextErrorMessageSchema>;
