@@ -8,6 +8,7 @@ import {
   analyticsSettingsStore,
 } from '@extension/storage';
 import { t } from '@extension/i18n';
+import type { ExternalIncomingMessage, SidePanelExternalPublishReceivedMessage } from '@extension/shared';
 import BrowserContext from './browser/context';
 import { Executor } from './agent/executor';
 import { createLogger } from './log';
@@ -36,7 +37,7 @@ function isHzgmTechSenderUrl(urlStr: string | undefined): boolean {
 const browserContext = new BrowserContext({});
 let currentExecutor: Executor | null = null;
 let currentPort: chrome.runtime.Port | null = null;
-const pendingSidePanelMessages: Array<Record<string, unknown>> = [];
+const pendingSidePanelMessages: SidePanelExternalPublishReceivedMessage[] = [];
 const SIDE_PANEL_URL = chrome.runtime.getURL('side-panel/index.html');
 
 // Setup side panel behavior
@@ -88,19 +89,21 @@ chrome.runtime.onMessage.addListener(() => {
 
 // Web pages under https://*.hzgm.tech (see manifest externally_connectable)
 chrome.runtime.onMessageExternal.addListener(async (message, sender, sendResponse) => {
+  const externalMessage = message as ExternalIncomingMessage;
+
   if (!isHzgmTechSenderUrl(sender.url)) {
     logger.warning('Blocked external message', sender.url);
     sendResponse({ ok: false, error: 'forbidden' });
     return false;
   }
 
-  if (message && typeof message === 'object' && (message as { type?: string }).type === 'ping') {
+  if (externalMessage && externalMessage.type === 'ping') {
     sendResponse({ ok: true, type: 'pong' });
     return false;
   }
 
-  if (message && typeof message === 'object' && (message as { type?: string }).type === 'publish') {
-    logger.info('External publish message from hzgm.tech', { url: sender.url, message });
+  if (externalMessage && externalMessage.type === 'publish') {
+    logger.info('External publish message from hzgm.tech', { url: sender.url, message: externalMessage });
     try {
       const targetTabId = sender.tab?.id;
       if (targetTabId) {
@@ -114,10 +117,10 @@ chrome.runtime.onMessageExternal.addListener(async (message, sender, sendRespons
     } catch (error) {
       logger.warning('Failed to auto-open side panel for external publish message', error);
     }
-    const sidePanelMessage = {
+    const sidePanelMessage: SidePanelExternalPublishReceivedMessage = {
       type: 'external_publish_received',
       message: '收到发布指令',
-      payload: message,
+      payload: externalMessage,
       from: sender.url,
       timestamp: Date.now(),
     };
@@ -130,7 +133,7 @@ chrome.runtime.onMessageExternal.addListener(async (message, sender, sendRespons
     return false;
   }
 
-  logger.info('External message from hzgm.tech', { url: sender.url, message });
+  logger.info('External message from hzgm.tech', { url: sender.url, message: externalMessage });
   sendResponse({ ok: true, received: true });
   return false;
 });

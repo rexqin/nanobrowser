@@ -15,6 +15,7 @@ import {
   type PlanSessionMetadata,
   type PlanStep,
 } from '@extension/storage';
+import type { SidePanelInternalMessage } from '@extension/shared';
 import favoritesStorage from '@extension/storage/lib/prompt/favorites';
 import { t } from '@extension/i18n';
 import MessageList from './components/MessageList';
@@ -331,11 +332,10 @@ const SidePanel = () => {
     try {
       portRef.current = chrome.runtime.connect({ name: 'side-panel-connection' });
 
-      // biome-ignore lint/suspicious/noExplicitAny: <explanation>
-      portRef.current.onMessage.addListener((message: any) => {
+      portRef.current.onMessage.addListener((message: SidePanelInternalMessage) => {
         // Add type checking for message
         if (message && message.type === EventType.EXECUTION) {
-          handleTaskState(message);
+          handleTaskState(message as unknown as AgentEvent);
         } else if (message && message.type === 'error') {
           // Handle error messages from service worker
           appendMessage({
@@ -360,7 +360,6 @@ const SidePanel = () => {
           });
           setIsProcessingSpeech(false);
         } else if (message && message.type === 'external_publish_received') {
-          console.log('external_publish_received', message);
           setMode('chat');
           setShowHistory(false);
           appendMessage({
