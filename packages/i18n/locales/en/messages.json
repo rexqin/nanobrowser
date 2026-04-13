@@ -203,6 +203,61 @@
   "options_tabs_firewall": {
     "message": "Firewall"
   },
+  "options_tabs_analytics": {
+    "message": "Analytics"
+  },
+
+  "options_analytics_header": {
+    "message": "Analytics Settings"
+  },
+  "options_analytics_loadFailed": {
+    "message": "Failed to load analytics settings."
+  },
+  "options_analytics_helpImprove": {
+    "message": "Help improve iBB8"
+  },
+  "options_analytics_toggle_a11y": {
+    "message": "Toggle analytics"
+  },
+  "options_analytics_shareDesc": {
+    "message": "Share anonymous usage data to help us improve the extension"
+  },
+  "options_analytics_collect_heading": {
+    "message": "What we collect:"
+  },
+  "options_analytics_collect_item1": {
+    "message": "Task execution metrics (start, completion, failure counts and duration)"
+  },
+  "options_analytics_collect_item2": {
+    "message": "Domain names of websites visited (e.g., \"amazon.com\", not full URLs)"
+  },
+  "options_analytics_collect_item3": {
+    "message": "Error categories for failed tasks (no sensitive details)"
+  },
+  "options_analytics_collect_item4": {
+    "message": "Anonymous usage statistics"
+  },
+  "options_analytics_nocollect_heading": {
+    "message": "What we DON'T collect:"
+  },
+  "options_analytics_nocollect_item1": {
+    "message": "Personal information or login credentials"
+  },
+  "options_analytics_nocollect_item2": {
+    "message": "Full URLs or page content"
+  },
+  "options_analytics_nocollect_item3": {
+    "message": "Task instructions or user prompts"
+  },
+  "options_analytics_nocollect_item4": {
+    "message": "Screen recordings or screenshots"
+  },
+  "options_analytics_nocollect_item5": {
+    "message": "Any sensitive or private data"
+  },
+  "options_analytics_disabled_notice": {
+    "message": "Analytics disabled. You can re-enable it anytime to help improve iBB8."
+  },
 
   "options_general_header": {
     "message": "General"

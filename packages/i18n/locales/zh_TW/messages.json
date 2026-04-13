@@ -204,6 +204,61 @@
   "options_tabs_firewall": {
     "message": "防火牆"
   },
+  "options_tabs_analytics": {
+    "message": "資料統計"
+  },
+
+  "options_analytics_header": {
+    "message": "資料統計設定"
+  },
+  "options_analytics_loadFailed": {
+    "message": "無法載入資料統計設定。"
+  },
+  "options_analytics_helpImprove": {
+    "message": "協助改進 iBB8"
+  },
+  "options_analytics_toggle_a11y": {
+    "message": "切換使用情況統計"
+  },
+  "options_analytics_shareDesc": {
+    "message": "分享匿名使用資料，協助我們改進擴充功能"
+  },
+  "options_analytics_collect_heading": {
+    "message": "我們會收集："
+  },
+  "options_analytics_collect_item1": {
+    "message": "工作執行指標（開始、完成、失敗次數與耗時）"
+  },
+  "options_analytics_collect_item2": {
+    "message": "所造訪網站的網域名稱（例如「amazon.com」，不含完整網址）"
+  },
+  "options_analytics_collect_item3": {
+    "message": "失敗工作的錯誤類別（不含敏感細節）"
+  },
+  "options_analytics_collect_item4": {
+    "message": "匿名使用統計"
+  },
+  "options_analytics_nocollect_heading": {
+    "message": "我們不會收集："
+  },
+  "options_analytics_nocollect_item1": {
+    "message": "個人身分資訊或登入憑證"
+  },
+  "options_analytics_nocollect_item2": {
+    "message": "完整網址或頁面內容"
+  },
+  "options_analytics_nocollect_item3": {
+    "message": "工作說明或使用者輸入的提示內容"
+  },
+  "options_analytics_nocollect_item4": {
+    "message": "螢幕錄影或截圖"
+  },
+  "options_analytics_nocollect_item5": {
+    "message": "任何敏感或隱私資料"
+  },
+  "options_analytics_disabled_notice": {
+    "message": "已關閉資料統計。您可隨時重新開啟，以協助改進 iBB8。"
+  },
 
   "options_general_header": {
     "message": "一般"

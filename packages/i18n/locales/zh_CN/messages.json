@@ -202,6 +202,62 @@
   "options_tabs_firewall": {
     "message": "防火墙"
   },
+  "options_tabs_analytics": {
+    "message": "数据统计"
+  },
+
+  "options_analytics_header": {
+    "message": "数据统计设置"
+  },
+  "options_analytics_loadFailed": {
+    "message": "无法加载数据统计设置。"
+  },
+  "options_analytics_helpImprove": {
+    "message": "帮助改进 iBB8"
+  },
+  "options_analytics_toggle_a11y": {
+    "message": "开关使用情况统计"
+  },
+  "options_analytics_shareDesc": {
+    "message": "分享匿名使用数据，帮助我们改进扩展"
+  },
+  "options_analytics_collect_heading": {
+    "message": "我们会收集："
+  },
+  "options_analytics_collect_item1": {
+    "message": "任务执行指标（开始、完成、失败次数与耗时）"
+  },
+  "options_analytics_collect_item2": {
+    "message": "所访问网站的域名（例如「amazon.com」，不含完整网址）"
+  },
+  "options_analytics_collect_item3": {
+    "message": "失败任务的错误类别（不含敏感细节）"
+  },
+  "options_analytics_collect_item4": {
+    "message": "匿名使用统计"
+  },
+  "options_analytics_nocollect_heading": {
+    "message": "我们不会收集："
+  },
+  "options_analytics_nocollect_item1": {
+    "message": "个人身份信息或登录凭据"
+  },
+  "options_analytics_nocollect_item2": {
+    "message": "完整网址或页面内容"
+  },
+  "options_analytics_nocollect_item3": {
+    "message": "任务说明或用户输入的提示内容"
+  },
+  "options_analytics_nocollect_item4": {
+    "message": "屏幕录制或截图"
+  },
+  "options_analytics_nocollect_item5": {
+    "message": "任何敏感或隐私数据"
+  },
+  "options_analytics_disabled_notice": {
+    "message": "已关闭数据统计。您可随时重新开启，以帮助改进 iBB8。"
+  },
+
   "options_general_header": {
     "message": "一般"
   },

@@ -204,6 +204,62 @@
   "options_tabs_firewall": {
     "message": "Firewall"
   },
+  "options_tabs_analytics": {
+    "message": "Análises"
+  },
+
+  "options_analytics_header": {
+    "message": "Configurações de análise"
+  },
+  "options_analytics_loadFailed": {
+    "message": "Falha ao carregar as configurações de análise."
+  },
+  "options_analytics_helpImprove": {
+    "message": "Ajude a melhorar o iBB8"
+  },
+  "options_analytics_toggle_a11y": {
+    "message": "Ativar ou desativar análises"
+  },
+  "options_analytics_shareDesc": {
+    "message": "Compartilhe dados de uso anônimos para nos ajudar a melhorar a extensão"
+  },
+  "options_analytics_collect_heading": {
+    "message": "O que coletamos:"
+  },
+  "options_analytics_collect_item1": {
+    "message": "Métricas de execução de tarefas (início, conclusão, falhas e duração)"
+  },
+  "options_analytics_collect_item2": {
+    "message": "Nomes de domínio dos sites visitados (ex.: \"amazon.com\", não URLs completas)"
+  },
+  "options_analytics_collect_item3": {
+    "message": "Categorias de erro para tarefas com falha (sem detalhes sensíveis)"
+  },
+  "options_analytics_collect_item4": {
+    "message": "Estatísticas de uso anônimas"
+  },
+  "options_analytics_nocollect_heading": {
+    "message": "O que NÃO coletamos:"
+  },
+  "options_analytics_nocollect_item1": {
+    "message": "Informações pessoais ou credenciais de login"
+  },
+  "options_analytics_nocollect_item2": {
+    "message": "URLs completas ou conteúdo de páginas"
+  },
+  "options_analytics_nocollect_item3": {
+    "message": "Instruções de tarefas ou prompts do usuário"
+  },
+  "options_analytics_nocollect_item4": {
+    "message": "Gravações de tela ou capturas de tela"
+  },
+  "options_analytics_nocollect_item5": {
+    "message": "Quaisquer dados sensíveis ou privados"
+  },
+  "options_analytics_disabled_notice": {
+    "message": "Análises desativadas. Você pode reativá-las a qualquer momento para ajudar a melhorar o iBB8."
+  },
+
   "options_general_header": {
     "message": "Geral"
   },
