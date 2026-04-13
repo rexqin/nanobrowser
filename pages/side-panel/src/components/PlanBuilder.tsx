@@ -203,6 +203,17 @@ export default function PlanBuilder({
     await onExecute(validSteps, title);
   };
 
+  const primaryActionLabel = taskAwaitingUserResume
+    ? t('chat_buttons_resume')
+    : executing
+      ? t('chat_buttons_stop')
+      : t('nav_planBuilder_execute');
+  const primaryActionButtonClassName = taskAwaitingUserResume
+    ? 'rounded-md bg-emerald-600 px-3 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:bg-emerald-300 disabled:text-emerald-100'
+    : executing
+      ? 'rounded-md bg-rose-600 px-3 py-2 text-sm font-medium text-white hover:bg-rose-700 disabled:bg-rose-300 disabled:text-rose-100'
+      : 'rounded-md bg-[#fdb56f] px-3 py-2 text-sm font-medium text-white hover:bg-[#ee9b47] disabled:bg-[#f6d3b0] disabled:text-white/80';
+
   if (!plan) {
     return (
       <div className="flex h-full items-center justify-center p-6">
@@ -254,22 +265,6 @@ export default function PlanBuilder({
               <p className="text-sm font-medium text-[#8a490d]">
                 {taskAwaitingUserResume ? t('exec_task_pause') : t('nav_planBuilder_runningHint')}
               </p>
-              <div className="flex flex-wrap items-center gap-2">
-                {taskAwaitingUserResume && onResumeTask ? (
-                  <button
-                    type="button"
-                    onClick={() => onResumeTask()}
-                    className="rounded-md bg-emerald-600 px-3 py-1.5 text-sm text-white hover:bg-emerald-700">
-                    {t('chat_buttons_resume')}
-                  </button>
-                ) : null}
-                <button
-                  type="button"
-                  onClick={() => onStopTask()}
-                  className="rounded-md border border-red-300 bg-white px-3 py-1.5 text-sm text-red-600 hover:bg-red-50">
-                  {t('chat_buttons_stop')}
-                </button>
-              </div>
             </div>
             {taskAwaitingUserResume ? (
               <p className="text-xs text-[#6f3909]/90">
@@ -345,10 +340,20 @@ export default function PlanBuilder({
           </button>
           <button
             type="button"
-            onClick={() => void handleExecute()}
-            disabled={executing}
-            className="rounded-md bg-[#fdb56f] px-3 py-2 text-sm text-white hover:bg-[#ee9b47] disabled:opacity-50">
-            {executing ? t('nav_planBuilder_executing') : t('nav_planBuilder_execute')}
+            onClick={() => {
+              if (taskAwaitingUserResume) {
+                onResumeTask?.();
+                return;
+              }
+              if (executing) {
+                onStopTask();
+                return;
+              }
+              void handleExecute();
+            }}
+            disabled={!executing && sortedSteps.every(step => step.content.trim() === '')}
+            className={primaryActionButtonClassName}>
+            {primaryActionLabel}
           </button>
         </div>
       </div>
