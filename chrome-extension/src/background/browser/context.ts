@@ -12,6 +12,11 @@ import { isUrlAllowed } from './util';
 import { analytics } from '../services/analytics';
 
 const logger = createLogger('BrowserContext');
+
+function isNoTabError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return message.includes('No tab with id');
+}
 export default class BrowserContext {
   private _config: BrowserContextConfig;
   private _currentTabId: number | null = null;
@@ -54,8 +59,17 @@ export default class BrowserContext {
   }
 
   public async cleanup(): Promise<void> {
-    const currentPage = await this.getCurrentPage();
-    currentPage?.removeHighlight();
+    try {
+      const currentPage = await this.getCurrentPage();
+      await currentPage?.removeHighlight();
+    } catch (error) {
+      // Cleanup should be best-effort: tab may have been closed already.
+      if (isNoTabError(error)) {
+        logger.info('cleanup skipped highlight removal because tab no longer exists');
+      } else {
+        logger.warning('cleanup failed to remove highlight', error);
+      }
+    }
     // detach all pages
     for (const page of this._attachedPages.values()) {
       await page.detachPuppeteer();
@@ -116,7 +130,17 @@ export default class BrowserContext {
     // 2. If _currentTabId is set but not in attachedPages, attach the tab
     const existingPage = this._attachedPages.get(this._currentTabId);
     if (!existingPage) {
-      const tab = await chrome.tabs.get(this._currentTabId);
+      let tab: chrome.tabs.Tab;
+      try {
+        tab = await chrome.tabs.get(this._currentTabId);
+      } catch (error) {
+        if (isNoTabError(error)) {
+          logger.info(`Current tab ${this._currentTabId} no longer exists, falling back to active tab`);
+          this._currentTabId = null;
+          return this.getCurrentPage();
+        }
+        throw error;
+      }
       const page = await this._getOrCreatePage(tab);
       // set current tab id to null if the page is not attached successfully
       await this.attachPage(page);

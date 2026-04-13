@@ -24,6 +24,28 @@ import { isUrlAllowed } from './util';
 
 const logger = createLogger('Page');
 
+function isCdpEvaluationBlockedUrl(urlStr: string): boolean {
+  try {
+    const parsed = new URL(urlStr);
+    if (parsed.protocol === 'chrome:') return true;
+    if (parsed.protocol === 'chrome-extension:') {
+      // Allow current extension pages, block other extensions.
+      return parsed.hostname !== chrome.runtime.id;
+    }
+    if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') return true;
+    const host = parsed.hostname.toLowerCase();
+    if (
+      (host === 'chrome.google.com' || host === 'chromewebstore.google.com') &&
+      parsed.pathname.startsWith('/webstore')
+    ) {
+      return true;
+    }
+    return false;
+  } catch {
+    return true;
+  }
+}
+
 export function build_initial_state(tabId?: number, url?: string, title?: string): PageState {
   return {
     elementTree: new DOMElementNode({
@@ -393,6 +415,12 @@ export default class Page {
     }
 
     try {
+      const currentUrl = this._puppeteerPage?.url() ?? '';
+      if (isCdpEvaluationBlockedUrl(currentUrl)) {
+        logger.info(`Skip state update on blocked URL: ${currentUrl}`);
+        return this._state;
+      }
+
       await this.removeHighlight();
 
       // Get DOM content (equivalent to dom_service.get_clickable_elements)

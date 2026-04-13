@@ -53,6 +53,12 @@ export const sidePanelHeartbeatAckMessageSchema = z.object({
   type: z.literal('heartbeat_ack'),
 });
 
+export const sidePanelSuccessMessageSchema = z
+  .object({
+    type: z.literal('success'),
+  })
+  .passthrough();
+
 export const sidePanelExternalPublishReceivedMessageSchema = z.object({
   type: z.literal('external_publish_received'),
   message: z.string(),
@@ -68,6 +74,7 @@ export const sidePanelInternalMessageSchema = z.union([
   sidePanelSpeechToTextErrorMessageSchema,
   sidePanelExternalPublishReceivedMessageSchema,
   sidePanelHeartbeatAckMessageSchema,
+  sidePanelSuccessMessageSchema,
 ]);
 
 export type SidePanelExecutionMessage = z.infer<typeof sidePanelExecutionMessageSchema>;
@@ -76,5 +83,6 @@ export type SidePanelErrorMessage = z.infer<typeof sidePanelErrorMessageSchema>;
 export type SidePanelSpeechToTextResultMessage = z.infer<typeof sidePanelSpeechToTextResultMessageSchema>;
 export type SidePanelSpeechToTextErrorMessage = z.infer<typeof sidePanelSpeechToTextErrorMessageSchema>;
 export type SidePanelHeartbeatAckMessage = z.infer<typeof sidePanelHeartbeatAckMessageSchema>;
+export type SidePanelSuccessMessage = z.infer<typeof sidePanelSuccessMessageSchema>;
 export type SidePanelPublishReceivedMessage = z.infer<typeof sidePanelExternalPublishReceivedMessageSchema>;
 export type SidePanelInternalMessage = z.infer<typeof sidePanelInternalMessageSchema>;
