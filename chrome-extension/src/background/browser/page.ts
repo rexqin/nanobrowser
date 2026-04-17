@@ -1187,7 +1187,12 @@ export default class Page {
     return null;
   }
 
-  async inputTextElementNode(useVision: boolean, elementNode: DOMElementNode, text: string): Promise<void> {
+  async inputTextElementNode(
+    useVision: boolean,
+    elementNode: DOMElementNode,
+    text: string,
+    inputMode: 'override' | 'append' = 'override',
+  ): Promise<void> {
     if (!this._puppeteerPage) {
       throw new Error('Puppeteer is not connected');
     }
@@ -1241,33 +1246,123 @@ export default class Page {
 
       // Choose appropriate input method based on element properties
       if ((isContentEditable || tagName === 'input') && !isReadOnly && !isDisabled) {
-        // Clear content and set value directly
+        if (inputMode === 'override') {
+          // Clear content first when overriding.
+          await element.evaluate(el => {
+            if (el instanceof HTMLElement) {
+              el.textContent = '';
+            }
+            if ('value' in el) {
+              (el as HTMLInputElement).value = '';
+            }
+            // Dispatch events
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          });
+        }
+
+        // Ensure focus and cursor at end before typing (works for append and override).
         await element.evaluate(el => {
           if (el instanceof HTMLElement) {
-            el.textContent = '';
+            el.focus();
+            if (el.isContentEditable) {
+              const range = document.createRange();
+              range.selectNodeContents(el);
+              range.collapse(false);
+              const selection = window.getSelection();
+              selection?.removeAllRanges();
+              selection?.addRange(range);
+            }
           }
-          if ('value' in el) {
-            (el as HTMLInputElement).value = '';
+          if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+            el.focus();
+            const len = el.value?.length ?? 0;
+            el.setSelectionRange(len, len);
           }
-          // Dispatch events
-          el.dispatchEvent(new Event('input', { bubbles: true }));
-          el.dispatchEvent(new Event('change', { bubbles: true }));
         });
 
-        // Type the text with a small delay between keypresses
-        await element.type(text, { delay: 50 });
+        if (isContentEditable) {
+          // For rich text editors, prefer paste simulation so page-level paste handlers can process text consistently.
+          await element.evaluate(
+            (el, value, mode) => {
+              const beforeHtml = el instanceof HTMLElement ? el.innerHTML : '';
+              const beforeText = el instanceof HTMLElement ? (el.textContent ?? '') : '';
+
+              const dataTransfer = new DataTransfer();
+              dataTransfer.setData('text/plain', value);
+              dataTransfer.setData('text/html', value.replace(/\n/g, '<br>'));
+
+              let pasteEvent: Event;
+              try {
+                pasteEvent = new ClipboardEvent('paste', {
+                  clipboardData: dataTransfer,
+                  bubbles: true,
+                  cancelable: true,
+                });
+              } catch {
+                pasteEvent = new Event('paste', { bubbles: true, cancelable: true });
+                Object.defineProperty(pasteEvent, 'clipboardData', { value: dataTransfer });
+              }
+
+              el.dispatchEvent(pasteEvent);
+
+              // Some editors replace entire content on paste; for append mode,
+              // restore previous content and append new text when replacement is detected.
+              if (mode === 'append' && el instanceof HTMLElement) {
+                const afterHtml = el.innerHTML;
+                const afterText = el.textContent ?? '';
+                const hasOriginalHtml =
+                  beforeHtml.length === 0 ? afterHtml.length === 0 : afterHtml.includes(beforeHtml);
+                const hasOriginalText =
+                  beforeText.length === 0 ? true : afterText.startsWith(beforeText) || afterText.includes(beforeText);
+                const replacedContent = !hasOriginalHtml && !hasOriginalText;
+                if (replacedContent) {
+                  el.innerHTML = beforeHtml;
+                  // Keep existing rich content (including images), then append plain text lines.
+                  const lines = value.split('\n');
+                  lines.forEach((line, index) => {
+                    if (index > 0) {
+                      el.appendChild(document.createElement('br'));
+                    }
+                    el.appendChild(document.createTextNode(line));
+                  });
+                  el.dispatchEvent(new Event('input', { bubbles: true }));
+                  el.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+              }
+            },
+            text,
+            inputMode,
+          );
+        } else {
+          // Type the text with a small delay between keypresses
+          await element.type(text, { delay: 50 });
+        }
       } else {
         // Use direct value setting for other types of elements
-        await element.evaluate((el, value) => {
-          if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
-            el.value = value;
-          } else if (el instanceof HTMLElement && el.isContentEditable) {
-            el.textContent = value;
-          }
-          // Dispatch events
-          el.dispatchEvent(new Event('input', { bubbles: true }));
-          el.dispatchEvent(new Event('change', { bubbles: true }));
-        }, text);
+        await element.evaluate(
+          (el, value, mode) => {
+            const shouldAppend = mode === 'append';
+            const currentValue =
+              el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement
+                ? el.value
+                : el instanceof HTMLElement && el.isContentEditable
+                  ? (el.textContent ?? '')
+                  : '';
+            const nextValue = shouldAppend ? `${currentValue}${value}` : value;
+
+            if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+              el.value = nextValue;
+            } else if (el instanceof HTMLElement && el.isContentEditable) {
+              el.textContent = nextValue;
+            }
+            // Dispatch events
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+          },
+          text,
+          inputMode,
+        );
       }
 
       // Wait for page stability after input

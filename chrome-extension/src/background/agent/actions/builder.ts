@@ -18,6 +18,7 @@ import {
   getDropdownOptionsActionSchema,
   closeTabActionSchema,
   waitActionSchema,
+  waitForElementActionSchema,
   previousPageActionSchema,
   scrollToPercentActionSchema,
   nextPageActionSchema,
@@ -220,6 +221,62 @@ export class ActionBuilder {
     }, waitActionSchema);
     actions.push(wait);
 
+    const waitForElement = new Action(async (input: z.infer<typeof waitForElementActionSchema.schema>) => {
+      const timeoutMs = Math.max(200, input.timeout_ms ?? 5000);
+      const pollMs = Math.max(50, input.poll_interval_ms ?? 250);
+      const intent = input.intent || `Wait for element ${input.index}`;
+      this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_START, intent);
+
+      const deadline = Date.now() + timeoutMs;
+      let attempts = 0;
+
+      while (Date.now() <= deadline) {
+        attempts++;
+        try {
+          const page = await this.context.browserContext.getCurrentPage();
+          const state = await page.getState();
+          const elementNode = state?.selectorMap.get(input.index);
+          if (elementNode) {
+            const handle = await page.locateElement(elementNode);
+            if (handle) {
+              const visible = await handle.evaluate(el => {
+                if (!(el instanceof HTMLElement)) return false;
+                const style = window.getComputedStyle(el);
+                const rect = el.getBoundingClientRect();
+                return (
+                  style.display !== 'none' &&
+                  style.visibility !== 'hidden' &&
+                  style.opacity !== '0' &&
+                  rect.width > 0 &&
+                  rect.height > 0
+                );
+              });
+              if (visible) {
+                const msg = `Element ${input.index} is available`;
+                this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_OK, msg);
+                return new ActionResult({ extractedContent: msg, includeInMemory: true });
+              }
+            }
+          }
+        } catch (error) {
+          if (import.meta.env.DEV) {
+            logger.debug('wait_for_element poll error', {
+              index: input.index,
+              attempts,
+              error: error instanceof Error ? error.message : String(error),
+            });
+          }
+        }
+
+        await new Promise(resolve => setTimeout(resolve, pollMs));
+      }
+
+      const msg = `Element ${input.index} not available within ${timeoutMs}ms`;
+      this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, msg);
+      return new ActionResult({ error: msg, includeInMemory: true });
+    }, waitForElementActionSchema);
+    actions.push(waitForElement);
+
     // Element Interaction Actions
     const clickElement = new Action(
       async (input: z.infer<typeof clickElementActionSchema.schema>) => {
@@ -367,7 +424,12 @@ export class ActionBuilder {
           }
         }
 
-        await page.inputTextElementNode(this.context.options.useVision, elementNode, input.text);
+        await page.inputTextElementNode(
+          this.context.options.useVision,
+          elementNode,
+          input.text,
+          input.input_mode ?? 'override',
+        );
         const msg = t('act_inputText_ok', [input.text, targetIndex.toString()]);
         this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_OK, msg);
         return new ActionResult({ extractedContent: msg, includeInMemory: true });
@@ -534,9 +596,59 @@ export class ActionBuilder {
           const didTruncate = typeof maxChars === 'number' && maxChars > 0 && finalOutput.length > maxChars;
           const output = didTruncate ? finalOutput.slice(0, maxChars) : finalOutput;
 
-          await page.inputTextElementNode(this.context.options.useVision, targetNode, output);
+          const targetHandle = await page.locateElement(targetNode);
+          if (!targetHandle) {
+            throw new Error(t('act_errors_elementNotExist', [String(targetIndex)]));
+          }
 
-          const msg = `Downloaded image and pasted base64 into index ${targetIndex} (${output.length} chars)`;
+          await targetHandle.evaluate(
+            async (element, src, originalUrl) => {
+              if (!(element instanceof HTMLElement)) {
+                throw new Error('Target element is not an HTMLElement');
+              }
+
+              const tag = element.tagName.toLowerCase();
+              const isRichEditor =
+                element.isContentEditable || tag === 'div' || element.classList.contains('ql-editor');
+
+              if (!isRichEditor) {
+                throw new Error(`Target element ${tag} is not a rich-text editor; cannot insert image node`);
+              }
+
+              // Normalize to data URI so we can build a File/Blob for paste clipboard.
+              const dataUri = src.startsWith('data:') ? src : `data:image/png;base64,${src}`;
+              const response = await fetch(dataUri);
+              const blob = await response.blob();
+              const file = new File([blob], 'pasted-image', { type: blob.type || 'image/png' });
+
+              const dataTransfer = new DataTransfer();
+              dataTransfer.items.add(file);
+              dataTransfer.setData('text/html', `<img src="${dataUri}" alt="embedded-image" />`);
+              dataTransfer.setData('text/plain', originalUrl || dataUri);
+
+              // Focus target before paste so editor-level handlers can receive it.
+              element.focus();
+
+              let pasteEvent: Event;
+              try {
+                pasteEvent = new ClipboardEvent('paste', {
+                  clipboardData: dataTransfer,
+                  bubbles: true,
+                  cancelable: true,
+                });
+              } catch {
+                pasteEvent = new Event('paste', { bubbles: true, cancelable: true });
+                Object.defineProperty(pasteEvent, 'clipboardData', { value: dataTransfer });
+              }
+
+              // Dispatch on target element (will bubble to document-level paste listeners).
+              element.dispatchEvent(pasteEvent);
+            },
+            output,
+            input.url,
+          );
+
+          const msg = `Downloaded image and dispatched paste image data to rich editor index ${targetIndex} (${output.length} chars)`;
           this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_OK, msg);
 
           return new ActionResult({ extractedContent: msg, includeInMemory: true });

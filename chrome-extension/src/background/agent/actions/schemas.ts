@@ -8,228 +8,227 @@ export interface ActionSchema {
 
 export const doneActionSchema: ActionSchema = {
   name: 'done',
-  description: 'Complete task',
+  description: '完成任务',
   schema: z.object({
     text: z.string(),
     success: z.boolean(),
   }),
 };
 
-// Basic Navigation Actions
+// 基础导航动作
 export const searchGoogleActionSchema: ActionSchema = {
   name: 'search_google',
-  description:
-    'Search the query in Google in the current tab, the query should be a search query like humans search in Google, concrete and not vague or super long. More the single most important items.',
+  description: '在当前标签页中使用 Google 搜索。查询词应像人类搜索一样具体，不要模糊或过长，优先聚焦最关键的信息。',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
+    intent: z.string().default('').describe('此动作的目的'),
     query: z.string(),
   }),
 };
 
 export const goToUrlActionSchema: ActionSchema = {
   name: 'go_to_url',
-  description: 'Navigate to URL in the current tab',
+  description: '在当前标签页导航到指定 URL',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
+    intent: z.string().default('').describe('此动作的目的'),
     url: z.string(),
   }),
 };
 
 export const goBackActionSchema: ActionSchema = {
   name: 'go_back',
-  description: 'Go back to the previous page',
+  description: '返回上一页',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
+    intent: z.string().default('').describe('此动作的目的'),
   }),
 };
 
 export const clickElementActionSchema: ActionSchema = {
   name: 'click_element',
-  description: 'Click element by index',
+  description: '通过索引点击元素',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    index: z.number().int().describe('index of the element'),
-    xpath: z.string().nullable().optional().describe('xpath of the element'),
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().describe('元素索引'),
+    xpath: z.string().nullable().optional().describe('元素的 xpath'),
   }),
 };
 
 export const inputTextActionSchema: ActionSchema = {
   name: 'input_text',
-  description: 'Input text into an interactive input element',
+  description: '向可交互输入元素写入文本',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    index: z.number().int().describe('index of the element'),
-    text: z.string().describe('text to input'),
-    xpath: z.string().nullable().optional().describe('xpath of the element'),
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().describe('元素索引'),
+    text: z.string().describe('要输入的文本'),
+    input_mode: z
+      .enum(['override', 'append'])
+      .default('override')
+      .describe('文本输入模式：override 覆盖现有内容，append 在末尾追加'),
+    xpath: z.string().nullable().optional().describe('元素的 xpath'),
   }),
 };
 
-// Tab Management Actions
+// 标签页管理动作
 export const switchTabActionSchema: ActionSchema = {
   name: 'switch_tab',
-  description: 'Switch to tab by tab id',
+  description: '通过 tab id 切换标签页',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    tab_id: z.number().int().describe('id of the tab to switch to'),
+    intent: z.string().default('').describe('此动作的目的'),
+    tab_id: z.number().int().describe('要切换到的标签页 id'),
   }),
 };
 
 export const openTabActionSchema: ActionSchema = {
   name: 'open_tab',
-  description: 'Open URL in new tab',
+  description: '在新标签页打开 URL',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    url: z.string().describe('url to open'),
+    intent: z.string().default('').describe('此动作的目的'),
+    url: z.string().describe('要打开的 url'),
   }),
 };
 
 export const closeTabActionSchema: ActionSchema = {
   name: 'close_tab',
-  description: 'Close tab by tab id',
+  description: '通过 tab id 关闭标签页',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    tab_id: z.number().int().describe('id of the tab'),
+    intent: z.string().default('').describe('此动作的目的'),
+    tab_id: z.number().int().describe('标签页 id'),
   }),
 };
 
-// Content Actions, not used currently
+// 内容相关动作（当前未使用）
 // export const extractContentActionSchema: ActionSchema = {
 //   name: 'extract_content',
 //   description:
-//     'Extract page content to retrieve specific information from the page, e.g. all company names, a specific description, all information about, links with companies in structured format or simply links',
+//     '提取页面内容以获取特定信息，例如公司名称列表、指定描述、结构化公司信息或链接等',
 //   schema: z.object({
 //     goal: z.string(),
 //   }),
 // };
 
-// Cache Actions
+// 缓存动作
 export const cacheContentActionSchema: ActionSchema = {
   name: 'cache_content',
-  description: 'Cache what you have found so far from the current page for future use',
+  description: '缓存当前页面已找到的信息供后续使用',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    content: z.string().default('').describe('content to cache'),
+    intent: z.string().default('').describe('此动作的目的'),
+    content: z.string().default('').describe('要缓存的内容'),
   }),
 };
 
 export const downloadImageToBase64ActionSchema: ActionSchema = {
   name: 'download_image_to_base64',
-  description: 'Download an image from an URL, convert it to base64 and paste it into the specified element index',
+  description: '从 URL 下载图片并转换为 base64，再写入指定索引的元素',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    index: z.number().int().nullable().optional().describe('index of the target interactive input/editor element'),
-    url: z.string().describe('image url to download'),
-    as_data_uri: z
-      .boolean()
-      .default(true)
-      .describe('return as data:image/*;base64,... when true, otherwise plain base64'),
-    mime_type: z
-      .string()
-      .nullable()
-      .optional()
-      .describe('override mime type, e.g. image/png. If empty, tries to infer from response header.'),
-    max_output_chars: z.number().int().optional().describe('truncate output to at most N characters'),
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().nullable().optional().describe('目标可交互输入/编辑器元素索引'),
+    url: z.string().describe('要下载的图片 url'),
+    as_data_uri: z.boolean().default(true).describe('为 true 时返回 data:image/*;base64,...，否则返回纯 base64'),
+    mime_type: z.string().nullable().optional().describe('覆盖 mime type，例如 image/png；为空时尝试从响应头推断'),
+    max_output_chars: z.number().int().optional().describe('将输出截断到最多 N 个字符'),
   }),
 };
 
 export const scrollToPercentActionSchema: ActionSchema = {
   name: 'scroll_to_percent',
-  description:
-    'Scrolls to a particular vertical percentage of the document or an element. If no index of element is specified, scroll the whole document.',
+  description: '滚动到文档或元素的指定垂直百分比；如果未提供元素索引，则滚动整个文档。',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    yPercent: z.number().int().describe('percentage to scroll to - min 0, max 100; 0 is top, 100 is bottom'),
-    index: z.number().int().nullable().optional().describe('index of the element'),
+    intent: z.string().default('').describe('此动作的目的'),
+    yPercent: z.number().int().describe('滚动目标百分比：最小 0，最大 100；0 为顶部，100 为底部'),
+    index: z.number().int().nullable().optional().describe('元素索引'),
   }),
 };
 
 export const scrollToTopActionSchema: ActionSchema = {
   name: 'scroll_to_top',
-  description: 'Scroll the document in the window or an element to the top',
+  description: '将窗口文档或指定元素滚动到顶部',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    index: z.number().int().nullable().optional().describe('index of the element'),
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().nullable().optional().describe('元素索引'),
   }),
 };
 
 export const scrollToBottomActionSchema: ActionSchema = {
   name: 'scroll_to_bottom',
-  description: 'Scroll the document in the window or an element to the bottom',
+  description: '将窗口文档或指定元素滚动到底部',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    index: z.number().int().nullable().optional().describe('index of the element'),
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().nullable().optional().describe('元素索引'),
   }),
 };
 
 export const previousPageActionSchema: ActionSchema = {
   name: 'previous_page',
-  description:
-    'Scroll the document in the window or an element to the previous page. If no index is specified, scroll the whole document.',
+  description: '将窗口文档或指定元素向上翻一页；如果未提供索引，则滚动整个文档。',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    index: z.number().int().nullable().optional().describe('index of the element'),
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().nullable().optional().describe('元素索引'),
   }),
 };
 
 export const nextPageActionSchema: ActionSchema = {
   name: 'next_page',
-  description:
-    'Scroll the document in the window or an element to the next page. If no index is specified, scroll the whole document.',
+  description: '将窗口文档或指定元素向下翻一页；如果未提供索引，则滚动整个文档。',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    index: z.number().int().nullable().optional().describe('index of the element'),
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().nullable().optional().describe('元素索引'),
   }),
 };
 
 export const scrollToTextActionSchema: ActionSchema = {
   name: 'scroll_to_text',
-  description: 'If you dont find something which you want to interact with in current viewport, try to scroll to it',
+  description: '当在当前视口找不到要交互的内容时，尝试滚动到对应文本位置',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    text: z.string().describe('text to scroll to'),
-    nth: z
-      .number()
-      .int()
-      .min(1)
-      .default(1)
-      .describe('which occurrence of the text to scroll to (1-indexed, default: 1)'),
+    intent: z.string().default('').describe('此动作的目的'),
+    text: z.string().describe('要滚动定位的文本'),
+    nth: z.number().int().min(1).default(1).describe('滚动到第几个匹配文本（从 1 开始，默认 1）'),
   }),
 };
 
 export const sendKeysActionSchema: ActionSchema = {
   name: 'send_keys',
   description:
-    'Send strings of special keys like Backspace, Insert, PageDown, Delete, Enter. Shortcuts such as `Control+o`, `Control+Shift+T` are supported as well. This gets used in keyboard press. Be aware of different operating systems and their shortcuts',
+    '发送特殊按键序列，例如 Backspace、Insert、PageDown、Delete、Enter。也支持快捷键组合，如 `Control+o`、`Control+Shift+T`。用于键盘按键操作，需注意不同操作系统的快捷键差异。',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    keys: z.string().describe('keys to send'),
+    intent: z.string().default('').describe('此动作的目的'),
+    keys: z.string().describe('要发送的按键序列'),
   }),
 };
 
 export const getDropdownOptionsActionSchema: ActionSchema = {
   name: 'get_dropdown_options',
-  description: 'Get all options from a native dropdown',
+  description: '获取原生下拉框中的所有选项',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    index: z.number().int().describe('index of the dropdown element'),
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().describe('下拉框元素索引'),
   }),
 };
 
 export const selectDropdownOptionActionSchema: ActionSchema = {
   name: 'select_dropdown_option',
-  description: 'Select dropdown option for interactive element index by the text of the option you want to select',
+  description: '按选项文本为指定索引的交互元素选择下拉项',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    index: z.number().int().describe('index of the dropdown element'),
-    text: z.string().describe('text of the option'),
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().describe('下拉框元素索引'),
+    text: z.string().describe('选项文本'),
   }),
 };
 
 export const waitActionSchema: ActionSchema = {
   name: 'wait',
-  description: 'Wait for x seconds default 3, do NOT use this action unless user asks to wait explicitly',
+  description: '等待指定秒数，默认 3 秒；除非用户明确要求等待，否则不要使用',
   schema: z.object({
-    intent: z.string().default('').describe('purpose of this action'),
-    seconds: z.number().int().default(3).describe('amount of seconds'),
+    intent: z.string().default('').describe('此动作的目的'),
+    seconds: z.number().int().default(3).describe('等待秒数'),
+  }),
+};
+
+export const waitForElementActionSchema: ActionSchema = {
+  name: 'wait_for_element',
+  description: '等待指定索引的交互元素在超时前变为可用/可见',
+  schema: z.object({
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().describe('目标交互元素索引'),
+    timeout_ms: z.number().int().default(5000).describe('最大等待时长（毫秒）'),
+    poll_interval_ms: z.number().int().default(250).describe('轮询间隔（毫秒）'),
   }),
 };

@@ -141,10 +141,10 @@ export function getPatterns(strict: boolean = false): SecurityPattern[] {
  * Tags to preserve during sanitization (wrapped content tags)
  */
 export const PRESERVED_TAGS = [
-  'nano_untrusted_content',
-  'nano_user_request',
-  'nano_attached_files',
-  'nano_file_content',
+  'ibb8_untrusted_content',
+  'ibb8_user_request',
+  'ibb8_attached_files',
+  'ibb8_file_content',
 ];
 
 /**

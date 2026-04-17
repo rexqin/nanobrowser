@@ -134,6 +134,8 @@ export default function PlanBuilder({
   const awaitingActionMenuRef = useRef<HTMLDivElement>(null);
   const [awaitingActionChoice, setAwaitingActionChoice] = useState<'resume' | 'stop'>('resume');
   const [awaitingActionMenuOpen, setAwaitingActionMenuOpen] = useState(false);
+  const [draggingStepId, setDraggingStepId] = useState<string | null>(null);
+  const [dragOverStepId, setDragOverStepId] = useState<string | null>(null);
 
   // Re-hydrate when switching plans or after save (updatedAt); avoid resetting on unrelated parent re-renders that replace `plan` by reference only.
   useEffect(() => {
@@ -190,6 +192,24 @@ export default function PlanBuilder({
           order: index,
         })),
     );
+  };
+
+  const reorderSteps = (sourceId: string, targetId: string) => {
+    if (sourceId === targetId) return;
+    setSteps(prev => {
+      const ordered = [...prev].sort((a, b) => a.order - b.order);
+      const fromIndex = ordered.findIndex(step => step.id === sourceId);
+      const toIndex = ordered.findIndex(step => step.id === targetId);
+      if (fromIndex === -1 || toIndex === -1) return prev;
+
+      const [moved] = ordered.splice(fromIndex, 1);
+      ordered.splice(toIndex, 0, moved);
+
+      return ordered.map((step, index) => ({
+        ...step,
+        order: index,
+      }));
+    });
   };
 
   const handleSave = async () => {
@@ -303,11 +323,63 @@ export default function PlanBuilder({
         )}
         {sortedSteps.length === 0 && <p className="text-sm text-[#a35b19]">{t('nav_planBuilder_emptySteps')}</p>}
         {sortedSteps.map((step, index) => (
-          <div key={step.id} className="rounded-md border border-[#fdb56f]/25 bg-white p-2">
+          <div
+            key={step.id}
+            draggable={!executing}
+            onDragStart={event => {
+              if (executing) return;
+              setDraggingStepId(step.id);
+              event.dataTransfer.effectAllowed = 'move';
+              event.dataTransfer.setData('text/plain', step.id);
+            }}
+            onDragEnd={() => {
+              setDraggingStepId(null);
+              setDragOverStepId(null);
+            }}
+            onDragOver={event => {
+              if (executing || !draggingStepId || draggingStepId === step.id) return;
+              event.preventDefault();
+              event.dataTransfer.dropEffect = 'move';
+              setDragOverStepId(step.id);
+            }}
+            onDragLeave={() => {
+              if (dragOverStepId === step.id) {
+                setDragOverStepId(null);
+              }
+            }}
+            onDrop={event => {
+              event.preventDefault();
+              if (executing) return;
+              const sourceId = event.dataTransfer.getData('text/plain') || draggingStepId;
+              if (!sourceId) return;
+              reorderSteps(sourceId, step.id);
+              setDraggingStepId(null);
+              setDragOverStepId(null);
+            }}
+            className={`rounded-md border bg-white p-2 transition ${
+              dragOverStepId === step.id ? 'border-[#ee9b47] ring-2 ring-[#fdb56f]/40' : 'border-[#fdb56f]/25'
+            } ${draggingStepId === step.id ? 'opacity-60' : ''}`}>
             <div className="mb-1 flex items-center justify-between gap-2">
-              <span className="text-xs font-medium text-[#8a490d]">
-                {t('nav_planBuilder_stepLabel', [String(index + 1)])}
-              </span>
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={executing}
+                  draggable={!executing}
+                  onDragStart={event => {
+                    if (executing) return;
+                    setDraggingStepId(step.id);
+                    event.dataTransfer.effectAllowed = 'move';
+                    event.dataTransfer.setData('text/plain', step.id);
+                  }}
+                  className="cursor-grab text-[#c47b34] hover:text-[#8a490d] disabled:cursor-not-allowed disabled:opacity-40"
+                  aria-label="Drag to reorder step"
+                  title="Drag to reorder step">
+                  ⋮⋮
+                </button>
+                <span className="text-xs font-medium text-[#8a490d]">
+                  {t('nav_planBuilder_stepLabel', [String(index + 1)])}
+                </span>
+              </div>
               <div className="flex items-center gap-2">
                 {stepStatusByStepId?.[step.id] ? (
                   <span
