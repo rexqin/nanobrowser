@@ -2,6 +2,7 @@ import { ActionResult, type AgentContext } from '@src/background/agent/types';
 import { t } from '@extension/i18n';
 import {
   clickElementActionSchema,
+  hoverElementActionSchema,
   doneActionSchema,
   goBackActionSchema,
   goToUrlActionSchema,
@@ -333,6 +334,28 @@ export class ActionBuilder {
       true,
     );
     actions.push(clickElement);
+
+    const hoverElement = new Action(
+      async (input: z.infer<typeof hoverElementActionSchema.schema>) => {
+        const intent = input.intent || `悬停索引为 ${input.index} 的元素`;
+        this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_START, intent);
+
+        const page = await this.context.browserContext.getCurrentPage();
+        const state = await page.getState();
+        const elementNode = state?.selectorMap.get(input.index);
+        if (!elementNode) {
+          throw new Error(t('act_errors_elementNotExist', [input.index.toString()]));
+        }
+
+        await page.hoverElementNode(elementNode);
+        const msg = `已悬停索引为 ${input.index} 的元素`;
+        this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_OK, msg);
+        return new ActionResult({ extractedContent: msg, includeInMemory: true });
+      },
+      hoverElementActionSchema,
+      true,
+    );
+    actions.push(hoverElement);
 
     const inputText = new Action(
       async (input: z.infer<typeof inputTextActionSchema.schema>) => {

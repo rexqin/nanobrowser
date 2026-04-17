@@ -52,6 +52,16 @@ export const clickElementActionSchema: ActionSchema = {
   }),
 };
 
+export const hoverElementActionSchema: ActionSchema = {
+  name: 'hover_element',
+  description: '通过索引悬停元素',
+  schema: z.object({
+    intent: z.string().default('').describe('此动作的目的'),
+    index: z.number().int().describe('元素索引'),
+    xpath: z.string().nullable().optional().describe('元素的 xpath'),
+  }),
+};
+
 export const inputTextActionSchema: ActionSchema = {
   name: 'input_text',
   description: '向可交互输入元素写入文本',

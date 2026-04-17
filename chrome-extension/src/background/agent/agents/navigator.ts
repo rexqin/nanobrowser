@@ -158,10 +158,15 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
         logger.info('Navigator structuredLlm tool call with empty content', rawResponse.tool_calls);
         // only use the first tool call
         const toolCall = rawResponse.tool_calls[0];
-        return {
+        const candidate = {
           current_state: toolCall.args.currentState,
           action: [...toolCall.args.action],
         };
+        const validated = this.modelOutputSchema.safeParse(candidate);
+        if (!validated.success) {
+          throw new ResponseParseError(`Invalid action payload from model tool_call: ${validated.error.message}`);
+        }
+        return validated.data;
       }
       throw new ResponseParseError('Could not parse navigator response');
     }
@@ -403,7 +408,6 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
 
   private async doMultiAction(actions: Record<string, unknown>[]): Promise<ActionResult[]> {
     const results: ActionResult[] = [];
-    let errCount = 0;
     logger.info('Actions', actions);
 
     const browserContext = this.context.browserContext;
@@ -457,6 +461,9 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
         const result = await actionInstance.call(actionArgs);
         if (result === undefined) {
           throw new Error(`Action ${actionName} returned undefined`);
+        }
+        if (result.error) {
+          throw new Error(typeof result.error === 'string' ? result.error : String(result.error));
         }
         const afterUrl = page.url();
         const urlChanged = beforeUrl !== afterUrl;
@@ -512,21 +519,8 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
         );
         // unexpected error, emit event
         this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, errorMessage);
-        errCount++;
-        if (errCount > 3) {
-          throw new Error('Too many errors in actions');
-        }
-        results.push(
-          new ActionResult({
-            error: errorMessage,
-            isDone: false,
-            includeInMemory: true,
-          }),
-        );
-        const postActionDelayMs = this.getPostActionDelayMs(actionName, results[results.length - 1], false);
-        if (postActionDelayMs > 0) {
-          await new Promise(resolve => setTimeout(resolve, postActionDelayMs));
-        }
+        // Strict failure mode: fail-fast on first action error.
+        throw new Error(errorMessage);
       }
     }
     return results;

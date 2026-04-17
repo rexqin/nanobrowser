@@ -92,6 +92,22 @@ export default class Page {
   private _cachedStateClickableElementsHashes: CachedStateClickableElementsHashes | null = null;
   private _evaluateWrapped = false;
 
+  private _getMainCdpSession(): {
+    send: (method: string, params?: Record<string, unknown>) => Promise<unknown>;
+  } | null {
+    if (!this._puppeteerPage) return null;
+    const pageLike = this._puppeteerPage as unknown as {
+      _client?: () => { send: (method: string, params?: unknown) => Promise<unknown> };
+    };
+    const client = pageLike._client?.();
+    if (!client) return null;
+    return {
+      send: async (method: string, params?: Record<string, unknown>) => {
+        return await client.send(method, params);
+      },
+    };
+  }
+
   constructor(tabId: number, url: string, title: string, config: Partial<BrowserContextConfig> = {}) {
     this._tabId = tabId;
     this._config = { ...DEFAULT_BROWSER_CONTEXT_CONFIG, ...config };
@@ -270,6 +286,7 @@ export default class Page {
       focusElement,
       this._config.viewportExpansion,
       import.meta.env.DEV,
+      this._getMainCdpSession(),
     );
   }
 
@@ -1515,6 +1532,26 @@ export default class Page {
       throw new Error(
         `Failed to click element: ${elementNode}. Error: ${error instanceof Error ? error.message : String(error)}`,
       );
+    }
+  }
+
+  async hoverElementNode(elementNode: DOMElementNode): Promise<void> {
+    if (!this._puppeteerPage) {
+      throw new Error('Puppeteer is not connected');
+    }
+
+    try {
+      const element = await this.locateElement(elementNode);
+      if (!element) {
+        throw new Error(`Element: ${elementNode} not found`);
+      }
+
+      await this._scrollIntoViewIfNeeded(element);
+      await element.hover();
+    } catch (error) {
+      const errorMsg = `Failed to hover element: ${elementNode}. Error: ${error instanceof Error ? error.message : String(error)}`;
+      logger.error(errorMsg);
+      throw new Error(errorMsg);
     }
   }
 
