@@ -378,12 +378,6 @@
   "options_general_maxFailures_desc": {
     "message": "在停止执行前，可容许的连续失败次数"
   },
-  "options_general_enableVision": {
-    "message": "启用视觉能力"
-  },
-  "options_general_enableVision_desc": {
-    "message": "使用大型语言模型的视觉能力 (将会消耗更多的 token 以取得更好的结果)"
-  },
 
   "options_general_planningInterval": {
     "message": "重新规划频率"

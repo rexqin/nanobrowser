@@ -354,7 +354,7 @@ chrome.runtime.onConnect.addListener(port => {
 
           case 'state': {
             try {
-              const browserState = await browserContext.getState(true);
+              const browserState = await browserContext.getState();
               const elementsText = browserState.elementTree.clickableElementsToString(
                 DEFAULT_AGENT_OPTIONS.includeAttributes,
               );
@@ -517,8 +517,6 @@ async function setupExecutor(taskId: string, task: string, browserContext: Brows
       maxSteps: generalSettings.maxSteps,
       maxFailures: generalSettings.maxFailures,
       maxActionsPerStep: generalSettings.maxActionsPerStep,
-      useVision: generalSettings.useVision,
-      useVisionForPlanner: true,
       planningInterval: generalSettings.planningInterval,
     },
     generalSettings: generalSettings,

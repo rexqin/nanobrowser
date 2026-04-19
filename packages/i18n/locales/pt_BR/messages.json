@@ -380,12 +380,6 @@
   "options_general_maxFailures_desc": {
     "message": "Quantas falhas consecutivas antes de parar"
   },
-  "options_general_enableVision": {
-    "message": "Ativar Visão"
-  },
-  "options_general_enableVision_desc": {
-    "message": "Usar capacidade de visão dos modelos de linguagem (consome mais tokens para melhores resultados)"
-  },
   "options_general_planningInterval": {
     "message": "Frequência de Replanejamento"
   },

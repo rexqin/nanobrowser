@@ -17,8 +17,7 @@ export const GeneralSettings = () => {
     // Call the store to update the setting
     await generalSettingsStore.updateSettings({ [key]: value } as Partial<GeneralSettingsConfig>);
 
-    // After the store update (which might have side effects, e.g., useVision affecting displayHighlights),
-    // fetch the latest settings from the store and update the local state again to ensure UI consistency.
+    // Fetch the latest settings from the store after update to keep UI in sync.
     const latestSettings = await generalSettingsStore.getSettings();
     setSettings(latestSettings);
   };
@@ -84,27 +83,6 @@ export const GeneralSettings = () => {
               onChange={e => updateSetting('maxFailures', Number.parseInt(e.target.value, 10))}
               className="w-20 rounded-md border border-[#fdb56f]/30 bg-white px-3 py-2 text-[#6f3909]"
             />
-          </div>
-
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-base font-medium text-[#8a490d]">{t('options_general_enableVision')}</h3>
-              <p className="text-sm font-normal text-[#a35b19]">{t('options_general_enableVision_desc')}</p>
-            </div>
-            <div className="relative inline-flex cursor-pointer items-center">
-              <input
-                id="useVision"
-                type="checkbox"
-                checked={settings.useVision}
-                onChange={e => updateSetting('useVision', e.target.checked)}
-                className="peer sr-only"
-              />
-              <label
-                htmlFor="useVision"
-                className="peer h-6 w-11 rounded-full bg-gray-200 after:absolute after:left-[2px] after:top-[2px] after:size-5 after:rounded-full after:border after:border-gray-300 after:bg-white after:transition-all after:content-[''] peer-checked:bg-[#fdb56f] peer-checked:after:translate-x-full peer-checked:after:border-white peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-[#fdb56f]/30">
-                <span className="sr-only">{t('options_general_enableVision')}</span>
-              </label>
-            </div>
           </div>
 
           <div className="flex items-center justify-between">

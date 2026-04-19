@@ -7,8 +7,6 @@ export interface GeneralSettingsConfig {
   maxSteps: number;
   maxActionsPerStep: number;
   maxFailures: number;
-  useVision: boolean;
-  useVisionForPlanner: boolean;
   planningInterval: number;
   minWaitPageLoad: number;
   replayHistoricalTasks: boolean;
@@ -25,8 +23,6 @@ export const DEFAULT_GENERAL_SETTINGS: GeneralSettingsConfig = {
   maxSteps: 100,
   maxActionsPerStep: 5,
   maxFailures: 3,
-  useVision: false,
-  useVisionForPlanner: false,
   planningInterval: 3,
   minWaitPageLoad: 250,
   replayHistoricalTasks: false,
@@ -46,18 +42,16 @@ export const generalSettingsStore: GeneralSettingsStorage = {
       ...settings,
     };
 
-    // If useVision is true, displayHighlights must also be true
-    if (updatedSettings.useVision) {
-    }
-
     await storage.set(updatedSettings);
   },
   async getSettings() {
     const settings = await storage.get();
-    return {
+    const merged = {
       ...DEFAULT_GENERAL_SETTINGS,
       ...settings,
     };
+
+    return merged;
   },
   async resetToDefaults() {
     await storage.set(DEFAULT_GENERAL_SETTINGS);

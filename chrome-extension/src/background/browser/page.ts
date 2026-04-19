@@ -262,7 +262,7 @@ export default class Page {
       focusElement,
       this._config.viewportExpansion,
       import.meta.env.DEV,
-      this._puppeteerPage,
+      this._puppeteerPage ?? undefined,
     );
   }
 
@@ -414,13 +414,13 @@ export default class Page {
     return this._cachedState;
   }
 
-  async getState(useVision = false, cacheClickableElementsHashes = false): Promise<PageState> {
+  async getState(cacheClickableElementsHashes = false): Promise<PageState> {
     if (!this._validWebPage) {
       // return the initial state
       return build_initial_state(this._tabId);
     }
     await this.waitForPageAndFramesLoad();
-    const updatedState = await this._updateState(useVision);
+    const updatedState = await this._updateState();
 
     // Find out which elements are new
     // Do this only if url has not changed
@@ -451,7 +451,7 @@ export default class Page {
     return updatedState;
   }
 
-  async _updateState(useVision = false, focusElement = -1): Promise<PageState> {
+  async _updateState(focusElement = -1): Promise<PageState> {
     try {
       // Test if page is still accessible
       // @ts-expect-error - puppeteerPage is not null, already checked before calling this function
@@ -493,8 +493,7 @@ export default class Page {
         logger.debug('content.elementTree: not found');
       }
 
-      // Take screenshot if needed
-      const screenshot = useVision ? await this.takeScreenshot() : null;
+      const screenshot: string | null = null;
       const [scrollY, visualViewportHeight, scrollHeight] = await this.getScrollInfo();
 
       // update the state
@@ -1176,7 +1175,6 @@ export default class Page {
   }
 
   async inputTextElementNode(
-    useVision: boolean,
     elementNode: DOMElementNode,
     text: string,
     inputMode: 'override' | 'append' = 'override',
@@ -1188,7 +1186,7 @@ export default class Page {
     try {
       // Highlight before typing
       // if (elementNode.highlightIndex != null) {
-      //   await this._updateState(useVision, elementNode.highlightIndex);
+      //   await this._updateState(elementNode.highlightIndex);
       // }
 
       const element = await this.locateElement(elementNode);
@@ -1454,7 +1452,7 @@ export default class Page {
     }
   }
 
-  async clickElementNode(useVision: boolean, elementNode: DOMElementNode): Promise<void> {
+  async clickElementNode(elementNode: DOMElementNode): Promise<void> {
     if (!this._puppeteerPage) {
       throw new Error('Puppeteer is not connected');
     }
@@ -1462,7 +1460,7 @@ export default class Page {
     try {
       // Highlight before clicking
       // if (elementNode.highlightIndex !== null) {
-      //   await this._updateState(useVision, elementNode.highlightIndex);
+      //   await this._updateState(elementNode.highlightIndex);
       // }
 
       const element = await this.locateElement(elementNode);

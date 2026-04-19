@@ -1,9 +1,10 @@
 import { createLogger } from '@src/background/log';
 import type { BuildDomTreeArgs, RawDomTreeNode } from './raw_types';
-import { type DOMState, DOMElementNode } from './views';
+import { type DOMState, type DOMBaseNode, DOMElementNode, DOMTextNode } from './views';
 
 import { isNewTabPage } from '../util';
-import { DomService } from './domService';
+import { DomService, NodeType } from './domService';
+import type { SimplifiedNode } from './domSerializer';
 import type { Page as PuppeteerPage, CDPSession as PuppeteerCDPSession } from 'puppeteer-core';
 const logger = createLogger('DOMService');
 
@@ -127,6 +128,89 @@ export async function getClickableElements(
   return { elementTree, selectorMap };
 }
 
+/**
+ * 将 `SerializedDOMState` 的简化树转为 `DOMElementNode` 树，并构建与 LLM 中 `[backendNodeId]` 一致的 selectorMap。
+ */
+function domStateFromSerializedRoot(
+  root: SimplifiedNode | null,
+): [DOMElementNode, Map<number, DOMElementNode>] {
+  const selectorMap = new Map<number, DOMElementNode>();
+
+  const convert = (node: SimplifiedNode, parent: DOMElementNode | null): DOMBaseNode => {
+    const orig = node.originalNode;
+
+    if (orig.nodeType === NodeType.TEXT_NODE) {
+      const text = orig.nodeValue ?? '';
+      const visible = orig.isVisible !== false;
+      return new DOMTextNode(text, visible, parent ?? undefined);
+    }
+
+    const snap = orig.snapshotNode;
+    const isVisible =
+      orig.isVisible !== false &&
+      (snap?.clientRects != null || orig.nodeType === NodeType.ELEMENT_NODE || orig.nodeType === NodeType.DOCUMENT_FRAGMENT_NODE);
+
+    const domEl = new DOMElementNode({
+      tagName: orig.tagName || null,
+      xpath: orig.xpath,
+      attributes: { ...orig.attributes },
+      children: [],
+      isVisible: Boolean(isVisible),
+      isInteractive: node.isInteractive,
+      isTopElement: false,
+      isInViewport: Boolean(snap?.bounds && snap.bounds.width > 0 && snap.bounds.height > 0),
+      shadowRoot: Boolean(orig.shadowRootType),
+      highlightIndex: node.isInteractive ? orig.backendNodeId : null,
+      isNew: node.isNew,
+      parent,
+    });
+
+    for (const child of node.children) {
+      domEl.children.push(convert(child, domEl));
+    }
+
+    if (node.isInteractive) {
+      selectorMap.set(orig.backendNodeId, domEl);
+    }
+
+    return domEl;
+  };
+
+  if (!root) {
+    const elementTree = new DOMElementNode({
+      tagName: 'body',
+      xpath: '',
+      attributes: {},
+      children: [],
+      isVisible: false,
+      isInteractive: false,
+      isTopElement: false,
+      isInViewport: false,
+      parent: null,
+    });
+    return [elementTree, selectorMap];
+  }
+
+  const built = convert(root, null);
+  if (built instanceof DOMElementNode) {
+    return [built, selectorMap];
+  }
+
+  const elementTree = new DOMElementNode({
+    tagName: 'body',
+    xpath: '',
+    attributes: {},
+    children: [built],
+    isVisible: true,
+    isInteractive: false,
+    isTopElement: false,
+    isInViewport: false,
+    parent: null,
+  });
+  built.parent = elementTree;
+  return [elementTree, selectorMap];
+}
+
 async function _buildDomTree(
   tabId: number,
   url: string,
@@ -137,6 +221,9 @@ async function _buildDomTree(
   cdpSession?: PuppeteerCDPSession,
   page?: PuppeteerPage,
 ): Promise<[DOMElementNode, Map<number, DOMElementNode>]> {
+  void focusElement;
+  void viewportExpansion;
+
   if (!cdpSession || !page) {
     throw new Error('Failed to create CDP session or page');
   }
@@ -158,13 +245,17 @@ async function _buildDomTree(
   }
 
   const domService = new DomService();
-  const [serializedDomState, enhancedDomTree, timingInfo] = await domService.getSerializedDomTree(
+  const [serializedDomState, , timingInfo] = await domService.getSerializedDomTree(
     page,
     cdpSession,
     tabId.toString(),
   );
 
-  return _constructDomTree(mainFramePage);
+  if (debugMode) {
+    logger.debug('getSerializedDomTree timing', timingInfo);
+  }
+
+  return domStateFromSerializedRoot(serializedDomState._root);
 }
 
 export async function getScrollInfo(tabId: number): Promise<[number, number, number]> {
@@ -187,4 +278,16 @@ export async function getScrollInfo(tabId: number): Promise<[number, number, num
     throw new Error('Failed to get scroll information');
   }
   return [result.scrollY, result.visualViewportHeight, result.scrollHeight];
+}
+
+/** 在可脚本化页面注入 `buildDomTree.js`，提供 `window.buildDomTree`（供自动化 DOM 采集使用） */
+export async function injectBuildDomTreeScripts(tabId: number): Promise<void> {
+  try {
+    await chrome.scripting.executeScript({
+      target: { tabId },
+      files: ['buildDomTree.js'],
+    });
+  } catch (e) {
+    logger.debug('injectBuildDomTreeScripts failed', tabId, e);
+  }
 }

@@ -304,7 +304,7 @@ export class ActionBuilder {
 
         try {
           const initialTabIds = await this.context.browserContext.getAllTabIds();
-          await page.clickElementNode(this.context.options.useVision, elementNode);
+          await page.clickElementNode(elementNode);
           let msg = t('act_click_ok', [input.index.toString(), elementNode.getAllTextTillNextClickableElement(2)]);
           logger.info(msg);
 
@@ -447,12 +447,7 @@ export class ActionBuilder {
           }
         }
 
-        await page.inputTextElementNode(
-          this.context.options.useVision,
-          elementNode,
-          input.text,
-          input.input_mode ?? 'override',
-        );
+        await page.inputTextElementNode(elementNode, input.text, input.input_mode ?? 'override');
         const msg = t('act_inputText_ok', [input.text, targetIndex.toString()]);
         this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_OK, msg);
         return new ActionResult({ extractedContent: msg, includeInMemory: true });

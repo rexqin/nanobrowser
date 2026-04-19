@@ -379,12 +379,6 @@
   "options_general_maxFailures_desc": {
     "message": "How many consecutive failures before stopping"
   },
-  "options_general_enableVision": {
-    "message": "Enable Vision"
-  },
-  "options_general_enableVision_desc": {
-    "message": "Use vision capability of LLMs (consumes more tokens for better results)"
-  },
   "options_general_planningInterval": {
     "message": "Replanning Frequency"
   },

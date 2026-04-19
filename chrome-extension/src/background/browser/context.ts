@@ -458,12 +458,12 @@ export default class BrowserContext {
     return tabInfos;
   }
 
-  public async getCachedState(useVision = false, cacheClickableElementsHashes = false): Promise<BrowserState> {
+  public async getCachedState(cacheClickableElementsHashes = false): Promise<BrowserState> {
     const currentPage = await this.getCurrentPage();
 
     let pageState = !currentPage ? build_initial_state() : currentPage.getCachedState();
     if (!pageState) {
-      pageState = await currentPage.getState(useVision, cacheClickableElementsHashes);
+      pageState = await currentPage.getState(cacheClickableElementsHashes);
     }
 
     const tabInfos = await this.getTabInfos();
@@ -474,12 +474,12 @@ export default class BrowserContext {
     return browserState;
   }
 
-  public async getState(useVision = false, cacheClickableElementsHashes = false): Promise<BrowserState> {
+  public async getState(cacheClickableElementsHashes = false): Promise<BrowserState> {
     const currentPage = await this.getCurrentPage();
 
     const pageState = !currentPage
       ? build_initial_state()
-      : await currentPage.getState(useVision, cacheClickableElementsHashes);
+      : await currentPage.getState(cacheClickableElementsHashes);
     const tabInfos = await this.getTabInfos();
     const browserState: BrowserState = {
       ...pageState,

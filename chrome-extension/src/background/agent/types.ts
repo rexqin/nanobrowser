@@ -14,8 +14,6 @@ export interface AgentOptions {
   retryDelay: number;
   maxInputTokens: number;
   maxErrorLength: number;
-  useVision: boolean;
-  useVisionForPlanner: boolean;
   includeAttributes: string[];
   planningInterval: number;
   plannerHistoryWindow: number;
@@ -28,8 +26,6 @@ export const DEFAULT_AGENT_OPTIONS: AgentOptions = {
   retryDelay: 10,
   maxInputTokens: 128000,
   maxErrorLength: 400,
-  useVision: false,
-  useVisionForPlanner: true,
   includeAttributes: DEFAULT_INCLUDE_ATTRIBUTES,
   planningInterval: 5,
   plannerHistoryWindow: 20,
