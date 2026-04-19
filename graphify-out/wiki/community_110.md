@@ -1,15 +1,17 @@
-# Community 110: utils
+# Community 110: impl
 
-**Members:** 3
+**Members:** 4
 
 ## Nodes
 
-- **utils** (`pages_side_panel_src_utils_ts`, File, degree: 2)
-- **generateNewTaskId()** (`pages_side_panel_src_utils_ts_generatenewtaskid`, Function, degree: 1)
-- **getCurrentTimestampStr()** (`pages_side_panel_src_utils_ts_getcurrenttimestampstr`, Function, degree: 1)
+- **impl** (`packages_dev_utils_lib_manifest_parser_impl_ts`, File, degree: 3)
+- **convertToFirefoxCompatibleManifest()** (`packages_dev_utils_lib_manifest_parser_impl_ts_converttofirefoxcompatiblemanifest`, Function, degree: 1)
+- **./type/Manifest** (`packages_dev_utils_lib_manifest_parser_impl_ts_import_type_manifest`, Module, degree: 1)
+- **./type/ManifestParserInterface** (`packages_dev_utils_lib_manifest_parser_impl_ts_import_type_manifestparserinterface`, Module, degree: 1)
 
 ## Relationships
 
-- pages_side_panel_src_utils_ts → pages_side_panel_src_utils_ts_generatenewtaskid (defines)
-- pages_side_panel_src_utils_ts → pages_side_panel_src_utils_ts_getcurrenttimestampstr (defines)
+- packages_dev_utils_lib_manifest_parser_impl_ts → packages_dev_utils_lib_manifest_parser_impl_ts_import_type_manifestparserinterface (imports)
+- packages_dev_utils_lib_manifest_parser_impl_ts → packages_dev_utils_lib_manifest_parser_impl_ts_import_type_manifest (imports)
+- packages_dev_utils_lib_manifest_parser_impl_ts → packages_dev_utils_lib_manifest_parser_impl_ts_converttofirefoxcompatiblemanifest (defines)
 

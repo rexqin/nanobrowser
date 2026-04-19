@@ -1,30 +1,31 @@
-# Community 40: domTreeValidator
+# Community 40: utils
 
 **Members:** 10
 
 ## Nodes
 
-- **domTreeValidator** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts`, File, degree: 4)
-- **DOMTreeValidator** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator`, Class, degree: 6)
-- **._countTotalChildren()** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_counttotalchildren`, Method, degree: 2)
-- **.generateReport()** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_generatereport`, Method, degree: 1)
-- **.quickCheck()** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_quickcheck`, Method, degree: 1)
-- **.validateOriginalTree()** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_validateoriginaltree`, Method, degree: 1)
-- **.validateSimplifiedTree()** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_validatesimplifiedtree`, Method, degree: 2)
-- **./domSerializer.js/SimplifiedNode** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domserializer_js_simplifiednode`, Module, degree: 1)
-- **./domService.js/EnhancedDOMTreeNode** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domservice_js_enhanceddomtreenode`, Module, degree: 1)
-- **./domService.js/NodeType** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domservice_js_nodetype`, Module, degree: 1)
+- **utils** (`chrome_extension_src_background_utils_ts`, File, degree: 9)
+- **addTitlesToProperties()** (`chrome_extension_src_background_utils_ts_addtitlestoproperties`, Function, degree: 3)
+- **capitalizeFirstLetter()** (`chrome_extension_src_background_utils_ts_capitalizefirstletter`, Function, degree: 2)
+- **convertZodToJsonSchema()** (`chrome_extension_src_background_utils_ts_convertzodtojsonschema`, Function, degree: 2)
+- **getCurrentTimestampStr()** (`chrome_extension_src_background_utils_ts_getcurrenttimestampstr`, Function, degree: 1)
+- **jsonrepair/jsonrepair** (`chrome_extension_src_background_utils_ts_import_jsonrepair_jsonrepair`, Module, degree: 1)
+- **@src/background/log/createLogger** (`chrome_extension_src_background_utils_ts_import_src_background_log_createlogger`, Module, degree: 1)
+- **zod-to-json-schema/zodToJsonSchema** (`chrome_extension_src_background_utils_ts_import_zod_to_json_schema_zodtojsonschema`, Module, degree: 1)
+- **zod/z** (`chrome_extension_src_background_utils_ts_import_zod_z`, Module, degree: 1)
+- **repairJsonString()** (`chrome_extension_src_background_utils_ts_repairjsonstring`, Function, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_dom_domtreevalidator_ts → chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domservice_js_nodetype (imports)
-- chrome_extension_src_background_browser_dom_domtreevalidator_ts → chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domservice_js_enhanceddomtreenode (imports)
-- chrome_extension_src_background_browser_dom_domtreevalidator_ts → chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domserializer_js_simplifiednode (imports)
-- chrome_extension_src_background_browser_dom_domtreevalidator_ts → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator (defines)
-- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_validatesimplifiedtree (defines)
-- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_counttotalchildren (defines)
-- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_validateoriginaltree (defines)
-- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_generatereport (defines)
-- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_quickcheck (defines)
-- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_validatesimplifiedtree → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_counttotalchildren (calls)
+- chrome_extension_src_background_utils_ts → chrome_extension_src_background_utils_ts_import_zod_z (imports)
+- chrome_extension_src_background_utils_ts → chrome_extension_src_background_utils_ts_import_jsonrepair_jsonrepair (imports)
+- chrome_extension_src_background_utils_ts → chrome_extension_src_background_utils_ts_import_src_background_log_createlogger (imports)
+- chrome_extension_src_background_utils_ts → chrome_extension_src_background_utils_ts_import_zod_to_json_schema_zodtojsonschema (imports)
+- chrome_extension_src_background_utils_ts → chrome_extension_src_background_utils_ts_getcurrenttimestampstr (defines)
+- chrome_extension_src_background_utils_ts → chrome_extension_src_background_utils_ts_repairjsonstring (defines)
+- chrome_extension_src_background_utils_ts → chrome_extension_src_background_utils_ts_capitalizefirstletter (defines)
+- chrome_extension_src_background_utils_ts → chrome_extension_src_background_utils_ts_addtitlestoproperties (defines)
+- chrome_extension_src_background_utils_ts → chrome_extension_src_background_utils_ts_convertzodtojsonschema (defines)
+- chrome_extension_src_background_utils_ts_addtitlestoproperties → chrome_extension_src_background_utils_ts_capitalizefirstletter (calls)
+- chrome_extension_src_background_utils_ts_convertzodtojsonschema → chrome_extension_src_background_utils_ts_addtitlestoproperties (calls)
 

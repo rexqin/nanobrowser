@@ -1,8 +1,8 @@
-# Community 136: index
+# Community 136: vite-env.d
 
 **Members:** 1
 
 ## Nodes
 
-- **index** (`packages_ui_index_ts`, File, degree: 0)
+- **vite-env.d** (`vite_env_d_ts`, File, degree: 0)
 

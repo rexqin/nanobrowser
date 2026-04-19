@@ -1,8 +1,8 @@
-# Community 158: type
+# Community 158: types
 
 **Members:** 1
 
 ## Nodes
 
-- **type** (`packages_dev_utils_lib_manifest_parser_type_ts`, File, degree: 0)
+- **types** (`chrome_extension_src_background_services_guardrails_types_ts`, File, degree: 0)
 

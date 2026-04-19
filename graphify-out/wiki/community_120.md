@@ -1,15 +1,15 @@
-# Community 120: tailwind.config
+# Community 120: utils
 
 **Members:** 3
 
 ## Nodes
 
-- **tailwind.config** (`pages_options_tailwind_config_ts`, File, degree: 2)
-- **@extension/tailwindcss-config/baseConfig** (`pages_options_tailwind_config_ts_import_extension_tailwindcss_config_baseconfig`, Module, degree: 1)
-- **@extension/ui/withUI** (`pages_options_tailwind_config_ts_import_extension_ui_withui`, Module, degree: 1)
+- **utils** (`pages_side_panel_src_utils_ts`, File, degree: 2)
+- **generateNewTaskId()** (`pages_side_panel_src_utils_ts_generatenewtaskid`, Function, degree: 1)
+- **getCurrentTimestampStr()** (`pages_side_panel_src_utils_ts_getcurrenttimestampstr`, Function, degree: 1)
 
 ## Relationships
 
-- pages_options_tailwind_config_ts → pages_options_tailwind_config_ts_import_extension_tailwindcss_config_baseconfig (imports)
-- pages_options_tailwind_config_ts → pages_options_tailwind_config_ts_import_extension_ui_withui (imports)
+- pages_side_panel_src_utils_ts → pages_side_panel_src_utils_ts_generatenewtaskid (defines)
+- pages_side_panel_src_utils_ts → pages_side_panel_src_utils_ts_getcurrenttimestampstr (defines)
 

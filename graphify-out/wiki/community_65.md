@@ -1,27 +1,25 @@
-# Community 65: user
+# Community 65: index
 
 **Members:** 8
 
 ## Nodes
 
-- **user** (`packages_storage_lib_profile_user_ts`, File, degree: 7)
-- **createProfile()** (`packages_storage_lib_profile_user_ts_createprofile`, Function, degree: 1)
-- **getProfile()** (`packages_storage_lib_profile_user_ts_getprofile`, Function, degree: 2)
-- **getUserId()** (`packages_storage_lib_profile_user_ts_getuserid`, Function, degree: 3)
-- **../base/base/createStorage** (`packages_storage_lib_profile_user_ts_import_base_base_createstorage`, Module, degree: 1)
-- **../base/enums/StorageEnum** (`packages_storage_lib_profile_user_ts_import_base_enums_storageenum`, Module, degree: 1)
-- **../base/types/BaseStorage** (`packages_storage_lib_profile_user_ts_import_base_types_basestorage`, Module, degree: 1)
-- **updateProfile()** (`packages_storage_lib_profile_user_ts_updateprofile`, Function, degree: 2)
+- **index** (`chrome_extension_src_background_services_guardrails_index_ts`, File, degree: 8)
+- **./sanitizer/cleanEmptyTags** (`chrome_extension_src_background_services_guardrails_index_ts_import_sanitizer_cleanemptytags`, Module, degree: 1)
+- **./sanitizer/detectThreats** (`chrome_extension_src_background_services_guardrails_index_ts_import_sanitizer_detectthreats`, Module, degree: 1)
+- **./sanitizer/sanitizeContent** (`chrome_extension_src_background_services_guardrails_index_ts_import_sanitizer_sanitizecontent`, Module, degree: 1)
+- **@src/background/log/createLogger** (`chrome_extension_src_background_services_guardrails_index_ts_import_src_background_log_createlogger`, Module, degree: 1)
+- **./types/SanitizationResult** (`chrome_extension_src_background_services_guardrails_index_ts_import_types_sanitizationresult`, Module, degree: 1)
+- **./types/ThreatType** (`chrome_extension_src_background_services_guardrails_index_ts_import_types_threattype`, Module, degree: 1)
+- **./types/ValidationResult** (`chrome_extension_src_background_services_guardrails_index_ts_import_types_validationresult`, Module, degree: 1)
 
 ## Relationships
 
-- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_import_base_enums_storageenum (imports)
-- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_import_base_base_createstorage (imports)
-- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_import_base_types_basestorage (imports)
-- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_createprofile (defines)
-- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_updateprofile (defines)
-- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_getprofile (defines)
-- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_getuserid (defines)
-- packages_storage_lib_profile_user_ts_getuserid → packages_storage_lib_profile_user_ts_getprofile (calls)
-- packages_storage_lib_profile_user_ts_getuserid → packages_storage_lib_profile_user_ts_updateprofile (calls)
+- chrome_extension_src_background_services_guardrails_index_ts → chrome_extension_src_background_services_guardrails_index_ts_import_sanitizer_sanitizecontent (imports)
+- chrome_extension_src_background_services_guardrails_index_ts → chrome_extension_src_background_services_guardrails_index_ts_import_sanitizer_detectthreats (imports)
+- chrome_extension_src_background_services_guardrails_index_ts → chrome_extension_src_background_services_guardrails_index_ts_import_sanitizer_cleanemptytags (imports)
+- chrome_extension_src_background_services_guardrails_index_ts → chrome_extension_src_background_services_guardrails_index_ts_import_types_sanitizationresult (imports)
+- chrome_extension_src_background_services_guardrails_index_ts → chrome_extension_src_background_services_guardrails_index_ts_import_types_validationresult (imports)
+- chrome_extension_src_background_services_guardrails_index_ts → chrome_extension_src_background_services_guardrails_index_ts_import_types_threattype (imports)
+- chrome_extension_src_background_services_guardrails_index_ts → chrome_extension_src_background_services_guardrails_index_ts_import_src_background_log_createlogger (imports)
 

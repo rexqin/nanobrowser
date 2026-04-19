@@ -1,8 +1,8 @@
-# Community 161: common
+# Community 161: types
 
 **Members:** 1
 
 ## Nodes
 
-- **common** (`chrome_extension_src_background_agent_prompts_templates_common_ts`, File, degree: 0)
+- **types** (`packages_storage_lib_plan_types_ts`, File, degree: 0)
 

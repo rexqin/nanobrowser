@@ -1,8 +1,8 @@
-# Community 143: types
+# Community 143: enums
 
 **Members:** 1
 
 ## Nodes
 
-- **types** (`chrome_extension_src_background_services_guardrails_types_ts`, File, degree: 0)
+- **enums** (`packages_storage_lib_base_enums_ts`, File, degree: 0)
 

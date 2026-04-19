@@ -1,19 +1,35 @@
-# Community 87: .getScrollInfo()
+# Community 87: closePlanDedicatedTabIfAny()
 
 **Members:** 5
 
 ## Nodes
 
-- **.getScrollInfo()** (`chrome_extension_src_background_browser_page_ts_page_getscrollinfo`, Method, degree: 2)
-- **.removeHighlight()** (`chrome_extension_src_background_browser_page_ts_page_removehighlight`, Method, degree: 2)
-- **.takeScreenshot()** (`chrome_extension_src_background_browser_page_ts_page_takescreenshot`, Method, degree: 2)
-- **.title()** (`chrome_extension_src_background_browser_page_ts_page_title`, Method, degree: 2)
-- **._updateState()** (`chrome_extension_src_background_browser_page_ts_page_updatestate`, Method, degree: 11)
+- **closePlanDedicatedTabIfAny()** (`chrome_extension_src_background_index_ts_closeplandedicatedtabifany`, Function, degree: 9)
+- **isHzgmTechSenderUrl()** (`chrome_extension_src_background_index_ts_ishzgmtechsenderurl`, Function, degree: 9)
+- **isScriptableTabUrl()** (`chrome_extension_src_background_index_ts_isscriptabletaburl`, Function, degree: 9)
+- **setupExecutor()** (`chrome_extension_src_background_index_ts_setupexecutor`, Function, degree: 9)
+- **subscribeToExecutorEvents()** (`chrome_extension_src_background_index_ts_subscribetoexecutorevents`, Function, degree: 9)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_page_ts_page_updatestate → chrome_extension_src_background_browser_page_ts_page_getscrollinfo (calls)
-- chrome_extension_src_background_browser_page_ts_page_updatestate → chrome_extension_src_background_browser_page_ts_page_removehighlight (calls)
-- chrome_extension_src_background_browser_page_ts_page_updatestate → chrome_extension_src_background_browser_page_ts_page_takescreenshot (calls)
-- chrome_extension_src_background_browser_page_ts_page_updatestate → chrome_extension_src_background_browser_page_ts_page_title (calls)
+- chrome_extension_src_background_index_ts_isscriptabletaburl → chrome_extension_src_background_index_ts_ishzgmtechsenderurl (uses)
+- chrome_extension_src_background_index_ts_isscriptabletaburl → chrome_extension_src_background_index_ts_closeplandedicatedtabifany (uses)
+- chrome_extension_src_background_index_ts_isscriptabletaburl → chrome_extension_src_background_index_ts_setupexecutor (uses)
+- chrome_extension_src_background_index_ts_isscriptabletaburl → chrome_extension_src_background_index_ts_subscribetoexecutorevents (uses)
+- chrome_extension_src_background_index_ts_ishzgmtechsenderurl → chrome_extension_src_background_index_ts_isscriptabletaburl (uses)
+- chrome_extension_src_background_index_ts_ishzgmtechsenderurl → chrome_extension_src_background_index_ts_closeplandedicatedtabifany (uses)
+- chrome_extension_src_background_index_ts_ishzgmtechsenderurl → chrome_extension_src_background_index_ts_setupexecutor (uses)
+- chrome_extension_src_background_index_ts_ishzgmtechsenderurl → chrome_extension_src_background_index_ts_subscribetoexecutorevents (uses)
+- chrome_extension_src_background_index_ts_closeplandedicatedtabifany → chrome_extension_src_background_index_ts_isscriptabletaburl (uses)
+- chrome_extension_src_background_index_ts_closeplandedicatedtabifany → chrome_extension_src_background_index_ts_ishzgmtechsenderurl (uses)
+- chrome_extension_src_background_index_ts_closeplandedicatedtabifany → chrome_extension_src_background_index_ts_setupexecutor (uses)
+- chrome_extension_src_background_index_ts_closeplandedicatedtabifany → chrome_extension_src_background_index_ts_subscribetoexecutorevents (uses)
+- chrome_extension_src_background_index_ts_setupexecutor → chrome_extension_src_background_index_ts_isscriptabletaburl (uses)
+- chrome_extension_src_background_index_ts_setupexecutor → chrome_extension_src_background_index_ts_ishzgmtechsenderurl (uses)
+- chrome_extension_src_background_index_ts_setupexecutor → chrome_extension_src_background_index_ts_closeplandedicatedtabifany (uses)
+- chrome_extension_src_background_index_ts_setupexecutor → chrome_extension_src_background_index_ts_subscribetoexecutorevents (uses)
+- chrome_extension_src_background_index_ts_subscribetoexecutorevents → chrome_extension_src_background_index_ts_isscriptabletaburl (uses)
+- chrome_extension_src_background_index_ts_subscribetoexecutorevents → chrome_extension_src_background_index_ts_ishzgmtechsenderurl (uses)
+- chrome_extension_src_background_index_ts_subscribetoexecutorevents → chrome_extension_src_background_index_ts_closeplandedicatedtabifany (uses)
+- chrome_extension_src_background_index_ts_subscribetoexecutorevents → chrome_extension_src_background_index_ts_setupexecutor (uses)
 

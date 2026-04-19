@@ -1,15 +1,17 @@
-# Community 109: raw_types
+# Community 109: watch-public-plugin
 
-**Members:** 3
+**Members:** 4
 
 ## Nodes
 
-- **raw_types** (`chrome_extension_src_background_browser_dom_raw_types_ts`, File, degree: 2)
-- **./history/view/CoordinateSet** (`chrome_extension_src_background_browser_dom_raw_types_ts_import_history_view_coordinateset`, Module, degree: 1)
-- **./history/view/ViewportInfo** (`chrome_extension_src_background_browser_dom_raw_types_ts_import_history_view_viewportinfo`, Module, degree: 1)
+- **watch-public-plugin** (`packages_hmr_lib_plugins_watch_public_plugin_ts`, File, degree: 3)
+- **fast-glob/fg** (`packages_hmr_lib_plugins_watch_public_plugin_ts_import_fast_glob_fg`, Module, degree: 1)
+- **vite/PluginOption** (`packages_hmr_lib_plugins_watch_public_plugin_ts_import_vite_pluginoption`, Module, degree: 1)
+- **watchPublicPlugin()** (`packages_hmr_lib_plugins_watch_public_plugin_ts_watchpublicplugin`, Function, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_dom_raw_types_ts → chrome_extension_src_background_browser_dom_raw_types_ts_import_history_view_coordinateset (imports)
-- chrome_extension_src_background_browser_dom_raw_types_ts → chrome_extension_src_background_browser_dom_raw_types_ts_import_history_view_viewportinfo (imports)
+- packages_hmr_lib_plugins_watch_public_plugin_ts → packages_hmr_lib_plugins_watch_public_plugin_ts_import_vite_pluginoption (imports)
+- packages_hmr_lib_plugins_watch_public_plugin_ts → packages_hmr_lib_plugins_watch_public_plugin_ts_import_fast_glob_fg (imports)
+- packages_hmr_lib_plugins_watch_public_plugin_ts → packages_hmr_lib_plugins_watch_public_plugin_ts_watchpublicplugin (defines)
 

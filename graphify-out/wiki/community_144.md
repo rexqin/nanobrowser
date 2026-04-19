@@ -1,8 +1,8 @@
-# Community 144: types
+# Community 144: shared-types
 
 **Members:** 1
 
 ## Nodes
 
-- **types** (`packages_storage_lib_chat_types_ts`, File, degree: 0)
+- **shared-types** (`packages_shared_lib_utils_shared_types_ts`, File, degree: 0)
 

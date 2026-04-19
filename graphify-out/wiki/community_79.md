@@ -1,21 +1,21 @@
-# Community 79: view
+# Community 79: manifest
 
 **Members:** 6
 
 ## Nodes
 
-- **view** (`chrome_extension_src_background_browser_dom_history_view_ts`, File, degree: 2)
-- **DOMHistoryElement** (`chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement`, Class, degree: 3)
-- **.constructor()** (`chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement_constructor`, Method, degree: 1)
-- **.toDict()** (`chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement_todict`, Method, degree: 1)
-- **HashedDomElement** (`chrome_extension_src_background_browser_dom_history_view_ts_hasheddomelement`, Class, degree: 2)
-- **.constructor()** (`chrome_extension_src_background_browser_dom_history_view_ts_hasheddomelement_constructor`, Method, degree: 1)
+- **manifest** (`chrome_extension_manifest_js`, File, degree: 5)
+- **deepmerge/deepmerge** (`chrome_extension_manifest_js_import_deepmerge_deepmerge`, Module, degree: 1)
+- **node:fs/fs** (`chrome_extension_manifest_js_import_node_fs_fs`, Module, degree: 1)
+- **withExternallyConnectableHzgm()** (`chrome_extension_manifest_js_withexternallyconnectablehzgm`, Function, degree: 1)
+- **withOperaSidebar()** (`chrome_extension_manifest_js_withoperasidebar`, Function, degree: 1)
+- **withSidePanel()** (`chrome_extension_manifest_js_withsidepanel`, Function, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_dom_history_view_ts → chrome_extension_src_background_browser_dom_history_view_ts_hasheddomelement (defines)
-- chrome_extension_src_background_browser_dom_history_view_ts_hasheddomelement → chrome_extension_src_background_browser_dom_history_view_ts_hasheddomelement_constructor (defines)
-- chrome_extension_src_background_browser_dom_history_view_ts → chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement (defines)
-- chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement → chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement_constructor (defines)
-- chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement → chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement_todict (defines)
+- chrome_extension_manifest_js → chrome_extension_manifest_js_import_node_fs_fs (imports)
+- chrome_extension_manifest_js → chrome_extension_manifest_js_import_deepmerge_deepmerge (imports)
+- chrome_extension_manifest_js → chrome_extension_manifest_js_withsidepanel (defines)
+- chrome_extension_manifest_js → chrome_extension_manifest_js_withoperasidebar (defines)
+- chrome_extension_manifest_js → chrome_extension_manifest_js_withexternallyconnectablehzgm (defines)
 

@@ -1,25 +1,27 @@
-# Community 54: GeneralSettings
+# Community 54: user
 
 **Members:** 8
 
 ## Nodes
 
-- **GeneralSettings** (`pages_options_src_components_generalsettings_tsx`, File, degree: 7)
-- **@extension/i18n/t** (`pages_options_src_components_generalsettings_tsx_import_extension_i18n_t`, Module, degree: 1)
-- **@extension/storage/DEFAULT_GENERAL_SETTINGS** (`pages_options_src_components_generalsettings_tsx_import_extension_storage_default_general_settings`, Module, degree: 1)
-- **@extension/storage/GeneralSettingsConfig** (`pages_options_src_components_generalsettings_tsx_import_extension_storage_generalsettingsconfig`, Module, degree: 1)
-- **@extension/storage/generalSettingsStore** (`pages_options_src_components_generalsettings_tsx_import_extension_storage_generalsettingsstore`, Module, degree: 1)
-- **react/useEffect** (`pages_options_src_components_generalsettings_tsx_import_react_useeffect`, Module, degree: 1)
-- **react/useState** (`pages_options_src_components_generalsettings_tsx_import_react_usestate`, Module, degree: 1)
-- **updateSetting()** (`pages_options_src_components_generalsettings_tsx_updatesetting`, Function, degree: 1)
+- **user** (`packages_storage_lib_profile_user_ts`, File, degree: 7)
+- **createProfile()** (`packages_storage_lib_profile_user_ts_createprofile`, Function, degree: 1)
+- **getProfile()** (`packages_storage_lib_profile_user_ts_getprofile`, Function, degree: 2)
+- **getUserId()** (`packages_storage_lib_profile_user_ts_getuserid`, Function, degree: 3)
+- **../base/base/createStorage** (`packages_storage_lib_profile_user_ts_import_base_base_createstorage`, Module, degree: 1)
+- **../base/enums/StorageEnum** (`packages_storage_lib_profile_user_ts_import_base_enums_storageenum`, Module, degree: 1)
+- **../base/types/BaseStorage** (`packages_storage_lib_profile_user_ts_import_base_types_basestorage`, Module, degree: 1)
+- **updateProfile()** (`packages_storage_lib_profile_user_ts_updateprofile`, Function, degree: 2)
 
 ## Relationships
 
-- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_react_usestate (imports)
-- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_react_useeffect (imports)
-- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_extension_storage_generalsettingsconfig (imports)
-- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_extension_storage_generalsettingsstore (imports)
-- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_extension_storage_default_general_settings (imports)
-- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_extension_i18n_t (imports)
-- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_updatesetting (defines)
+- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_import_base_enums_storageenum (imports)
+- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_import_base_base_createstorage (imports)
+- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_import_base_types_basestorage (imports)
+- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_createprofile (defines)
+- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_updateprofile (defines)
+- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_getprofile (defines)
+- packages_storage_lib_profile_user_ts → packages_storage_lib_profile_user_ts_getuserid (defines)
+- packages_storage_lib_profile_user_ts_getuserid → packages_storage_lib_profile_user_ts_getprofile (calls)
+- packages_storage_lib_profile_user_ts_getuserid → packages_storage_lib_profile_user_ts_updateprofile (calls)
 

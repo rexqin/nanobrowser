@@ -1,19 +1,19 @@
-# Community 96: favorites
+# Community 96: .getScrollInfo()
 
 **Members:** 5
 
 ## Nodes
 
-- **favorites** (`packages_storage_lib_prompt_favorites_ts`, File, degree: 4)
-- **createFavoritesStorage()** (`packages_storage_lib_prompt_favorites_ts_createfavoritesstorage`, Function, degree: 1)
-- **../base/base/createStorage** (`packages_storage_lib_prompt_favorites_ts_import_base_base_createstorage`, Module, degree: 1)
-- **../base/enums/StorageEnum** (`packages_storage_lib_prompt_favorites_ts_import_base_enums_storageenum`, Module, degree: 1)
-- **../base/types/BaseStorage** (`packages_storage_lib_prompt_favorites_ts_import_base_types_basestorage`, Module, degree: 1)
+- **.getScrollInfo()** (`chrome_extension_src_background_browser_page_ts_page_getscrollinfo`, Method, degree: 2)
+- **.removeHighlight()** (`chrome_extension_src_background_browser_page_ts_page_removehighlight`, Method, degree: 2)
+- **.takeScreenshot()** (`chrome_extension_src_background_browser_page_ts_page_takescreenshot`, Method, degree: 2)
+- **.title()** (`chrome_extension_src_background_browser_page_ts_page_title`, Method, degree: 2)
+- **._updateState()** (`chrome_extension_src_background_browser_page_ts_page_updatestate`, Method, degree: 11)
 
 ## Relationships
 
-- packages_storage_lib_prompt_favorites_ts → packages_storage_lib_prompt_favorites_ts_import_base_enums_storageenum (imports)
-- packages_storage_lib_prompt_favorites_ts → packages_storage_lib_prompt_favorites_ts_import_base_base_createstorage (imports)
-- packages_storage_lib_prompt_favorites_ts → packages_storage_lib_prompt_favorites_ts_import_base_types_basestorage (imports)
-- packages_storage_lib_prompt_favorites_ts → packages_storage_lib_prompt_favorites_ts_createfavoritesstorage (defines)
+- chrome_extension_src_background_browser_page_ts_page_updatestate → chrome_extension_src_background_browser_page_ts_page_getscrollinfo (calls)
+- chrome_extension_src_background_browser_page_ts_page_updatestate → chrome_extension_src_background_browser_page_ts_page_removehighlight (calls)
+- chrome_extension_src_background_browser_page_ts_page_updatestate → chrome_extension_src_background_browser_page_ts_page_takescreenshot (calls)
+- chrome_extension_src_background_browser_page_ts_page_updatestate → chrome_extension_src_background_browser_page_ts_page_title (calls)
 

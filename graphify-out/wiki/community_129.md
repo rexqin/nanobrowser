@@ -1,13 +1,13 @@
-# Community 129: navigator
+# Community 129: external
 
 **Members:** 2
 
 ## Nodes
 
-- **navigator** (`chrome_extension_src_background_agent_prompts_templates_navigator_ts`, File, degree: 1)
-- **./common/commonSecurityRules** (`chrome_extension_src_background_agent_prompts_templates_navigator_ts_import_common_commonsecurityrules`, Module, degree: 1)
+- **external** (`packages_shared_lib_message_external_ts`, File, degree: 1)
+- **zod/z** (`packages_shared_lib_message_external_ts_import_zod_z`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_agent_prompts_templates_navigator_ts → chrome_extension_src_background_agent_prompts_templates_navigator_ts_import_common_commonsecurityrules (imports)
+- packages_shared_lib_message_external_ts → packages_shared_lib_message_external_ts_import_zod_z (imports)
 

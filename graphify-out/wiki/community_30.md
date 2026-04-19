@@ -1,43 +1,33 @@
-# Community 30: MessageManager
+# Community 30: context
 
-**Members:** 13
+**Members:** 12
 
 ## Nodes
 
-- **MessageManager** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager`, Class, degree: 18)
-- **.addModelOutput()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_addmodeloutput`, Method, degree: 4)
-- **.addToolMessage()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_addtoolmessage`, Method, degree: 5)
-- **.constructor()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_constructor`, Method, degree: 1)
-- **._countTextTokens()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_counttexttokens`, Method, degree: 2)
-- **._countTokens()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_counttokens`, Method, degree: 3)
-- **.cutMessages()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_cutmessages`, Method, degree: 3)
-- **.getMessages()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_getmessages`, Method, degree: 1)
-- **.initTaskMessages()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_inittaskmessages`, Method, degree: 5)
-- **.length()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_length`, Method, degree: 1)
-- **.nextToolId()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_nexttoolid`, Method, degree: 4)
-- **.removeLastStateMessage()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_removelaststatemessage`, Method, degree: 2)
-- **.taskInstructions()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_taskinstructions`, Method, degree: 2)
+- **context** (`chrome_extension_src_background_browser_context_ts`, File, degree: 14)
+- **./page/build_initial_state** (`chrome_extension_src_background_browser_context_ts_import_page_build_initial_state`, Module, degree: 1)
+- **./page/Page** (`chrome_extension_src_background_browser_context_ts_import_page_page`, Module, degree: 1)
+- **../services/analytics/analytics** (`chrome_extension_src_background_browser_context_ts_import_services_analytics_analytics`, Module, degree: 1)
+- **@src/background/log/createLogger** (`chrome_extension_src_background_browser_context_ts_import_src_background_log_createlogger`, Module, degree: 1)
+- **./util/isUrlAllowed** (`chrome_extension_src_background_browser_context_ts_import_util_isurlallowed`, Module, degree: 1)
+- **./views/BrowserContextConfig** (`chrome_extension_src_background_browser_context_ts_import_views_browsercontextconfig`, Module, degree: 1)
+- **./views/BrowserState** (`chrome_extension_src_background_browser_context_ts_import_views_browserstate`, Module, degree: 1)
+- **./views/DEFAULT_BROWSER_CONTEXT_CONFIG** (`chrome_extension_src_background_browser_context_ts_import_views_default_browser_context_config`, Module, degree: 1)
+- **./views/TabInfo** (`chrome_extension_src_background_browser_context_ts_import_views_tabinfo`, Module, degree: 1)
+- **./views/URLNotAllowedError** (`chrome_extension_src_background_browser_context_ts_import_views_urlnotallowederror`, Module, degree: 1)
+- **webextension-polyfill** (`chrome_extension_src_background_browser_context_ts_import_webextension_polyfill`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_constructor (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_inittaskmessages (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_nexttoolid (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_taskinstructions (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_length (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_addmodeloutput (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_removelaststatemessage (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_getmessages (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_counttokens (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_counttexttokens (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_cutmessages (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager → chrome_extension_src_background_agent_messages_service_ts_messagemanager_addtoolmessage (defines)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager_inittaskmessages → chrome_extension_src_background_agent_messages_service_ts_messagemanager_addtoolmessage (calls)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager_inittaskmessages → chrome_extension_src_background_agent_messages_service_ts_messagemanager_taskinstructions (calls)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager_inittaskmessages → chrome_extension_src_background_agent_messages_service_ts_messagemanager_nexttoolid (calls)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager_addmodeloutput → chrome_extension_src_background_agent_messages_service_ts_messagemanager_addtoolmessage (calls)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager_addmodeloutput → chrome_extension_src_background_agent_messages_service_ts_messagemanager_nexttoolid (calls)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager_counttokens → chrome_extension_src_background_agent_messages_service_ts_messagemanager_counttexttokens (calls)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager_cutmessages → chrome_extension_src_background_agent_messages_service_ts_messagemanager_removelaststatemessage (calls)
-- chrome_extension_src_background_agent_messages_service_ts_messagemanager_addtoolmessage → chrome_extension_src_background_agent_messages_service_ts_messagemanager_nexttoolid (calls)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_webextension_polyfill (imports)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_views_browsercontextconfig (imports)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_views_browserstate (imports)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_views_default_browser_context_config (imports)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_views_tabinfo (imports)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_views_urlnotallowederror (imports)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_page_page (imports)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_page_build_initial_state (imports)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_src_background_log_createlogger (imports)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_util_isurlallowed (imports)
+- chrome_extension_src_background_browser_context_ts → chrome_extension_src_background_browser_context_ts_import_services_analytics_analytics (imports)
 

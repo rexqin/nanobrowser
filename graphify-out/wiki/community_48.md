@@ -1,30 +1,29 @@
-# Community 48: EventManager
+# Community 48: FirewallSettings
 
-**Members:** 9
+**Members:** 10
 
 ## Nodes
 
-- **EventManager** (`chrome_extension_src_background_agent_event_manager_ts_eventmanager`, Class, degree: 9)
-- **.attachDurations()** (`chrome_extension_src_background_agent_event_manager_ts_eventmanager_attachdurations`, Method, degree: 4)
-- **.clearSubscribers()** (`chrome_extension_src_background_agent_event_manager_ts_eventmanager_clearsubscribers`, Method, degree: 1)
-- **.constructor()** (`chrome_extension_src_background_agent_event_manager_ts_eventmanager_constructor`, Method, degree: 1)
-- **.emit()** (`chrome_extension_src_background_agent_event_manager_ts_eventmanager_emit`, Method, degree: 2)
-- **.getOrCreateTaskState()** (`chrome_extension_src_background_agent_event_manager_ts_eventmanager_getorcreatetaskstate`, Method, degree: 2)
-- **.getTotalPausedMs()** (`chrome_extension_src_background_agent_event_manager_ts_eventmanager_gettotalpausedms`, Method, degree: 2)
-- **.subscribe()** (`chrome_extension_src_background_agent_event_manager_ts_eventmanager_subscribe`, Method, degree: 1)
-- **.unsubscribe()** (`chrome_extension_src_background_agent_event_manager_ts_eventmanager_unsubscribe`, Method, degree: 1)
+- **FirewallSettings** (`pages_options_src_components_firewallsettings_tsx`, File, degree: 9)
+- **handleAddUrl()** (`pages_options_src_components_firewallsettings_tsx_handleaddurl`, Function, degree: 1)
+- **handleRemoveUrl()** (`pages_options_src_components_firewallsettings_tsx_handleremoveurl`, Function, degree: 1)
+- **handleToggleFirewall()** (`pages_options_src_components_firewallsettings_tsx_handletogglefirewall`, Function, degree: 1)
+- **@extension/i18n/t** (`pages_options_src_components_firewallsettings_tsx_import_extension_i18n_t`, Module, degree: 1)
+- **@extension/storage/firewallStore** (`pages_options_src_components_firewallsettings_tsx_import_extension_storage_firewallstore`, Module, degree: 1)
+- **@extension/ui/Button** (`pages_options_src_components_firewallsettings_tsx_import_extension_ui_button`, Module, degree: 1)
+- **react/useCallback** (`pages_options_src_components_firewallsettings_tsx_import_react_usecallback`, Module, degree: 1)
+- **react/useEffect** (`pages_options_src_components_firewallsettings_tsx_import_react_useeffect`, Module, degree: 1)
+- **react/useState** (`pages_options_src_components_firewallsettings_tsx_import_react_usestate`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager → chrome_extension_src_background_agent_event_manager_ts_eventmanager_constructor (defines)
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager → chrome_extension_src_background_agent_event_manager_ts_eventmanager_subscribe (defines)
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager → chrome_extension_src_background_agent_event_manager_ts_eventmanager_unsubscribe (defines)
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager → chrome_extension_src_background_agent_event_manager_ts_eventmanager_clearsubscribers (defines)
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager → chrome_extension_src_background_agent_event_manager_ts_eventmanager_getorcreatetaskstate (defines)
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager → chrome_extension_src_background_agent_event_manager_ts_eventmanager_gettotalpausedms (defines)
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager → chrome_extension_src_background_agent_event_manager_ts_eventmanager_attachdurations (defines)
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager → chrome_extension_src_background_agent_event_manager_ts_eventmanager_emit (defines)
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager_attachdurations → chrome_extension_src_background_agent_event_manager_ts_eventmanager_gettotalpausedms (calls)
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager_attachdurations → chrome_extension_src_background_agent_event_manager_ts_eventmanager_getorcreatetaskstate (calls)
-- chrome_extension_src_background_agent_event_manager_ts_eventmanager_emit → chrome_extension_src_background_agent_event_manager_ts_eventmanager_attachdurations (calls)
+- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_react_usestate (imports)
+- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_react_useeffect (imports)
+- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_react_usecallback (imports)
+- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_extension_storage_firewallstore (imports)
+- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_extension_ui_button (imports)
+- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_extension_i18n_t (imports)
+- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_handletogglefirewall (defines)
+- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_handleaddurl (defines)
+- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_handleremoveurl (defines)
 

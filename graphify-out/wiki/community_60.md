@@ -1,36 +1,25 @@
-# Community 60: i18n
+# Community 60: views
 
 **Members:** 8
 
 ## Nodes
 
-- **i18n** (`packages_i18n_lib_i18n_ts`, File, degree: 14)
-- **./getMessageFromLocale/defaultLocale** (`packages_i18n_lib_i18n_ts_import_getmessagefromlocale_defaultlocale`, Module, degree: 2)
-- **./getMessageFromLocale/getMessageFromLocale** (`packages_i18n_lib_i18n_ts_import_getmessagefromlocale_getmessagefromlocale`, Module, degree: 2)
-- **./type/DevLocale** (`packages_i18n_lib_i18n_ts_import_type_devlocale`, Module, degree: 2)
-- **./type/MessageKey** (`packages_i18n_lib_i18n_ts_import_type_messagekey`, Module, degree: 2)
-- **removePlaceholder()** (`packages_i18n_lib_i18n_ts_removeplaceholder`, Function, degree: 4)
-- **t()** (`packages_i18n_lib_i18n_ts_t`, Function, degree: 6)
-- **translate()** (`packages_i18n_lib_i18n_ts_translate`, Function, degree: 4)
+- **views** (`chrome_extension_src_background_agent_messages_views_ts`, File, degree: 6)
+- **@langchain/core/messages/BaseMessage** (`chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_basemessage`, Module, degree: 1)
+- **@langchain/core/messages/HumanMessage** (`chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_humanmessage`, Module, degree: 1)
+- **@langchain/core/messages/SystemMessage** (`chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_systemmessage`, Module, degree: 1)
+- **ManagedMessage** (`chrome_extension_src_background_agent_messages_views_ts_managedmessage`, Class, degree: 2)
+- **.constructor()** (`chrome_extension_src_background_agent_messages_views_ts_managedmessage_constructor`, Method, degree: 1)
+- **MessageMetadata** (`chrome_extension_src_background_agent_messages_views_ts_messagemetadata`, Class, degree: 2)
+- **.constructor()** (`chrome_extension_src_background_agent_messages_views_ts_messagemetadata_constructor`, Method, degree: 1)
 
 ## Relationships
 
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_import_type_devlocale (imports)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_import_type_messagekey (imports)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_import_getmessagefromlocale_defaultlocale (imports)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_import_getmessagefromlocale_getmessagefromlocale (imports)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_translate (defines)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_removeplaceholder (defines)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_t (defines)
-- packages_i18n_lib_i18n_ts_t → packages_i18n_lib_i18n_ts_translate (calls)
-- packages_i18n_lib_i18n_ts_t → packages_i18n_lib_i18n_ts_removeplaceholder (calls)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_import_type_devlocale (imports)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_import_type_messagekey (imports)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_import_getmessagefromlocale_defaultlocale (imports)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_import_getmessagefromlocale_getmessagefromlocale (imports)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_translate (defines)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_removeplaceholder (defines)
-- packages_i18n_lib_i18n_ts → packages_i18n_lib_i18n_ts_t (defines)
-- packages_i18n_lib_i18n_ts_t → packages_i18n_lib_i18n_ts_translate (calls)
-- packages_i18n_lib_i18n_ts_t → packages_i18n_lib_i18n_ts_removeplaceholder (calls)
+- chrome_extension_src_background_agent_messages_views_ts → chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_basemessage (imports)
+- chrome_extension_src_background_agent_messages_views_ts → chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_humanmessage (imports)
+- chrome_extension_src_background_agent_messages_views_ts → chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_systemmessage (imports)
+- chrome_extension_src_background_agent_messages_views_ts → chrome_extension_src_background_agent_messages_views_ts_messagemetadata (defines)
+- chrome_extension_src_background_agent_messages_views_ts_messagemetadata → chrome_extension_src_background_agent_messages_views_ts_messagemetadata_constructor (defines)
+- chrome_extension_src_background_agent_messages_views_ts → chrome_extension_src_background_agent_messages_views_ts_managedmessage (defines)
+- chrome_extension_src_background_agent_messages_views_ts_managedmessage → chrome_extension_src_background_agent_messages_views_ts_managedmessage_constructor (defines)
 

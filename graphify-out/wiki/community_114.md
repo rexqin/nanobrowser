@@ -1,15 +1,15 @@
-# Community 114: tailwind.config
+# Community 114: logger
 
 **Members:** 3
 
 ## Nodes
 
-- **tailwind.config** (`pages_side_panel_tailwind_config_ts`, File, degree: 2)
-- **@extension/tailwindcss-config/baseConfig** (`pages_side_panel_tailwind_config_ts_import_extension_tailwindcss_config_baseconfig`, Module, degree: 1)
-- **tailwindcss/types/config/Config** (`pages_side_panel_tailwind_config_ts_import_tailwindcss_types_config_config`, Module, degree: 1)
+- **logger** (`packages_dev_utils_lib_logger_ts`, File, degree: 2)
+- **colorLog()** (`packages_dev_utils_lib_logger_ts_colorlog`, Function, degree: 1)
+- **@extension/shared/ValueOf** (`packages_dev_utils_lib_logger_ts_import_extension_shared_valueof`, Module, degree: 1)
 
 ## Relationships
 
-- pages_side_panel_tailwind_config_ts → pages_side_panel_tailwind_config_ts_import_extension_tailwindcss_config_baseconfig (imports)
-- pages_side_panel_tailwind_config_ts → pages_side_panel_tailwind_config_ts_import_tailwindcss_types_config_config (imports)
+- packages_dev_utils_lib_logger_ts → packages_dev_utils_lib_logger_ts_import_extension_shared_valueof (imports)
+- packages_dev_utils_lib_logger_ts → packages_dev_utils_lib_logger_ts_colorlog (defines)
 

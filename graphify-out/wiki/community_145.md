@@ -4,5 +4,5 @@
 
 ## Nodes
 
-- **index** (`pages_content_src_index_ts`, File, degree: 0)
+- **index** (`packages_storage_lib_profile_index_ts`, File, degree: 0)
 

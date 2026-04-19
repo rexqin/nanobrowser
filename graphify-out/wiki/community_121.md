@@ -1,15 +1,15 @@
-# Community 121: PlanListSidebar
+# Community 121: tailwind.config
 
 **Members:** 3
 
 ## Nodes
 
-- **PlanListSidebar** (`pages_side_panel_src_components_planlistsidebar_tsx`, File, degree: 2)
-- **@extension/i18n/t** (`pages_side_panel_src_components_planlistsidebar_tsx_import_extension_i18n_t`, Module, degree: 1)
-- **@extension/storage/PlanSessionMetadata** (`pages_side_panel_src_components_planlistsidebar_tsx_import_extension_storage_plansessionmetadata`, Module, degree: 1)
+- **tailwind.config** (`pages_options_tailwind_config_ts`, File, degree: 2)
+- **@extension/tailwindcss-config/baseConfig** (`pages_options_tailwind_config_ts_import_extension_tailwindcss_config_baseconfig`, Module, degree: 1)
+- **@extension/ui/withUI** (`pages_options_tailwind_config_ts_import_extension_ui_withui`, Module, degree: 1)
 
 ## Relationships
 
-- pages_side_panel_src_components_planlistsidebar_tsx → pages_side_panel_src_components_planlistsidebar_tsx_import_extension_storage_plansessionmetadata (imports)
-- pages_side_panel_src_components_planlistsidebar_tsx → pages_side_panel_src_components_planlistsidebar_tsx_import_extension_i18n_t (imports)
+- pages_options_tailwind_config_ts → pages_options_tailwind_config_ts_import_extension_tailwindcss_config_baseconfig (imports)
+- pages_options_tailwind_config_ts → pages_options_tailwind_config_ts_import_extension_ui_withui (imports)
 

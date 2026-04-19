@@ -1,19 +1,19 @@
-# Community 97: index
+# Community 97: .goBack()
 
 **Members:** 5
 
 ## Nodes
 
-- **index** (`pages_side_panel_src_index_tsx`, File, degree: 4)
-- **react-dom/client/createRoot** (`pages_side_panel_src_index_tsx_import_react_dom_client_createroot`, Module, degree: 1)
-- **@src/index.css** (`pages_side_panel_src_index_tsx_import_src_index_css`, Module, degree: 1)
-- **@src/SidePanel/SidePanel** (`pages_side_panel_src_index_tsx_import_src_sidepanel_sidepanel`, Module, degree: 1)
-- **init()** (`pages_side_panel_src_index_tsx_init`, Function, degree: 1)
+- **.goBack()** (`chrome_extension_src_background_browser_page_ts_page_goback`, Method, degree: 2)
+- **.goForward()** (`chrome_extension_src_background_browser_page_ts_page_goforward`, Method, degree: 2)
+- **.navigateTo()** (`chrome_extension_src_background_browser_page_ts_page_navigateto`, Method, degree: 2)
+- **.refreshPage()** (`chrome_extension_src_background_browser_page_ts_page_refreshpage`, Method, degree: 2)
+- **.waitForPageAndFramesLoad()** (`chrome_extension_src_background_browser_page_ts_page_waitforpageandframesload`, Method, degree: 10)
 
 ## Relationships
 
-- pages_side_panel_src_index_tsx → pages_side_panel_src_index_tsx_import_react_dom_client_createroot (imports)
-- pages_side_panel_src_index_tsx → pages_side_panel_src_index_tsx_import_src_index_css (imports)
-- pages_side_panel_src_index_tsx → pages_side_panel_src_index_tsx_import_src_sidepanel_sidepanel (imports)
-- pages_side_panel_src_index_tsx → pages_side_panel_src_index_tsx_init (defines)
+- chrome_extension_src_background_browser_page_ts_page_navigateto → chrome_extension_src_background_browser_page_ts_page_waitforpageandframesload (calls)
+- chrome_extension_src_background_browser_page_ts_page_refreshpage → chrome_extension_src_background_browser_page_ts_page_waitforpageandframesload (calls)
+- chrome_extension_src_background_browser_page_ts_page_goback → chrome_extension_src_background_browser_page_ts_page_waitforpageandframesload (calls)
+- chrome_extension_src_background_browser_page_ts_page_goforward → chrome_extension_src_background_browser_page_ts_page_waitforpageandframesload (calls)
 

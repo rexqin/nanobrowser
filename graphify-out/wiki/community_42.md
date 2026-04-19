@@ -1,35 +1,29 @@
-# Community 42: DomService
+# Community 42: index
 
 **Members:** 10
 
 ## Nodes
 
-- **DomService** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice`, Class, degree: 10)
-- **.buildEnhancedAXNode()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_buildenhancedaxnode`, Method, degree: 2)
-- **.constructor()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_constructor`, Method, degree: 1)
-- **.detectPaginationButtons()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_detectpaginationbuttons`, Method, degree: 1)
-- **.getAllTrees()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_getalltrees`, Method, degree: 4)
-- **.getAXTreeForAllFrames()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_getaxtreeforallframes`, Method, degree: 2)
-- **.getDomTree()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree`, Method, degree: 5)
-- **.getSerializedDomTree()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_getserializeddomtree`, Method, degree: 2)
-- **.getViewportRatio()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_getviewportratio`, Method, degree: 2)
-- **.isElementVisibleAccordingToAllParents()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_iselementvisibleaccordingtoallparents`, Method, degree: 2)
+- **index** (`packages_zipper_lib_zip_bundle_index_ts`, File, degree: 14)
+- **fast-glob/glob** (`packages_zipper_lib_zip_bundle_index_ts_import_fast_glob_glob`, Module, degree: 1)
+- **fflate/AsyncZipDeflate** (`packages_zipper_lib_zip_bundle_index_ts_import_fflate_asynczipdeflate`, Module, degree: 1)
+- **fflate/Zip** (`packages_zipper_lib_zip_bundle_index_ts_import_fflate_zip`, Module, degree: 1)
+- **node:fs/createReadStream** (`packages_zipper_lib_zip_bundle_index_ts_import_node_fs_createreadstream`, Module, degree: 1)
+- **node:fs/createWriteStream** (`packages_zipper_lib_zip_bundle_index_ts_import_node_fs_createwritestream`, Module, degree: 1)
+- **node:fs/existsSync** (`packages_zipper_lib_zip_bundle_index_ts_import_node_fs_existssync`, Module, degree: 1)
+- **node:fs/mkdirSync** (`packages_zipper_lib_zip_bundle_index_ts_import_node_fs_mkdirsync`, Module, degree: 1)
+- **node:path/posix** (`packages_zipper_lib_zip_bundle_index_ts_import_node_path_posix`, Module, degree: 1)
+- **node:path/resolve** (`packages_zipper_lib_zip_bundle_index_ts_import_node_path_resolve`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_constructor (defines)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_buildenhancedaxnode (defines)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getviewportratio (defines)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_iselementvisibleaccordingtoallparents (defines)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getaxtreeforallframes (defines)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getalltrees (defines)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree (defines)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getserializeddomtree (defines)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_detectpaginationbuttons (defines)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getalltrees → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getviewportratio (calls)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getalltrees → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getaxtreeforallframes (calls)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getalltrees (calls)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree → chrome_extension_src_background_browser_dom_domservice_ts_domservice_buildenhancedaxnode (calls)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree → chrome_extension_src_background_browser_dom_domservice_ts_domservice_iselementvisibleaccordingtoallparents (calls)
-- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getserializeddomtree → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree (calls)
+- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_fs_createreadstream (imports)
+- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_fs_createwritestream (imports)
+- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_fs_existssync (imports)
+- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_fs_mkdirsync (imports)
+- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_path_posix (imports)
+- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_path_resolve (imports)
+- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_fast_glob_glob (imports)
+- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_fflate_asynczipdeflate (imports)
+- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_fflate_zip (imports)
 

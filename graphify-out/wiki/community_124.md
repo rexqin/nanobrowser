@@ -1,13 +1,15 @@
-# Community 124: log
+# Community 124: refresh
 
-**Members:** 2
+**Members:** 3
 
 ## Nodes
 
-- **log** (`chrome_extension_src_background_log_ts`, File, degree: 1)
-- **createLogger()** (`chrome_extension_src_background_log_ts_createlogger`, Function, degree: 1)
+- **refresh** (`packages_hmr_lib_injections_refresh_ts`, File, degree: 2)
+- **addRefresh()** (`packages_hmr_lib_injections_refresh_ts_addrefresh`, Function, degree: 1)
+- **../initializers/initClient/initClient** (`packages_hmr_lib_injections_refresh_ts_import_initializers_initclient_initclient`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_log_ts → chrome_extension_src_background_log_ts_createlogger (defines)
+- packages_hmr_lib_injections_refresh_ts → packages_hmr_lib_injections_refresh_ts_import_initializers_initclient_initclient (imports)
+- packages_hmr_lib_injections_refresh_ts → packages_hmr_lib_injections_refresh_ts_addrefresh (defines)
 

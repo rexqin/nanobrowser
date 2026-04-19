@@ -1,21 +1,21 @@
-# Community 80: index
+# Community 80: AgentContext
 
 **Members:** 6
 
 ## Nodes
 
-- **index** (`pages_options_src_index_tsx`, File, degree: 5)
-- **@extension/ui/dist/global.css** (`pages_options_src_index_tsx_import_extension_ui_dist_global_css`, Module, degree: 1)
-- **react-dom/client/createRoot** (`pages_options_src_index_tsx_import_react_dom_client_createroot`, Module, degree: 1)
-- **@src/index.css** (`pages_options_src_index_tsx_import_src_index_css`, Module, degree: 1)
-- **@src/Options/Options** (`pages_options_src_index_tsx_import_src_options_options`, Module, degree: 1)
-- **init()** (`pages_options_src_index_tsx_init`, Function, degree: 1)
+- **AgentContext** (`chrome_extension_src_background_agent_types_ts_agentcontext`, Class, degree: 6)
+- **.constructor()** (`chrome_extension_src_background_agent_types_ts_agentcontext_constructor`, Method, degree: 1)
+- **.emitEvent()** (`chrome_extension_src_background_agent_types_ts_agentcontext_emitevent`, Method, degree: 1)
+- **.pause()** (`chrome_extension_src_background_agent_types_ts_agentcontext_pause`, Method, degree: 1)
+- **.resume()** (`chrome_extension_src_background_agent_types_ts_agentcontext_resume`, Method, degree: 1)
+- **.stop()** (`chrome_extension_src_background_agent_types_ts_agentcontext_stop`, Method, degree: 1)
 
 ## Relationships
 
-- pages_options_src_index_tsx → pages_options_src_index_tsx_import_react_dom_client_createroot (imports)
-- pages_options_src_index_tsx → pages_options_src_index_tsx_import_src_index_css (imports)
-- pages_options_src_index_tsx → pages_options_src_index_tsx_import_extension_ui_dist_global_css (imports)
-- pages_options_src_index_tsx → pages_options_src_index_tsx_import_src_options_options (imports)
-- pages_options_src_index_tsx → pages_options_src_index_tsx_init (defines)
+- chrome_extension_src_background_agent_types_ts_agentcontext → chrome_extension_src_background_agent_types_ts_agentcontext_constructor (defines)
+- chrome_extension_src_background_agent_types_ts_agentcontext → chrome_extension_src_background_agent_types_ts_agentcontext_emitevent (defines)
+- chrome_extension_src_background_agent_types_ts_agentcontext → chrome_extension_src_background_agent_types_ts_agentcontext_pause (defines)
+- chrome_extension_src_background_agent_types_ts_agentcontext → chrome_extension_src_background_agent_types_ts_agentcontext_resume (defines)
+- chrome_extension_src_background_agent_types_ts_agentcontext → chrome_extension_src_background_agent_types_ts_agentcontext_stop (defines)
 

@@ -4,5 +4,5 @@
 
 ## Nodes
 
-- **index** (`packages_dev_utils_index_ts`, File, degree: 0)
+- **index** (`packages_ui_lib_components_index_ts`, File, degree: 0)
 

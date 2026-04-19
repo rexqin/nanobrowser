@@ -1,13 +1,15 @@
-# Community 123: schemas
+# Community 123: internal
 
-**Members:** 2
+**Members:** 3
 
 ## Nodes
 
-- **schemas** (`chrome_extension_src_background_agent_actions_schemas_ts`, File, degree: 1)
-- **zod/z** (`chrome_extension_src_background_agent_actions_schemas_ts_import_zod_z`, Module, degree: 1)
+- **internal** (`packages_shared_lib_message_internal_ts`, File, degree: 2)
+- **./external/externalPublishMessageSchema** (`packages_shared_lib_message_internal_ts_import_external_externalpublishmessageschema`, Module, degree: 1)
+- **zod/z** (`packages_shared_lib_message_internal_ts_import_zod_z`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_agent_actions_schemas_ts → chrome_extension_src_background_agent_actions_schemas_ts_import_zod_z (imports)
+- packages_shared_lib_message_internal_ts → packages_shared_lib_message_internal_ts_import_zod_z (imports)
+- packages_shared_lib_message_internal_ts → packages_shared_lib_message_internal_ts_import_external_externalpublishmessageschema (imports)
 

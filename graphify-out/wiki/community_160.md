@@ -1,8 +1,8 @@
-# Community 160: manager
+# Community 160: permission
 
 **Members:** 1
 
 ## Nodes
 
-- **manager** (`chrome_extension_src_background_task_manager_ts`, File, degree: 0)
+- **permission** (`chrome_extension_public_permission_permission_js`, File, degree: 0)
 

@@ -1,8 +1,8 @@
-# Community 156: types
+# Community 156: index
 
 **Members:** 1
 
 ## Nodes
 
-- **types** (`packages_storage_lib_settings_types_ts`, File, degree: 0)
+- **index** (`packages_storage_index_ts`, File, degree: 0)
 

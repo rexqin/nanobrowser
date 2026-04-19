@@ -1,8 +1,8 @@
-# Community 147: index
+# Community 147: constant
 
 **Members:** 1
 
 ## Nodes
 
-- **index** (`packages_hmr_lib_plugins_index_ts`, File, degree: 0)
+- **constant** (`packages_hmr_lib_constant_ts`, File, degree: 0)
 

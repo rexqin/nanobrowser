@@ -1,21 +1,27 @@
-# Community 73: executor-lifecycle.test
+# Community 73: .execute()
 
-**Members:** 6
+**Members:** 7
 
 ## Nodes
 
-- **executor-lifecycle.test** (`chrome_extension_src_background_tests_executor_lifecycle_test_ts`, File, degree: 5)
-- **../../background/agent/event/types/ExecutionState** (`chrome_extension_src_background_tests_executor_lifecycle_test_ts_import_background_agent_event_types_executionstate`, Module, degree: 1)
-- **../executor-lifecycle/shouldCleanupExecutorOnTerminalEvent** (`chrome_extension_src_background_tests_executor_lifecycle_test_ts_import_executor_lifecycle_shouldcleanupexecutoronterminalevent`, Module, degree: 1)
-- **vitest/describe** (`chrome_extension_src_background_tests_executor_lifecycle_test_ts_import_vitest_describe`, Module, degree: 1)
-- **vitest/expect** (`chrome_extension_src_background_tests_executor_lifecycle_test_ts_import_vitest_expect`, Module, degree: 1)
-- **vitest/it** (`chrome_extension_src_background_tests_executor_lifecycle_test_ts_import_vitest_it`, Module, degree: 1)
+- **.execute()** (`chrome_extension_src_background_agent_executor_ts_executor_execute`, Method, degree: 11)
+- **.navigate()** (`chrome_extension_src_background_agent_executor_ts_executor_navigate`, Method, degree: 4)
+- **.resume()** (`chrome_extension_src_background_agent_executor_ts_executor_resume`, Method, degree: 2)
+- **.runPlanner()** (`chrome_extension_src_background_agent_executor_ts_executor_runplanner`, Method, degree: 4)
+- **.shouldStop()** (`chrome_extension_src_background_agent_executor_ts_executor_shouldstop`, Method, degree: 2)
+- **.waitUntilUserResume()** (`chrome_extension_src_background_agent_executor_ts_executor_waituntiluserresume`, Method, degree: 2)
+- **isRequestCancelledLike()** (`chrome_extension_src_background_agent_executor_ts_isrequestcancelledlike`, Function, degree: 4)
 
 ## Relationships
 
-- chrome_extension_src_background_tests_executor_lifecycle_test_ts → chrome_extension_src_background_tests_executor_lifecycle_test_ts_import_vitest_describe (imports)
-- chrome_extension_src_background_tests_executor_lifecycle_test_ts → chrome_extension_src_background_tests_executor_lifecycle_test_ts_import_vitest_expect (imports)
-- chrome_extension_src_background_tests_executor_lifecycle_test_ts → chrome_extension_src_background_tests_executor_lifecycle_test_ts_import_vitest_it (imports)
-- chrome_extension_src_background_tests_executor_lifecycle_test_ts → chrome_extension_src_background_tests_executor_lifecycle_test_ts_import_background_agent_event_types_executionstate (imports)
-- chrome_extension_src_background_tests_executor_lifecycle_test_ts → chrome_extension_src_background_tests_executor_lifecycle_test_ts_import_executor_lifecycle_shouldcleanupexecutoronterminalevent (imports)
+- chrome_extension_src_background_agent_executor_ts_executor_execute → chrome_extension_src_background_agent_executor_ts_isrequestcancelledlike (calls)
+- chrome_extension_src_background_agent_executor_ts_executor_execute → chrome_extension_src_background_agent_executor_ts_executor_resume (calls)
+- chrome_extension_src_background_agent_executor_ts_executor_execute → chrome_extension_src_background_agent_executor_ts_executor_navigate (calls)
+- chrome_extension_src_background_agent_executor_ts_executor_execute → chrome_extension_src_background_agent_executor_ts_executor_shouldstop (calls)
+- chrome_extension_src_background_agent_executor_ts_executor_execute → chrome_extension_src_background_agent_executor_ts_executor_waituntiluserresume (calls)
+- chrome_extension_src_background_agent_executor_ts_executor_execute → chrome_extension_src_background_agent_executor_ts_executor_runplanner (calls)
+- chrome_extension_src_background_agent_executor_ts_executor_runplanner → chrome_extension_src_background_agent_executor_ts_isrequestcancelledlike (calls)
+- chrome_extension_src_background_agent_executor_ts_executor_runplanner → chrome_extension_src_background_agent_executor_ts_executor_execute (calls)
+- chrome_extension_src_background_agent_executor_ts_executor_navigate → chrome_extension_src_background_agent_executor_ts_isrequestcancelledlike (calls)
+- chrome_extension_src_background_agent_executor_ts_executor_navigate → chrome_extension_src_background_agent_executor_ts_executor_execute (calls)
 

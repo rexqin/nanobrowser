@@ -1,20 +1,19 @@
-# Community 89: useStorage
+# Community 89: index
 
 **Members:** 5
 
 ## Nodes
 
-- **useStorage** (`packages_shared_lib_hooks_usestorage_tsx`, File, degree: 4)
-- **@extension/storage/BaseStorage** (`packages_shared_lib_hooks_usestorage_tsx_import_extension_storage_basestorage`, Module, degree: 1)
-- **react/useSyncExternalStore** (`packages_shared_lib_hooks_usestorage_tsx_import_react_usesyncexternalstore`, Module, degree: 1)
-- **useStorage()** (`packages_shared_lib_hooks_usestorage_tsx_usestorage`, Function, degree: 2)
-- **wrapPromise()** (`packages_shared_lib_hooks_usestorage_tsx_wrappromise`, Function, degree: 2)
+- **index** (`pages_side_panel_src_index_tsx`, File, degree: 4)
+- **react-dom/client/createRoot** (`pages_side_panel_src_index_tsx_import_react_dom_client_createroot`, Module, degree: 1)
+- **@src/index.css** (`pages_side_panel_src_index_tsx_import_src_index_css`, Module, degree: 1)
+- **@src/SidePanel/SidePanel** (`pages_side_panel_src_index_tsx_import_src_sidepanel_sidepanel`, Module, degree: 1)
+- **init()** (`pages_side_panel_src_index_tsx_init`, Function, degree: 1)
 
 ## Relationships
 
-- packages_shared_lib_hooks_usestorage_tsx → packages_shared_lib_hooks_usestorage_tsx_import_react_usesyncexternalstore (imports)
-- packages_shared_lib_hooks_usestorage_tsx → packages_shared_lib_hooks_usestorage_tsx_import_extension_storage_basestorage (imports)
-- packages_shared_lib_hooks_usestorage_tsx → packages_shared_lib_hooks_usestorage_tsx_usestorage (defines)
-- packages_shared_lib_hooks_usestorage_tsx → packages_shared_lib_hooks_usestorage_tsx_wrappromise (defines)
-- packages_shared_lib_hooks_usestorage_tsx_usestorage → packages_shared_lib_hooks_usestorage_tsx_wrappromise (calls)
+- pages_side_panel_src_index_tsx → pages_side_panel_src_index_tsx_import_react_dom_client_createroot (imports)
+- pages_side_panel_src_index_tsx → pages_side_panel_src_index_tsx_import_src_index_css (imports)
+- pages_side_panel_src_index_tsx → pages_side_panel_src_index_tsx_import_src_sidepanel_sidepanel (imports)
+- pages_side_panel_src_index_tsx → pages_side_panel_src_index_tsx_init (defines)
 

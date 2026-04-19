@@ -1,25 +1,31 @@
-# Community 56: agentModels
+# Community 56: ._findNearestScrollableElement()
 
 **Members:** 8
 
 ## Nodes
 
-- **agentModels** (`packages_storage_lib_settings_agentmodels_ts`, File, degree: 7)
-- **getModelParameters()** (`packages_storage_lib_settings_agentmodels_ts_getmodelparameters`, Function, degree: 1)
-- **../base/base/createStorage** (`packages_storage_lib_settings_agentmodels_ts_import_base_base_createstorage`, Module, degree: 1)
-- **../base/enums/StorageEnum** (`packages_storage_lib_settings_agentmodels_ts_import_base_enums_storageenum`, Module, degree: 1)
-- **../base/types/BaseStorage** (`packages_storage_lib_settings_agentmodels_ts_import_base_types_basestorage`, Module, degree: 1)
-- **./types/AgentNameEnum** (`packages_storage_lib_settings_agentmodels_ts_import_types_agentnameenum`, Module, degree: 1)
-- **./types/llmProviderParameters** (`packages_storage_lib_settings_agentmodels_ts_import_types_llmproviderparameters`, Module, degree: 1)
-- **validateModelConfig()** (`packages_storage_lib_settings_agentmodels_ts_validatemodelconfig`, Function, degree: 1)
+- **._findNearestScrollableElement()** (`chrome_extension_src_background_browser_page_ts_page_findnearestscrollableelement`, Method, degree: 6)
+- **.getElementScrollInfo()** (`chrome_extension_src_background_browser_page_ts_page_getelementscrollinfo`, Method, degree: 3)
+- **.locateElement()** (`chrome_extension_src_background_browser_page_ts_page_locateelement`, Method, degree: 14)
+- **.scrollBy()** (`chrome_extension_src_background_browser_page_ts_page_scrollby`, Method, degree: 5)
+- **.scrollToNextPage()** (`chrome_extension_src_background_browser_page_ts_page_scrolltonextpage`, Method, degree: 4)
+- **.scrollToPercent()** (`chrome_extension_src_background_browser_page_ts_page_scrolltopercent`, Method, degree: 3)
+- **.scrollToPreviousPage()** (`chrome_extension_src_background_browser_page_ts_page_scrolltopreviouspage`, Method, degree: 4)
+- **._wrapElementEvaluateForDebug()** (`chrome_extension_src_background_browser_page_ts_page_wrapelementevaluatefordebug`, Method, degree: 2)
 
 ## Relationships
 
-- packages_storage_lib_settings_agentmodels_ts → packages_storage_lib_settings_agentmodels_ts_import_base_enums_storageenum (imports)
-- packages_storage_lib_settings_agentmodels_ts → packages_storage_lib_settings_agentmodels_ts_import_base_base_createstorage (imports)
-- packages_storage_lib_settings_agentmodels_ts → packages_storage_lib_settings_agentmodels_ts_import_base_types_basestorage (imports)
-- packages_storage_lib_settings_agentmodels_ts → packages_storage_lib_settings_agentmodels_ts_import_types_agentnameenum (imports)
-- packages_storage_lib_settings_agentmodels_ts → packages_storage_lib_settings_agentmodels_ts_import_types_llmproviderparameters (imports)
-- packages_storage_lib_settings_agentmodels_ts → packages_storage_lib_settings_agentmodels_ts_validatemodelconfig (defines)
-- packages_storage_lib_settings_agentmodels_ts → packages_storage_lib_settings_agentmodels_ts_getmodelparameters (defines)
+- chrome_extension_src_background_browser_page_ts_page_getelementscrollinfo → chrome_extension_src_background_browser_page_ts_page_findnearestscrollableelement (calls)
+- chrome_extension_src_background_browser_page_ts_page_getelementscrollinfo → chrome_extension_src_background_browser_page_ts_page_locateelement (calls)
+- chrome_extension_src_background_browser_page_ts_page_scrolltopercent → chrome_extension_src_background_browser_page_ts_page_findnearestscrollableelement (calls)
+- chrome_extension_src_background_browser_page_ts_page_scrolltopercent → chrome_extension_src_background_browser_page_ts_page_locateelement (calls)
+- chrome_extension_src_background_browser_page_ts_page_scrollby → chrome_extension_src_background_browser_page_ts_page_findnearestscrollableelement (calls)
+- chrome_extension_src_background_browser_page_ts_page_scrollby → chrome_extension_src_background_browser_page_ts_page_locateelement (calls)
+- chrome_extension_src_background_browser_page_ts_page_scrolltopreviouspage → chrome_extension_src_background_browser_page_ts_page_findnearestscrollableelement (calls)
+- chrome_extension_src_background_browser_page_ts_page_scrolltopreviouspage → chrome_extension_src_background_browser_page_ts_page_scrollby (calls)
+- chrome_extension_src_background_browser_page_ts_page_scrolltopreviouspage → chrome_extension_src_background_browser_page_ts_page_locateelement (calls)
+- chrome_extension_src_background_browser_page_ts_page_scrolltonextpage → chrome_extension_src_background_browser_page_ts_page_findnearestscrollableelement (calls)
+- chrome_extension_src_background_browser_page_ts_page_scrolltonextpage → chrome_extension_src_background_browser_page_ts_page_scrollby (calls)
+- chrome_extension_src_background_browser_page_ts_page_scrolltonextpage → chrome_extension_src_background_browser_page_ts_page_locateelement (calls)
+- chrome_extension_src_background_browser_page_ts_page_locateelement → chrome_extension_src_background_browser_page_ts_page_wrapelementevaluatefordebug (calls)
 

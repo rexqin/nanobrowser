@@ -1,15 +1,17 @@
-# Community 111: index
+# Community 111: i18n-prod
 
-**Members:** 3
+**Members:** 4
 
 ## Nodes
 
-- **index** (`packages_zipper_index_ts`, File, degree: 2)
-- **./lib/zip-bundle/zipBundle** (`packages_zipper_index_ts_import_lib_zip_bundle_zipbundle`, Module, degree: 1)
-- **node:path/resolve** (`packages_zipper_index_ts_import_node_path_resolve`, Module, degree: 1)
+- **i18n-prod** (`packages_i18n_lib_i18n_prod_ts`, File, degree: 3)
+- **./type/DevLocale** (`packages_i18n_lib_i18n_prod_ts_import_type_devlocale`, Module, degree: 1)
+- **./type/MessageKey** (`packages_i18n_lib_i18n_prod_ts_import_type_messagekey`, Module, degree: 1)
+- **t()** (`packages_i18n_lib_i18n_prod_ts_t`, Function, degree: 1)
 
 ## Relationships
 
-- packages_zipper_index_ts → packages_zipper_index_ts_import_node_path_resolve (imports)
-- packages_zipper_index_ts → packages_zipper_index_ts_import_lib_zip_bundle_zipbundle (imports)
+- packages_i18n_lib_i18n_prod_ts → packages_i18n_lib_i18n_prod_ts_import_type_devlocale (imports)
+- packages_i18n_lib_i18n_prod_ts → packages_i18n_lib_i18n_prod_ts_import_type_messagekey (imports)
+- packages_i18n_lib_i18n_prod_ts → packages_i18n_lib_i18n_prod_ts_t (defines)
 

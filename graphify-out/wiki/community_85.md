@@ -1,19 +1,23 @@
-# Community 85: speechToText
+# Community 85: enhancedSnapshot
 
-**Members:** 5
+**Members:** 6
 
 ## Nodes
 
-- **speechToText** (`packages_storage_lib_settings_speechtotext_ts`, File, degree: 4)
-- **../base/base/createStorage** (`packages_storage_lib_settings_speechtotext_ts_import_base_base_createstorage`, Module, degree: 1)
-- **../base/enums/StorageEnum** (`packages_storage_lib_settings_speechtotext_ts_import_base_enums_storageenum`, Module, degree: 1)
-- **../base/types/BaseStorage** (`packages_storage_lib_settings_speechtotext_ts_import_base_types_basestorage`, Module, degree: 1)
-- **validateSpeechToTextModelConfig()** (`packages_storage_lib_settings_speechtotext_ts_validatespeechtotextmodelconfig`, Function, degree: 1)
+- **enhancedSnapshot** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts`, File, degree: 5)
+- **buildSnapshotLookup()** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_buildsnapshotlookup`, Function, degree: 3)
+- **./domService/DOMRect** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_import_domservice_domrect`, Module, degree: 1)
+- **./domService/SnapshotNode** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_import_domservice_snapshotnode`, Module, degree: 1)
+- **parseComputedStyles()** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parsecomputedstyles`, Function, degree: 2)
+- **parseRareBooleanData()** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parserarebooleandata`, Function, degree: 2)
 
 ## Relationships
 
-- packages_storage_lib_settings_speechtotext_ts → packages_storage_lib_settings_speechtotext_ts_import_base_enums_storageenum (imports)
-- packages_storage_lib_settings_speechtotext_ts → packages_storage_lib_settings_speechtotext_ts_import_base_base_createstorage (imports)
-- packages_storage_lib_settings_speechtotext_ts → packages_storage_lib_settings_speechtotext_ts_import_base_types_basestorage (imports)
-- packages_storage_lib_settings_speechtotext_ts → packages_storage_lib_settings_speechtotext_ts_validatespeechtotextmodelconfig (defines)
+- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_import_domservice_domrect (imports)
+- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_import_domservice_snapshotnode (imports)
+- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parserarebooleandata (defines)
+- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parsecomputedstyles (defines)
+- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_buildsnapshotlookup (defines)
+- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_buildsnapshotlookup → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parsecomputedstyles (calls)
+- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_buildsnapshotlookup → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parserarebooleandata (calls)
 

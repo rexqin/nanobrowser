@@ -1,8 +1,8 @@
-# Community 151: index
+# Community 151: json_schema
 
 **Members:** 1
 
 ## Nodes
 
-- **index** (`packages_ui_lib_components_index_ts`, File, degree: 0)
+- **json_schema** (`packages_schema_utils_lib_json_schema_ts`, File, degree: 0)
 

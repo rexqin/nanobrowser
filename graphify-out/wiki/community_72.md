@@ -1,23 +1,35 @@
-# Community 72: MessageHistory
+# Community 72: index
 
 **Members:** 7
 
 ## Nodes
 
-- **MessageHistory** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory`, Class, degree: 7)
-- **.addMessage()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_addmessage`, Method, degree: 1)
-- **.getMessages()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_getmessages`, Method, degree: 1)
-- **.getTotalTokens()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_gettotaltokens`, Method, degree: 1)
-- **.removeLastStateMessage()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_removelaststatemessage`, Method, degree: 1)
-- **.removeMessage()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_removemessage`, Method, degree: 1)
-- **.removeOldestMessage()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_removeoldestmessage`, Method, degree: 1)
+- **index** (`packages_hmr_lib_interpreter_index_ts`, File, degree: 3)
+- **../types/SerializedMessage** (`packages_hmr_lib_interpreter_index_ts_import_types_serializedmessage`, Module, degree: 1)
+- **../types/WebSocketMessage** (`packages_hmr_lib_interpreter_index_ts_import_types_websocketmessage`, Module, degree: 1)
+- **MessageInterpreter** (`packages_hmr_lib_interpreter_index_ts_messageinterpreter`, Class, degree: 10)
+- **.constructor()** (`packages_hmr_lib_interpreter_index_ts_messageinterpreter_constructor`, Method, degree: 7)
+- **.receive()** (`packages_hmr_lib_interpreter_index_ts_messageinterpreter_receive`, Method, degree: 7)
+- **.send()** (`packages_hmr_lib_interpreter_index_ts_messageinterpreter_send`, Method, degree: 7)
 
 ## Relationships
 
-- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_addmessage (defines)
-- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_removemessage (defines)
-- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_removelaststatemessage (defines)
-- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_getmessages (defines)
-- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_gettotaltokens (defines)
-- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_removeoldestmessage (defines)
+- packages_hmr_lib_interpreter_index_ts → packages_hmr_lib_interpreter_index_ts_import_types_serializedmessage (imports)
+- packages_hmr_lib_interpreter_index_ts → packages_hmr_lib_interpreter_index_ts_import_types_websocketmessage (imports)
+- packages_hmr_lib_interpreter_index_ts → packages_hmr_lib_interpreter_index_ts_messageinterpreter (defines)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter → packages_hmr_lib_interpreter_index_ts_messageinterpreter_constructor (defines)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter → packages_hmr_lib_interpreter_index_ts_messageinterpreter_send (defines)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter → packages_hmr_lib_interpreter_index_ts_messageinterpreter_receive (defines)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter → packages_hmr_lib_interpreter_index_ts_messageinterpreter_constructor (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter → packages_hmr_lib_interpreter_index_ts_messageinterpreter_send (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter → packages_hmr_lib_interpreter_index_ts_messageinterpreter_receive (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter_constructor → packages_hmr_lib_interpreter_index_ts_messageinterpreter (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter_constructor → packages_hmr_lib_interpreter_index_ts_messageinterpreter_send (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter_constructor → packages_hmr_lib_interpreter_index_ts_messageinterpreter_receive (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter_send → packages_hmr_lib_interpreter_index_ts_messageinterpreter (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter_send → packages_hmr_lib_interpreter_index_ts_messageinterpreter_constructor (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter_send → packages_hmr_lib_interpreter_index_ts_messageinterpreter_receive (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter_receive → packages_hmr_lib_interpreter_index_ts_messageinterpreter (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter_receive → packages_hmr_lib_interpreter_index_ts_messageinterpreter_constructor (uses)
+- packages_hmr_lib_interpreter_index_ts_messageinterpreter_receive → packages_hmr_lib_interpreter_index_ts_messageinterpreter_send (uses)
 

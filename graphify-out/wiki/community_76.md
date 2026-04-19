@@ -1,21 +1,21 @@
-# Community 76: AgentContext
+# Community 76: initClient
 
 **Members:** 6
 
 ## Nodes
 
-- **AgentContext** (`chrome_extension_src_background_agent_types_ts_agentcontext`, Class, degree: 6)
-- **.constructor()** (`chrome_extension_src_background_agent_types_ts_agentcontext_constructor`, Method, degree: 1)
-- **.emitEvent()** (`chrome_extension_src_background_agent_types_ts_agentcontext_emitevent`, Method, degree: 1)
-- **.pause()** (`chrome_extension_src_background_agent_types_ts_agentcontext_pause`, Method, degree: 1)
-- **.resume()** (`chrome_extension_src_background_agent_types_ts_agentcontext_resume`, Method, degree: 1)
-- **.stop()** (`chrome_extension_src_background_agent_types_ts_agentcontext_stop`, Method, degree: 1)
+- **initClient** (`packages_hmr_lib_initializers_initclient_ts`, File, degree: 5)
+- **../constant/DO_UPDATE** (`packages_hmr_lib_initializers_initclient_ts_import_constant_do_update`, Module, degree: 1)
+- **../constant/DONE_UPDATE** (`packages_hmr_lib_initializers_initclient_ts_import_constant_done_update`, Module, degree: 1)
+- **../constant/LOCAL_RELOAD_SOCKET_URL** (`packages_hmr_lib_initializers_initclient_ts_import_constant_local_reload_socket_url`, Module, degree: 1)
+- **../interpreter/MessageInterpreter** (`packages_hmr_lib_initializers_initclient_ts_import_interpreter_messageinterpreter`, Module, degree: 1)
+- **initClient()** (`packages_hmr_lib_initializers_initclient_ts_initclient`, Function, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_agent_types_ts_agentcontext → chrome_extension_src_background_agent_types_ts_agentcontext_constructor (defines)
-- chrome_extension_src_background_agent_types_ts_agentcontext → chrome_extension_src_background_agent_types_ts_agentcontext_emitevent (defines)
-- chrome_extension_src_background_agent_types_ts_agentcontext → chrome_extension_src_background_agent_types_ts_agentcontext_pause (defines)
-- chrome_extension_src_background_agent_types_ts_agentcontext → chrome_extension_src_background_agent_types_ts_agentcontext_resume (defines)
-- chrome_extension_src_background_agent_types_ts_agentcontext → chrome_extension_src_background_agent_types_ts_agentcontext_stop (defines)
+- packages_hmr_lib_initializers_initclient_ts → packages_hmr_lib_initializers_initclient_ts_import_constant_do_update (imports)
+- packages_hmr_lib_initializers_initclient_ts → packages_hmr_lib_initializers_initclient_ts_import_constant_done_update (imports)
+- packages_hmr_lib_initializers_initclient_ts → packages_hmr_lib_initializers_initclient_ts_import_constant_local_reload_socket_url (imports)
+- packages_hmr_lib_initializers_initclient_ts → packages_hmr_lib_initializers_initclient_ts_import_interpreter_messageinterpreter (imports)
+- packages_hmr_lib_initializers_initclient_ts → packages_hmr_lib_initializers_initclient_ts_initclient (defines)
 

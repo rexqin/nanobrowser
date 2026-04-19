@@ -1,23 +1,29 @@
-# Community 71: AnalyticsSettings
+# Community 71: helper
 
 **Members:** 7
 
 ## Nodes
 
-- **AnalyticsSettings** (`pages_options_src_components_analyticssettings_tsx`, File, degree: 6)
-- **handleToggleAnalytics()** (`pages_options_src_components_analyticssettings_tsx_handletoggleanalytics`, Function, degree: 1)
-- **@extension/i18n/t** (`pages_options_src_components_analyticssettings_tsx_import_extension_i18n_t`, Module, degree: 1)
-- **@extension/storage/AnalyticsSettingsConfig** (`pages_options_src_components_analyticssettings_tsx_import_extension_storage_analyticssettingsconfig`, Module, degree: 1)
-- **@extension/storage/analyticsSettingsStore** (`pages_options_src_components_analyticssettings_tsx_import_extension_storage_analyticssettingsstore`, Module, degree: 1)
-- **react/useEffect** (`pages_options_src_components_analyticssettings_tsx_import_react_useeffect`, Module, degree: 1)
-- **react/useState** (`pages_options_src_components_analyticssettings_tsx_import_react_usestate`, Module, degree: 1)
+- **helper** (`packages_schema_utils_lib_helper_ts`, File, degree: 6)
+- **convertOpenAISchemaToGemini()** (`packages_schema_utils_lib_helper_ts_convertopenaischematogemini`, Function, degree: 4)
+- **dereferenceJsonSchema()** (`packages_schema_utils_lib_helper_ts_dereferencejsonschema`, Function, degree: 3)
+- **processPropertiesForGemini()** (`packages_schema_utils_lib_helper_ts_processpropertiesforgemini`, Function, degree: 4)
+- **processPropertyForGemini()** (`packages_schema_utils_lib_helper_ts_processpropertyforgemini`, Function, degree: 4)
+- **processSchemaNode()** (`packages_schema_utils_lib_helper_ts_processschemanode`, Function, degree: 2)
+- **stringifyCustom()** (`packages_schema_utils_lib_helper_ts_stringifycustom`, Function, degree: 1)
 
 ## Relationships
 
-- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_import_react_usestate (imports)
-- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_import_react_useeffect (imports)
-- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_import_extension_storage_analyticssettingsstore (imports)
-- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_import_extension_storage_analyticssettingsconfig (imports)
-- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_import_extension_i18n_t (imports)
-- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_handletoggleanalytics (defines)
+- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_dereferencejsonschema (defines)
+- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_processschemanode (defines)
+- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_convertopenaischematogemini (defines)
+- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_processpropertiesforgemini (defines)
+- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_processpropertyforgemini (defines)
+- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_stringifycustom (defines)
+- packages_schema_utils_lib_helper_ts_dereferencejsonschema → packages_schema_utils_lib_helper_ts_processschemanode (calls)
+- packages_schema_utils_lib_helper_ts_convertopenaischematogemini → packages_schema_utils_lib_helper_ts_processpropertiesforgemini (calls)
+- packages_schema_utils_lib_helper_ts_convertopenaischematogemini → packages_schema_utils_lib_helper_ts_processpropertyforgemini (calls)
+- packages_schema_utils_lib_helper_ts_convertopenaischematogemini → packages_schema_utils_lib_helper_ts_dereferencejsonschema (calls)
+- packages_schema_utils_lib_helper_ts_processpropertiesforgemini → packages_schema_utils_lib_helper_ts_processpropertyforgemini (calls)
+- packages_schema_utils_lib_helper_ts_processpropertyforgemini → packages_schema_utils_lib_helper_ts_processpropertiesforgemini (calls)
 

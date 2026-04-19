@@ -1,26 +1,27 @@
-# Community 61: Action
+# Community 61: analyticsSettings
 
 **Members:** 8
 
 ## Nodes
 
-- **Action** (`chrome_extension_src_background_agent_actions_builder_ts_action`, Class, degree: 7)
-- **.call()** (`chrome_extension_src_background_agent_actions_builder_ts_action_call`, Method, degree: 1)
-- **.constructor()** (`chrome_extension_src_background_agent_actions_builder_ts_action_constructor`, Method, degree: 1)
-- **.getIndexArg()** (`chrome_extension_src_background_agent_actions_builder_ts_action_getindexarg`, Method, degree: 1)
-- **.name()** (`chrome_extension_src_background_agent_actions_builder_ts_action_name`, Method, degree: 3)
-- **.prompt()** (`chrome_extension_src_background_agent_actions_builder_ts_action_prompt`, Method, degree: 2)
-- **.setIndexArg()** (`chrome_extension_src_background_agent_actions_builder_ts_action_setindexarg`, Method, degree: 1)
-- **buildDynamicActionSchema()** (`chrome_extension_src_background_agent_actions_builder_ts_builddynamicactionschema`, Function, degree: 2)
+- **analyticsSettings** (`packages_storage_lib_settings_analyticssettings_ts`, File, degree: 7)
+- **generateAnonymousUserId()** (`packages_storage_lib_settings_analyticssettings_ts_generateanonymoususerid`, Function, degree: 3)
+- **getSettings()** (`packages_storage_lib_settings_analyticssettings_ts_getsettings`, Function, degree: 2)
+- **../base/base/createStorage** (`packages_storage_lib_settings_analyticssettings_ts_import_base_base_createstorage`, Module, degree: 1)
+- **../base/enums/StorageEnum** (`packages_storage_lib_settings_analyticssettings_ts_import_base_enums_storageenum`, Module, degree: 1)
+- **../base/types/BaseStorage** (`packages_storage_lib_settings_analyticssettings_ts_import_base_types_basestorage`, Module, degree: 1)
+- **resetToDefaults()** (`packages_storage_lib_settings_analyticssettings_ts_resettodefaults`, Function, degree: 2)
+- **updateSettings()** (`packages_storage_lib_settings_analyticssettings_ts_updatesettings`, Function, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_constructor (defines)
-- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_call (defines)
-- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_name (defines)
-- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_prompt (defines)
-- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_getindexarg (defines)
-- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_setindexarg (defines)
-- chrome_extension_src_background_agent_actions_builder_ts_action_prompt → chrome_extension_src_background_agent_actions_builder_ts_action_name (calls)
-- chrome_extension_src_background_agent_actions_builder_ts_builddynamicactionschema → chrome_extension_src_background_agent_actions_builder_ts_action_name (calls)
+- packages_storage_lib_settings_analyticssettings_ts → packages_storage_lib_settings_analyticssettings_ts_import_base_enums_storageenum (imports)
+- packages_storage_lib_settings_analyticssettings_ts → packages_storage_lib_settings_analyticssettings_ts_import_base_base_createstorage (imports)
+- packages_storage_lib_settings_analyticssettings_ts → packages_storage_lib_settings_analyticssettings_ts_import_base_types_basestorage (imports)
+- packages_storage_lib_settings_analyticssettings_ts → packages_storage_lib_settings_analyticssettings_ts_generateanonymoususerid (defines)
+- packages_storage_lib_settings_analyticssettings_ts → packages_storage_lib_settings_analyticssettings_ts_updatesettings (defines)
+- packages_storage_lib_settings_analyticssettings_ts → packages_storage_lib_settings_analyticssettings_ts_getsettings (defines)
+- packages_storage_lib_settings_analyticssettings_ts → packages_storage_lib_settings_analyticssettings_ts_resettodefaults (defines)
+- packages_storage_lib_settings_analyticssettings_ts_getsettings → packages_storage_lib_settings_analyticssettings_ts_generateanonymoususerid (calls)
+- packages_storage_lib_settings_analyticssettings_ts_resettodefaults → packages_storage_lib_settings_analyticssettings_ts_generateanonymoususerid (calls)
 

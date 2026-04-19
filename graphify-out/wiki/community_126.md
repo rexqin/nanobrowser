@@ -1,13 +1,15 @@
-# Community 126: index
+# Community 126: PlanHistoryList
 
-**Members:** 2
+**Members:** 3
 
 ## Nodes
 
-- **index** (`packages_dev_utils_lib_manifest_parser_index_ts`, File, degree: 1)
-- **./impl/ManifestParserImpl** (`packages_dev_utils_lib_manifest_parser_index_ts_import_impl_manifestparserimpl`, Module, degree: 1)
+- **PlanHistoryList** (`pages_side_panel_src_components_planhistorylist_tsx`, File, degree: 2)
+- **@extension/storage/PlanRun** (`pages_side_panel_src_components_planhistorylist_tsx_import_extension_storage_planrun`, Module, degree: 1)
+- **@extension/storage/PlanSessionMetadata** (`pages_side_panel_src_components_planhistorylist_tsx_import_extension_storage_plansessionmetadata`, Module, degree: 1)
 
 ## Relationships
 
-- packages_dev_utils_lib_manifest_parser_index_ts → packages_dev_utils_lib_manifest_parser_index_ts_import_impl_manifestparserimpl (imports)
+- pages_side_panel_src_components_planhistorylist_tsx → pages_side_panel_src_components_planhistorylist_tsx_import_extension_storage_planrun (imports)
+- pages_side_panel_src_components_planhistorylist_tsx → pages_side_panel_src_components_planhistorylist_tsx_import_extension_storage_plansessionmetadata (imports)
 

@@ -8,7 +8,7 @@
 |--------|-------|
 | Nodes | 1368 |
 | Edges | 1724 |
-| Communities | 161 |
+| Communities | 165 |
 | Hyperedges | 0 |
 
 ### Confidence Breakdown
@@ -26,8 +26,8 @@
 | Page | 0 | – |
 | navigator | 0 | – |
 | builder | 0 | – |
-| executor | 0 | – |
 | SidePanel | 0 | – |
+| executor | 0 | – |
 | ModelSettings | 0 | – |
 | SecurityGuardrails | 0 | – |
 | service | 0 | – |
@@ -44,28 +44,28 @@
 
 ## 🏘️ Communities
 
-### Community 0 — build_initial_state() (43 nodes, cohesion: 0.09)
+### Community 0 — navigator (43 nodes, cohesion: 0.05)
 
-- build_initial_state()
-- isCdpEvaluationBlockedUrl()
-- Page
-- ._addAntiDetectionScripts()
-- .attached()
-- .attachPuppeteer()
-- ._checkAndHandleNavigation()
-- .clickElementNode()
-- .constructor()
-- ._convertKey()
-- .detachPuppeteer()
-- ._findNearestScrollableElement()
-- .getCachedState()
-- .getClickableElements()
-- .getContent()
-- .getDomElementByIndex()
-- .getDropdownOptions()
-- .getElementByIndex()
-- .getElementScrollInfo()
-- ._getMainCdpSession()
+- navigator
+- ../actions/builder/Action
+- ../actions/builder/buildDynamicActionSchema
+- ./base/BaseAgent
+- ./base/BaseAgentOptions
+- ./base/ExtraAgentOptions
+- ./errors/ChatModelAuthError
+- ./errors/ChatModelBadRequestError
+- ./errors/ChatModelForbiddenError
+- ./errors/EXTENSION_CONFLICT_ERROR_MESSAGE
+- ./errors/ExtensionConflictError
+- ./errors/isAbortedError
+- ./errors/isAuthenticationError
+- ./errors/isBadRequestError
+- ./errors/isExtensionConflictError
+- ./errors/isForbiddenError
+- ./errors/LLM_FORBIDDEN_ERROR_MESSAGE
+- ./errors/RequestCancelledError
+- ./errors/ResponseParseError
+- ../event/types/Actors
 - _…and 23 more_
 
 ### Community 1 — builder (39 nodes, cohesion: 0.05)
@@ -116,55 +116,31 @@
 - @extension/storage/agentModelStore
 - _…and 17 more_
 
-### Community 3 — navigator (37 nodes, cohesion: 0.05)
+### Community 3 — build_initial_state() (35 nodes, cohesion: 0.09)
 
-- navigator
-- ../actions/builder/Action
-- ../actions/builder/buildDynamicActionSchema
-- ./base/BaseAgent
-- ./base/BaseAgentOptions
-- ./base/ExtraAgentOptions
-- ./errors/ChatModelAuthError
-- ./errors/ChatModelBadRequestError
-- ./errors/ChatModelForbiddenError
-- ./errors/EXTENSION_CONFLICT_ERROR_MESSAGE
-- ./errors/ExtensionConflictError
-- ./errors/isAbortedError
-- ./errors/isAuthenticationError
-- ./errors/isBadRequestError
-- ./errors/isExtensionConflictError
-- ./errors/isForbiddenError
-- ./errors/LLM_FORBIDDEN_ERROR_MESSAGE
-- ./errors/RequestCancelledError
-- ./errors/ResponseParseError
-- ../event/types/Actors
-- _…and 17 more_
-
-### Community 4 — ModelSettings (35 nodes, cohesion: 0.07)
-
-- ModelSettings
-- addModel()
-- getButtonProps()
-- handleApiKeyChange()
-- handleCancelProvider()
-- handleDelete()
-- handleKeyDown()
-- handleModelChange()
-- handleModelsChange()
-- handleNameChange()
-- handleParameterChange()
-- handleReasoningEffortChange()
-- handleSave()
-- handleSpeechToTextModelChange()
-- @extension/i18n/t
-- @extension/storage/agentModelStore
-- @extension/storage/AgentNameEnum
-- @extension/storage/getDefaultAgentModelParams
-- @extension/storage/getDefaultDisplayNameFromProviderId
-- @extension/storage/getDefaultProviderConfig
+- build_initial_state()
+- isCdpEvaluationBlockedUrl()
+- Page
+- ._addAntiDetectionScripts()
+- .attached()
+- .attachPuppeteer()
+- ._checkAndHandleNavigation()
+- .clickElementNode()
+- .constructor()
+- ._convertKey()
+- .detachPuppeteer()
+- .getCachedState()
+- .getClickableElements()
+- .getContent()
+- .getDomElementByIndex()
+- .getDropdownOptions()
+- .getElementByIndex()
+- ._getMainCdpSession()
+- .getSelectorMap()
+- .getState()
 - _…and 15 more_
 
-### Community 5 — executor (35 nodes, cohesion: 0.06)
+### Community 4 — executor (35 nodes, cohesion: 0.06)
 
 - executor
 - ./actions/builder/ActionBuilder
@@ -186,6 +162,30 @@
 - ./event/types/EventCallback
 - ./event/types/EventType
 - ./event/types/ExecutionState
+- _…and 15 more_
+
+### Community 5 — ModelSettings (35 nodes, cohesion: 0.07)
+
+- ModelSettings
+- addModel()
+- getButtonProps()
+- handleApiKeyChange()
+- handleCancelProvider()
+- handleDelete()
+- handleKeyDown()
+- handleModelChange()
+- handleModelsChange()
+- handleNameChange()
+- handleParameterChange()
+- handleReasoningEffortChange()
+- handleSave()
+- handleSpeechToTextModelChange()
+- @extension/i18n/t
+- @extension/storage/agentModelStore
+- @extension/storage/AgentNameEnum
+- @extension/storage/getDefaultAgentModelParams
+- @extension/storage/getDefaultDisplayNameFromProviderId
+- @extension/storage/getDefaultProviderConfig
 - _…and 15 more_
 
 ### Community 6 — errors (29 nodes, cohesion: 0.07)
@@ -236,31 +236,7 @@
 - @langchain/core/messages/ToolMessage
 - _…and 8 more_
 
-### Community 8 — BrowserContext (28 nodes, cohesion: 0.16)
-
-- BrowserContext
-- .attachPage()
-- .attachToTabInBackground()
-- .cleanup()
-- .closeTab()
-- .constructor()
-- .detachPage()
-- .ensureNavigableTabForNavigation()
-- .findFallbackWebTab()
-- .getAllTabIds()
-- .getCachedState()
-- .getConfig()
-- .getCurrentPage()
-- ._getOrCreatePage()
-- .getState()
-- .getTabInfos()
-- .navigateTo()
-- .openInactiveTab()
-- .openTab()
-- .removeAttachedPage()
-- _…and 8 more_
-
-### Community 9 — page (26 nodes, cohesion: 0.08)
+### Community 8 — page (26 nodes, cohesion: 0.08)
 
 - page
 - CachedStateClickableElementsHashes
@@ -284,7 +260,7 @@
 - @src/background/log/createLogger
 - _…and 6 more_
 
-### Community 10 — helper (25 nodes, cohesion: 0.10)
+### Community 9 — helper (25 nodes, cohesion: 0.10)
 
 - helper
 - ChatLlama
@@ -308,7 +284,7 @@
 - @langchain/openai/ChatOpenAI
 - _…and 5 more_
 
-### Community 11 — EnhancedDOMTreeNode (24 nodes, cohesion: 0.12)
+### Community 10 — EnhancedDOMTreeNode (24 nodes, cohesion: 0.12)
 
 - EnhancedDOMTreeNode
 - ._capTextLength()
@@ -332,7 +308,7 @@
 - .shouldShowScrollInfo()
 - _…and 4 more_
 
-### Community 12 — index (24 nodes, cohesion: 0.08)
+### Community 11 — index (24 nodes, cohesion: 0.08)
 
 - index
 - ./agent/executor/Executor
@@ -356,7 +332,7 @@
 - @langchain/core/language_models/chat_models/BaseChatModel
 - _…and 4 more_
 
-### Community 13 — base (23 nodes, cohesion: 0.11)
+### Community 12 — base (23 nodes, cohesion: 0.11)
 
 - base
 - constructor()
@@ -380,7 +356,7 @@
 - manuallyParseResponse()
 - _…and 3 more_
 
-### Community 14 — service (23 nodes, cohesion: 0.10)
+### Community 13 — service (23 nodes, cohesion: 0.10)
 
 - service
 - _constructDomTree()
@@ -404,54 +380,31 @@
 - logCdpTreesInDev()
 - _…and 3 more_
 
-### Community 15 — capTextLength() (22 nodes, cohesion: 0.17)
+### Community 14 — BrowserContext (22 nodes, cohesion: 0.18)
 
-- capTextLength()
-- DOMTreeSerializer
-- ._addCompoundComponents()
-- ._applyBoundingBoxFiltering()
-- ._assignInteractiveIndicesAndMarkNewNodes()
-- ._buildAttributesString()
+- BrowserContext
+- .cleanup()
+- .closeTab()
 - .constructor()
-- ._createSimplifiedTree()
-- ._extractSelectOptions()
-- ._filterTreeRecursive()
-- ._getChildrenAndShadowRoots()
-- ._hasInteractiveDescendants()
-- ._isContained()
-- ._isInsideShadowDOM()
-- ._isInteractiveCached()
-- ._isPropagatingElement()
-- ._optimizeTree()
-- ._safeParseNumber()
-- ._safeParseOptionalNumber()
-- .serializeAccessibleElements()
+- .detachPage()
+- .ensureNavigableTabForNavigation()
+- .findFallbackWebTab()
+- .getAllTabIds()
+- .getCachedState()
+- .getConfig()
+- .getCurrentPage()
+- .getState()
+- .getTabInfos()
+- .navigateTo()
+- .openTab()
+- .removeAttachedPage()
+- .removeHighlight()
+- .updateConfig()
+- .updateCurrentTabId()
+- .waitForTabNavigationComplete()
 - _…and 2 more_
 
-### Community 16 — NavigatorActionRegistry (20 nodes, cohesion: 0.17)
-
-- NavigatorActionRegistry
-- .constructor()
-- .getAction()
-- .registerAction()
-- .setupModelOutputSchema()
-- .unregisterAction()
-- NavigatorAgent
-- .addModelOutputToMemory()
-- .addStateMessageToMemory()
-- .constructor()
-- .doMultiAction()
-- .execute()
-- .executeHistoryActions()
-- .executeHistoryStep()
-- .fixActions()
-- .getPostActionDelayMs()
-- .invoke()
-- .parseHistoryModelOutput()
-- .removeLastStateMessageFromMemory()
-- .updateActionIndices()
-
-### Community 17 — utils (19 nodes, cohesion: 0.14)
+### Community 15 — utils (19 nodes, cohesion: 0.14)
 
 - utils
 - convertInputMessages()
@@ -473,7 +426,7 @@
 - wrapUntrustedContent()
 - wrapUserRequest()
 
-### Community 18 — types (18 nodes, cohesion: 0.11)
+### Community 16 — types (18 nodes, cohesion: 0.11)
 
 - types
 - ActionResult
@@ -494,7 +447,7 @@
 - .constructor()
 - .durationSeconds()
 
-### Community 19 — llmProviders (18 nodes, cohesion: 0.16)
+### Community 17 — llmProviders (18 nodes, cohesion: 0.16)
 
 - llmProviders
 - ensureBackwardCompatibility()
@@ -515,28 +468,7 @@
 - removeProvider()
 - setProvider()
 
-### Community 20 — Executor (18 nodes, cohesion: 0.18)
-
-- Executor
-- .addFollowUpTask()
-- .cancel()
-- .checkTaskCompletion()
-- .cleanup()
-- .clearExecutionEvents()
-- .constructor()
-- .execute()
-- .getCurrentTaskId()
-- .navigate()
-- .pause()
-- .replayHistory()
-- .resume()
-- .runPlanner()
-- .shouldStop()
-- .subscribeExecutionEvents()
-- .waitUntilUserResume()
-- isRequestCancelledLike()
-
-### Community 21 — Options (17 nodes, cohesion: 0.12)
+### Community 18 — Options (17 nodes, cohesion: 0.12)
 
 - Options
 - handleTabClick()
@@ -556,7 +488,7 @@
 - @src/Options.css
 - renderTabContent()
 
-### Community 22 — PlanBuilder (17 nodes, cohesion: 0.13)
+### Community 19 — PlanBuilder (17 nodes, cohesion: 0.13)
 
 - PlanBuilder
 - actorDisplayName()
@@ -576,7 +508,27 @@
 - reorderSteps()
 - updateStep()
 
-### Community 23 — BookmarkList (16 nodes, cohesion: 0.13)
+### Community 20 — capTextLength() (17 nodes, cohesion: 0.21)
+
+- capTextLength()
+- DOMTreeSerializer
+- ._addCompoundComponents()
+- ._assignInteractiveIndicesAndMarkNewNodes()
+- ._buildAttributesString()
+- .constructor()
+- ._extractSelectOptions()
+- ._filterTreeRecursive()
+- ._hasInteractiveDescendants()
+- ._isContained()
+- ._isInsideShadowDOM()
+- ._isInteractiveCached()
+- ._isPropagatingElement()
+- ._safeParseNumber()
+- ._safeParseOptionalNumber()
+- .serializeTree()
+- ._shouldExcludeChild()
+
+### Community 21 — BookmarkList (16 nodes, cohesion: 0.13)
 
 - BookmarkList
 - handleCancelEdit()
@@ -595,44 +547,7 @@
 - react/useRef
 - react/useState
 
-### Community 24 — calcBranchPathHashSet() (16 nodes, cohesion: 0.15)
-
-- calcBranchPathHashSet()
-- DOMElementNode
-- .clearHashCache()
-- .clickableElementsToString()
-- .constructor()
-- .convertSimpleXPathToCssSelector()
-- .enhancedCssSelectorForElement()
-- .getAllTextTillNextClickableElement()
-- .getEnhancedCssSelector()
-- .getFileUploadElement()
-- .hash()
-- DOMTextNode
-- .constructor()
-- .hasParentWithHighlightIndex()
-- .isParentInViewport()
-- .isParentTopElement()
-
-### Community 25 — history (15 nodes, cohesion: 0.18)
-
-- history
-- createChatHistoryStorage()
-- getCurrentTimestamp()
-- getSessionAgentStepHistoryKey()
-- getSessionAgentStepHistoryStorage()
-- getSessionMessagesKey()
-- getSessionMessagesStorage()
-- ../base/base/createStorage
-- ../base/enums/StorageEnum
-- ./types/ChatAgentStepHistory
-- ./types/ChatHistoryStorage
-- ./types/ChatMessage
-- ./types/ChatSession
-- ./types/ChatSessionMetadata
-- ./types/Message
-
-### Community 26 — service (15 nodes, cohesion: 0.13)
+### Community 22 — service (15 nodes, cohesion: 0.13)
 
 - service
 - @langchain/core/messages/AIMessage
@@ -650,7 +565,7 @@
 - MessageManagerSettings
 - .constructor()
 
-### Community 27 — service (15 nodes, cohesion: 0.29)
+### Community 23 — service (15 nodes, cohesion: 0.29)
 
 - service
 - _attributesHash()
@@ -668,23 +583,75 @@
 - _textHash()
 - _xpathHash()
 
-### Community 28 — analytics (13 nodes, cohesion: 0.17)
+### Community 24 — history (15 nodes, cohesion: 0.18)
 
-- analytics
-- AnalyticsService
-- .categorizeError()
-- .init()
-- .trackDomainVisit()
-- .trackTaskCancelled()
-- .trackTaskComplete()
-- .trackTaskFailed()
-- .trackTaskStart()
-- .updateSettings()
-- @extension/storage/analyticsSettingsStore
-- ../log/createLogger
-- posthog-js/dist/module.no-external
+- history
+- createChatHistoryStorage()
+- getCurrentTimestamp()
+- getSessionAgentStepHistoryKey()
+- getSessionAgentStepHistoryStorage()
+- getSessionMessagesKey()
+- getSessionMessagesStorage()
+- ../base/base/createStorage
+- ../base/enums/StorageEnum
+- ./types/ChatAgentStepHistory
+- ./types/ChatHistoryStorage
+- ./types/ChatMessage
+- ./types/ChatSession
+- ./types/ChatSessionMetadata
+- ./types/Message
 
-### Community 29 — history (13 nodes, cohesion: 0.19)
+### Community 25 — .getAction() (14 nodes, cohesion: 0.27)
+
+- .getAction()
+- NavigatorAgent
+- .addModelOutputToMemory()
+- .addStateMessageToMemory()
+- .doMultiAction()
+- .execute()
+- .executeHistoryActions()
+- .executeHistoryStep()
+- .fixActions()
+- .getPostActionDelayMs()
+- .invoke()
+- .parseHistoryModelOutput()
+- .removeLastStateMessageFromMemory()
+- .updateActionIndices()
+
+### Community 26 — views (14 nodes, cohesion: 0.14)
+
+- views
+- calcBranchPathHashSet()
+- constructor()
+- .hash()
+- domElementNodeToDict()
+- DOMTextNode
+- .constructor()
+- .isParentInViewport()
+- .isParentTopElement()
+- ./history/service/HistoryTreeProcessor
+- ./history/view/CoordinateSet
+- ./history/view/HashedDomElement
+- ./history/view/ViewportInfo
+- ../util/capTextLength
+
+### Community 27 — MessageManager (13 nodes, cohesion: 0.26)
+
+- MessageManager
+- .addMessageWithTokens()
+- .addNewTask()
+- .addPlan()
+- .addStateMessage()
+- .constructor()
+- ._countTextTokens()
+- ._countTokens()
+- .cutMessages()
+- ._filterSensitiveData()
+- .getMessages()
+- .length()
+- .removeLastStateMessage()
+
+### Community 28 — history (13 nodes, cohesion: 0.19)
 
 - history
 - createPlanHistoryStorage()
@@ -700,38 +667,23 @@
 - ./types/PlanStep
 - now()
 
-### Community 30 — MessageManager (13 nodes, cohesion: 0.26)
+### Community 29 — analytics (13 nodes, cohesion: 0.17)
 
-- MessageManager
-- .addModelOutput()
-- .addToolMessage()
-- .constructor()
-- ._countTextTokens()
-- ._countTokens()
-- .cutMessages()
-- .getMessages()
-- .initTaskMessages()
-- .length()
-- .nextToolId()
-- .removeLastStateMessage()
-- .taskInstructions()
+- analytics
+- AnalyticsService
+- .categorizeError()
+- .init()
+- .trackDomainVisit()
+- .trackTaskCancelled()
+- .trackTaskComplete()
+- .trackTaskFailed()
+- .trackTaskStart()
+- .updateSettings()
+- @extension/storage/analyticsSettingsStore
+- ../log/createLogger
+- posthog-js/dist/module.no-external
 
-### Community 31 — firewall (12 nodes, cohesion: 0.35)
-
-- firewall
-- addToAllowList()
-- addToDenyList()
-- getFirewall()
-- ../base/base/createStorage
-- ../base/enums/StorageEnum
-- ../base/types/BaseStorage
-- normalizeUrl()
-- removeFromAllowList()
-- removeFromDenyList()
-- resetToDefaults()
-- updateFirewall()
-
-### Community 32 — context (12 nodes, cohesion: 0.17)
+### Community 30 — context (12 nodes, cohesion: 0.17)
 
 - context
 - ./page/build_initial_state
@@ -746,7 +698,7 @@
 - ./views/URLNotAllowedError
 - webextension-polyfill
 
-### Community 33 — make-manifest-plugin (12 nodes, cohesion: 0.20)
+### Community 31 — make-manifest-plugin (12 nodes, cohesion: 0.20)
 
 - make-manifest-plugin
 - addRefreshContentScript()
@@ -761,35 +713,22 @@
 - vite/PluginOption
 - makeManifestPlugin()
 
-### Community 34 — SecurityGuardrails (11 nodes, cohesion: 2.25)
+### Community 32 — firewall (12 nodes, cohesion: 0.35)
 
-- SecurityGuardrails
-- .cleanEmptyTags()
-- .constructor()
-- .detectThreats()
-- .detectThreatsStrict()
-- .sanitize()
-- .sanitizeStrict()
-- .setEnabled()
-- .setStrictMode()
-- .validate()
-- .validateStrict()
+- firewall
+- addToAllowList()
+- addToDenyList()
+- getFirewall()
+- ../base/base/createStorage
+- ../base/enums/StorageEnum
+- ../base/types/BaseStorage
+- normalizeUrl()
+- removeFromAllowList()
+- removeFromDenyList()
+- resetToDefaults()
+- updateFirewall()
 
-### Community 35 — guardrails.test (11 nodes, cohesion: 0.18)
-
-- guardrails.test
-- ../../../agent/messages/utils/filterExternalContent
-- ../../../agent/messages/utils/filterExternalContentWithReport
-- ../../../agent/messages/utils/wrapUntrustedContent
-- ../index/cleanEmptyTags
-- ../index/guardrails
-- ../index/sanitizeContent
-- ../index/ThreatType
-- vitest/describe
-- vitest/expect
-- vitest/it
-
-### Community 36 — service (11 nodes, cohesion: 0.36)
+### Community 33 — service (11 nodes, cohesion: 0.36)
 
 - service
 - _attributesHash()
@@ -803,7 +742,7 @@
 - _parentBranchPathHash()
 - _xpathHash()
 
-### Community 37 — navigator (11 nodes, cohesion: 0.18)
+### Community 34 — navigator (11 nodes, cohesion: 0.18)
 
 - navigator
 - ./base/BasePrompt
@@ -817,7 +756,21 @@
 - .getSystemMessage()
 - .getUserMessage()
 
-### Community 38 — speechToText (11 nodes, cohesion: 0.18)
+### Community 35 — SecurityGuardrails (11 nodes, cohesion: 2.25)
+
+- SecurityGuardrails
+- .cleanEmptyTags()
+- .constructor()
+- .detectThreats()
+- .detectThreatsStrict()
+- .sanitize()
+- .sanitizeStrict()
+- .setEnabled()
+- .setStrictMode()
+- .validate()
+- .validateStrict()
+
+### Community 36 — speechToText (11 nodes, cohesion: 0.18)
 
 - speechToText
 - @extension/i18n/t
@@ -831,33 +784,35 @@
 - .create()
 - .transcribeAudio()
 
-### Community 39 — utils (10 nodes, cohesion: 0.24)
+### Community 37 — Executor (11 nodes, cohesion: 0.18)
 
-- utils
-- addTitlesToProperties()
-- capitalizeFirstLetter()
-- convertZodToJsonSchema()
-- getCurrentTimestampStr()
-- jsonrepair/jsonrepair
-- @src/background/log/createLogger
-- zod-to-json-schema/zodToJsonSchema
-- zod/z
-- repairJsonString()
+- Executor
+- .addFollowUpTask()
+- .cancel()
+- .checkTaskCompletion()
+- .cleanup()
+- .clearExecutionEvents()
+- .constructor()
+- .getCurrentTaskId()
+- .pause()
+- .replayHistory()
+- .subscribeExecutionEvents()
 
-### Community 40 — domTreeValidator (10 nodes, cohesion: 0.22)
+### Community 38 — guardrails.test (11 nodes, cohesion: 0.18)
 
-- domTreeValidator
-- DOMTreeValidator
-- ._countTotalChildren()
-- .generateReport()
-- .quickCheck()
-- .validateOriginalTree()
-- .validateSimplifiedTree()
-- ./domSerializer.js/SimplifiedNode
-- ./domService.js/EnhancedDOMTreeNode
-- ./domService.js/NodeType
+- guardrails.test
+- ../../../agent/messages/utils/filterExternalContent
+- ../../../agent/messages/utils/filterExternalContentWithReport
+- ../../../agent/messages/utils/wrapUntrustedContent
+- ../index/cleanEmptyTags
+- ../index/guardrails
+- ../index/sanitizeContent
+- ../index/ThreatType
+- vitest/describe
+- vitest/expect
+- vitest/it
 
-### Community 41 — withErrorBoundary (10 nodes, cohesion: 0.20)
+### Community 39 — withErrorBoundary (10 nodes, cohesion: 0.20)
 
 - withErrorBoundary
 - ErrorBoundary
@@ -870,18 +825,44 @@
 - react/ReactElement
 - withErrorBoundary()
 
-### Community 42 — DomService (10 nodes, cohesion: 0.33)
+### Community 40 — utils (10 nodes, cohesion: 0.24)
 
-- DomService
-- .buildEnhancedAXNode()
-- .constructor()
-- .detectPaginationButtons()
-- .getAllTrees()
-- .getAXTreeForAllFrames()
-- .getDomTree()
-- .getSerializedDomTree()
-- .getViewportRatio()
-- .isElementVisibleAccordingToAllParents()
+- utils
+- addTitlesToProperties()
+- capitalizeFirstLetter()
+- convertZodToJsonSchema()
+- getCurrentTimestampStr()
+- jsonrepair/jsonrepair
+- @src/background/log/createLogger
+- zod-to-json-schema/zodToJsonSchema
+- zod/z
+- repairJsonString()
+
+### Community 41 — watch-rebuild-plugin (10 nodes, cohesion: 0.20)
+
+- watch-rebuild-plugin
+- ../constant/BUILD_COMPLETE
+- ../constant/LOCAL_RELOAD_SOCKET_URL
+- ../interpreter/MessageInterpreter
+- node:fs/fs
+- node:path/path
+- ../types/PluginConfig
+- vite/PluginOption
+- ws/WebSocket
+- watchRebuildPlugin()
+
+### Community 42 — index (10 nodes, cohesion: 0.20)
+
+- index
+- fast-glob/glob
+- fflate/AsyncZipDeflate
+- fflate/Zip
+- node:fs/createReadStream
+- node:fs/createWriteStream
+- node:fs/existsSync
+- node:fs/mkdirSync
+- node:path/posix
+- node:path/resolve
 
 ### Community 43 — initReloadServer (10 nodes, cohesion: 0.20)
 
@@ -896,33 +877,7 @@
 - ws/WebSocketServer
 - initReloadServer()
 
-### Community 44 — FirewallSettings (10 nodes, cohesion: 0.20)
-
-- FirewallSettings
-- handleAddUrl()
-- handleRemoveUrl()
-- handleToggleFirewall()
-- @extension/i18n/t
-- @extension/storage/firewallStore
-- @extension/ui/Button
-- react/useCallback
-- react/useEffect
-- react/useState
-
-### Community 45 — index (10 nodes, cohesion: 0.20)
-
-- index
-- fast-glob/glob
-- fflate/AsyncZipDeflate
-- fflate/Zip
-- node:fs/createReadStream
-- node:fs/createWriteStream
-- node:fs/existsSync
-- node:fs/mkdirSync
-- node:path/posix
-- node:path/resolve
-
-### Community 46 — domSerializer (10 nodes, cohesion: 0.22)
+### Community 44 — domSerializer (10 nodes, cohesion: 0.22)
 
 - domSerializer
 - ./clickableElementDetector/ClickableElementDetector
@@ -935,20 +890,59 @@
 - .constructor()
 - .toJSON()
 
-### Community 47 — watch-rebuild-plugin (10 nodes, cohesion: 0.20)
+### Community 45 — DOMElementNode (10 nodes, cohesion: 0.27)
 
-- watch-rebuild-plugin
-- ../constant/BUILD_COMPLETE
-- ../constant/LOCAL_RELOAD_SOCKET_URL
-- ../interpreter/MessageInterpreter
-- node:fs/fs
-- node:path/path
-- ../types/PluginConfig
-- vite/PluginOption
-- ws/WebSocket
-- watchRebuildPlugin()
+- DOMElementNode
+- .clearHashCache()
+- .clickableElementsToString()
+- .constructor()
+- .convertSimpleXPathToCssSelector()
+- .enhancedCssSelectorForElement()
+- .getAllTextTillNextClickableElement()
+- .getEnhancedCssSelector()
+- .getFileUploadElement()
+- .hasParentWithHighlightIndex()
 
-### Community 48 — EventManager (9 nodes, cohesion: 0.31)
+### Community 46 — domTreeValidator (10 nodes, cohesion: 0.22)
+
+- domTreeValidator
+- DOMTreeValidator
+- ._countTotalChildren()
+- .generateReport()
+- .quickCheck()
+- .validateOriginalTree()
+- .validateSimplifiedTree()
+- ./domSerializer.js/SimplifiedNode
+- ./domService.js/EnhancedDOMTreeNode
+- ./domService.js/NodeType
+
+### Community 47 — DomService (10 nodes, cohesion: 0.33)
+
+- DomService
+- .buildEnhancedAXNode()
+- .constructor()
+- .detectPaginationButtons()
+- .getAllTrees()
+- .getAXTreeForAllFrames()
+- .getDomTree()
+- .getSerializedDomTree()
+- .getViewportRatio()
+- .isElementVisibleAccordingToAllParents()
+
+### Community 48 — FirewallSettings (10 nodes, cohesion: 0.20)
+
+- FirewallSettings
+- handleAddUrl()
+- handleRemoveUrl()
+- handleToggleFirewall()
+- @extension/i18n/t
+- @extension/storage/firewallStore
+- @extension/ui/Button
+- react/useCallback
+- react/useEffect
+- react/useState
+
+### Community 49 — EventManager (9 nodes, cohesion: 0.31)
 
 - EventManager
 - .attachDurations()
@@ -959,18 +953,6 @@
 - .getTotalPausedMs()
 - .subscribe()
 - .unsubscribe()
-
-### Community 49 — planner (9 nodes, cohesion: 0.22)
-
-- planner
-- ./base/BasePrompt
-- @langchain/core/messages/HumanMessage
-- @langchain/core/messages/SystemMessage
-- @src/background/agent/types/AgentContext
-- ./templates/planner/plannerSystemPromptTemplate
-- PlannerPrompt
-- .getSystemMessage()
-- .getUserMessage()
 
 ### Community 50 — base (9 nodes, cohesion: 0.28)
 
@@ -1008,139 +990,19 @@
 - URLNotAllowedError
 - .constructor()
 
-### Community 53 — domService (8 nodes, cohesion: 0.25)
+### Community 53 — planner (9 nodes, cohesion: 0.22)
 
-- domService
-- ./domSerializer/DOMTreeSerializer
-- ./enhancedDOMTreeNode/EnhancedDOMTreeNode
-- ./enhancedSnapshot/buildSnapshotLookup
-- ./enhancedSnapshot/REQUIRED_COMPUTED_STYLES
-- puppeteer-core/CDPSession
-- puppeteer-core/Page
-- ./serializedDOMState/SerializedDOMState
-
-### Community 54 — GeneralSettings (8 nodes, cohesion: 0.25)
-
-- GeneralSettings
-- @extension/i18n/t
-- @extension/storage/DEFAULT_GENERAL_SETTINGS
-- @extension/storage/GeneralSettingsConfig
-- @extension/storage/generalSettingsStore
-- react/useEffect
-- react/useState
-- updateSetting()
-
-### Community 55 — analyticsSettings (8 nodes, cohesion: 0.32)
-
-- analyticsSettings
-- generateAnonymousUserId()
-- getSettings()
-- ../base/base/createStorage
-- ../base/enums/StorageEnum
-- ../base/types/BaseStorage
-- resetToDefaults()
-- updateSettings()
-
-### Community 56 — agentModels (8 nodes, cohesion: 0.25)
-
-- agentModels
-- getModelParameters()
-- ../base/base/createStorage
-- ../base/enums/StorageEnum
-- ../base/types/BaseStorage
-- ./types/AgentNameEnum
-- ./types/llmProviderParameters
-- validateModelConfig()
-
-### Community 57 — views (8 nodes, cohesion: 0.25)
-
-- views
-- @langchain/core/messages/BaseMessage
+- planner
+- ./base/BasePrompt
 - @langchain/core/messages/HumanMessage
 - @langchain/core/messages/SystemMessage
-- ManagedMessage
-- .constructor()
-- MessageMetadata
-- .constructor()
+- @src/background/agent/types/AgentContext
+- ./templates/planner/plannerSystemPromptTemplate
+- PlannerPrompt
+- .getSystemMessage()
+- .getUserMessage()
 
-### Community 58 — index (8 nodes, cohesion: 0.25)
-
-- index
-- ./sanitizer/cleanEmptyTags
-- ./sanitizer/detectThreats
-- ./sanitizer/sanitizeContent
-- @src/background/log/createLogger
-- ./types/SanitizationResult
-- ./types/ThreatType
-- ./types/ValidationResult
-
-### Community 59 — views (8 nodes, cohesion: 0.25)
-
-- views
-- constructor()
-- domElementNodeToDict()
-- ./history/service/HistoryTreeProcessor
-- ./history/view/CoordinateSet
-- ./history/view/HashedDomElement
-- ./history/view/ViewportInfo
-- ../util/capTextLength
-
-### Community 60 — i18n (8 nodes, cohesion: 0.64)
-
-- i18n
-- ./getMessageFromLocale/defaultLocale
-- ./getMessageFromLocale/getMessageFromLocale
-- ./type/DevLocale
-- ./type/MessageKey
-- removePlaceholder()
-- t()
-- translate()
-
-### Community 61 — Action (8 nodes, cohesion: 0.29)
-
-- Action
-- .call()
-- .constructor()
-- .getIndexArg()
-- .name()
-- .prompt()
-- .setIndexArg()
-- buildDynamicActionSchema()
-
-### Community 62 — history (8 nodes, cohesion: 0.25)
-
-- history
-- AgentStepHistory
-- .constructor()
-- AgentStepRecord
-- .constructor()
-- ../browser/views/BrowserStateHistory
-- ./types/ActionResult
-- ./types/StepMetadata
-
-### Community 63 — sanitizer (8 nodes, cohesion: 0.29)
-
-- sanitizer
-- cleanEmptyTags()
-- detectThreats()
-- ./patterns/getPatterns
-- @src/background/log/createLogger
-- ./types/SanitizationResult
-- ./types/ThreatType
-- sanitizeContent()
-
-### Community 64 — _buildDomTree() (8 nodes, cohesion: 0.39)
-
-- _buildDomTree()
-- constructFrameTree()
-- getClickableElements()
-- _getMaxHighlighIndex()
-- _getMaxID()
-- _getRawDomTreeNodes()
-- _locateMatchingIframeNode()
-- _visibleIFramesFailedLoading()
-
-### Community 65 — user (8 nodes, cohesion: 0.32)
+### Community 54 — user (8 nodes, cohesion: 0.32)
 
 - user
 - createProfile()
@@ -1151,15 +1013,137 @@
 - ../base/types/BaseStorage
 - updateProfile()
 
-### Community 66 — helper (7 nodes, cohesion: 0.57)
+### Community 55 — domService (8 nodes, cohesion: 0.25)
 
-- helper
-- convertOpenAISchemaToGemini()
-- dereferenceJsonSchema()
-- processPropertiesForGemini()
-- processPropertyForGemini()
-- processSchemaNode()
-- stringifyCustom()
+- domService
+- ./domSerializer/DOMTreeSerializer
+- ./enhancedDOMTreeNode/EnhancedDOMTreeNode
+- ./enhancedSnapshot/buildSnapshotLookup
+- ./enhancedSnapshot/REQUIRED_COMPUTED_STYLES
+- puppeteer-core/CDPSession
+- puppeteer-core/Page
+- ./serializedDOMState/SerializedDOMState
+
+### Community 56 — ._findNearestScrollableElement() (8 nodes, cohesion: 0.46)
+
+- ._findNearestScrollableElement()
+- .getElementScrollInfo()
+- .locateElement()
+- .scrollBy()
+- .scrollToNextPage()
+- .scrollToPercent()
+- .scrollToPreviousPage()
+- ._wrapElementEvaluateForDebug()
+
+### Community 57 — _buildDomTree() (8 nodes, cohesion: 0.39)
+
+- _buildDomTree()
+- constructFrameTree()
+- getClickableElements()
+- _getMaxHighlighIndex()
+- _getMaxID()
+- _getRawDomTreeNodes()
+- _locateMatchingIframeNode()
+- _visibleIFramesFailedLoading()
+
+### Community 58 — agentModels (8 nodes, cohesion: 0.25)
+
+- agentModels
+- getModelParameters()
+- ../base/base/createStorage
+- ../base/enums/StorageEnum
+- ../base/types/BaseStorage
+- ./types/AgentNameEnum
+- ./types/llmProviderParameters
+- validateModelConfig()
+
+### Community 59 — GeneralSettings (8 nodes, cohesion: 0.25)
+
+- GeneralSettings
+- @extension/i18n/t
+- @extension/storage/DEFAULT_GENERAL_SETTINGS
+- @extension/storage/GeneralSettingsConfig
+- @extension/storage/generalSettingsStore
+- react/useEffect
+- react/useState
+- updateSetting()
+
+### Community 60 — views (8 nodes, cohesion: 0.25)
+
+- views
+- @langchain/core/messages/BaseMessage
+- @langchain/core/messages/HumanMessage
+- @langchain/core/messages/SystemMessage
+- ManagedMessage
+- .constructor()
+- MessageMetadata
+- .constructor()
+
+### Community 61 — analyticsSettings (8 nodes, cohesion: 0.32)
+
+- analyticsSettings
+- generateAnonymousUserId()
+- getSettings()
+- ../base/base/createStorage
+- ../base/enums/StorageEnum
+- ../base/types/BaseStorage
+- resetToDefaults()
+- updateSettings()
+
+### Community 62 — sanitizer (8 nodes, cohesion: 0.29)
+
+- sanitizer
+- cleanEmptyTags()
+- detectThreats()
+- ./patterns/getPatterns
+- @src/background/log/createLogger
+- ./types/SanitizationResult
+- ./types/ThreatType
+- sanitizeContent()
+
+### Community 63 — i18n (8 nodes, cohesion: 0.64)
+
+- i18n
+- ./getMessageFromLocale/defaultLocale
+- ./getMessageFromLocale/getMessageFromLocale
+- ./type/DevLocale
+- ./type/MessageKey
+- removePlaceholder()
+- t()
+- translate()
+
+### Community 64 — history (8 nodes, cohesion: 0.25)
+
+- history
+- AgentStepHistory
+- .constructor()
+- AgentStepRecord
+- .constructor()
+- ../browser/views/BrowserStateHistory
+- ./types/ActionResult
+- ./types/StepMetadata
+
+### Community 65 — index (8 nodes, cohesion: 0.25)
+
+- index
+- ./sanitizer/cleanEmptyTags
+- ./sanitizer/detectThreats
+- ./sanitizer/sanitizeContent
+- @src/background/log/createLogger
+- ./types/SanitizationResult
+- ./types/ThreatType
+- ./types/ValidationResult
+
+### Community 66 — Action (8 nodes, cohesion: 0.29)
+
+- Action
+- .call()
+- .constructor()
+- .getIndexArg()
+- .name()
+- .prompt()
+- .setIndexArg()
+- buildDynamicActionSchema()
 
 ### Community 67 — base (7 nodes, cohesion: 0.29)
 
@@ -1171,17 +1155,7 @@
 - @src/background/agent/types/AgentContext
 - @src/background/log/createLogger
 
-### Community 68 — index (7 nodes, cohesion: 0.86)
-
-- index
-- ../types/SerializedMessage
-- ../types/WebSocketMessage
-- MessageInterpreter
-- .constructor()
-- .receive()
-- .send()
-
-### Community 69 — refresh (7 nodes, cohesion: 0.43)
+### Community 68 — refresh (7 nodes, cohesion: 0.43)
 
 - refresh
 - addRefresh()
@@ -1191,17 +1165,7 @@
 - .receive()
 - .send()
 
-### Community 70 — generalSettings (7 nodes, cohesion: 0.29)
-
-- generalSettings
-- getSettings()
-- ../base/base/createStorage
-- ../base/enums/StorageEnum
-- ../base/types/BaseStorage
-- resetToDefaults()
-- updateSettings()
-
-### Community 71 — AnalyticsSettings (7 nodes, cohesion: 0.29)
+### Community 69 — AnalyticsSettings (7 nodes, cohesion: 0.29)
 
 - AnalyticsSettings
 - handleToggleAnalytics()
@@ -1211,7 +1175,7 @@
 - react/useEffect
 - react/useState
 
-### Community 72 — MessageHistory (7 nodes, cohesion: 0.29)
+### Community 70 — MessageHistory (7 nodes, cohesion: 0.29)
 
 - MessageHistory
 - .addMessage()
@@ -1221,70 +1185,47 @@
 - .removeMessage()
 - .removeOldestMessage()
 
-### Community 73 — executor-lifecycle.test (6 nodes, cohesion: 0.33)
+### Community 71 — helper (7 nodes, cohesion: 0.57)
 
-- executor-lifecycle.test
-- ../../background/agent/event/types/ExecutionState
-- ../executor-lifecycle/shouldCleanupExecutorOnTerminalEvent
-- vitest/describe
-- vitest/expect
-- vitest/it
+- helper
+- convertOpenAISchemaToGemini()
+- dereferenceJsonSchema()
+- processPropertiesForGemini()
+- processPropertyForGemini()
+- processSchemaNode()
+- stringifyCustom()
 
-### Community 74 — manager (6 nodes, cohesion: 0.33)
+### Community 72 — index (7 nodes, cohesion: 0.86)
 
-- manager
-- ../../log/createLogger
-- ./types/AgentEvent
-- ./types/EventCallback
-- ./types/EventType
-- ./types/ExecutionState
-
-### Community 75 — manifest (6 nodes, cohesion: 0.33)
-
-- manifest
-- deepmerge/deepmerge
-- node:fs/fs
-- withExternallyConnectableHzgm()
-- withOperaSidebar()
-- withSidePanel()
-
-### Community 76 — AgentContext (6 nodes, cohesion: 0.33)
-
-- AgentContext
+- index
+- ../types/SerializedMessage
+- ../types/WebSocketMessage
+- MessageInterpreter
 - .constructor()
-- .emitEvent()
-- .pause()
+- .receive()
+- .send()
+
+### Community 73 — .execute() (7 nodes, cohesion: 0.48)
+
+- .execute()
+- .navigate()
 - .resume()
-- .stop()
+- .runPlanner()
+- .shouldStop()
+- .waitUntilUserResume()
+- isRequestCancelledLike()
 
-### Community 77 — getMessageFromLocale (6 nodes, cohesion: 0.33)
+### Community 74 — generalSettings (7 nodes, cohesion: 0.29)
 
-- getMessageFromLocale
-- getMessageFromLocale()
-- ../locales/en/messages.json/enMessage
-- ../locales/pt_BR/messages.json/pt_BRMessage
-- ../locales/zh_CN/messages.json/zh_CNMessage
-- ../locales/zh_TW/messages.json/zh_TWMessage
+- generalSettings
+- getSettings()
+- ../base/base/createStorage
+- ../base/enums/StorageEnum
+- ../base/types/BaseStorage
+- resetToDefaults()
+- updateSettings()
 
-### Community 78 — enhancedDOMTreeNode (6 nodes, cohesion: 0.33)
-
-- enhancedDOMTreeNode
-- crypto/createHash
-- ./domService/DOMRect
-- ./domService/EnhancedAXNode
-- ./domService/NodeType
-- ./domService/SnapshotNode
-
-### Community 79 — view (6 nodes, cohesion: 0.33)
-
-- view
-- DOMHistoryElement
-- .constructor()
-- .toDict()
-- HashedDomElement
-- .constructor()
-
-### Community 80 — index (6 nodes, cohesion: 0.33)
+### Community 75 — index (6 nodes, cohesion: 0.33)
 
 - index
 - @extension/ui/dist/global.css
@@ -1293,14 +1234,59 @@
 - @src/Options/Options
 - init()
 
-### Community 81 — enhancedSnapshot (6 nodes, cohesion: 0.47)
+### Community 76 — initClient (6 nodes, cohesion: 0.33)
 
-- enhancedSnapshot
-- buildSnapshotLookup()
+- initClient
+- ../constant/DO_UPDATE
+- ../constant/DONE_UPDATE
+- ../constant/LOCAL_RELOAD_SOCKET_URL
+- ../interpreter/MessageInterpreter
+- initClient()
+
+### Community 77 — enhancedDOMTreeNode (6 nodes, cohesion: 0.33)
+
+- enhancedDOMTreeNode
+- crypto/createHash
 - ./domService/DOMRect
+- ./domService/EnhancedAXNode
+- ./domService/NodeType
 - ./domService/SnapshotNode
-- parseComputedStyles()
-- parseRareBooleanData()
+
+### Community 78 — executor-lifecycle.test (6 nodes, cohesion: 0.33)
+
+- executor-lifecycle.test
+- ../../background/agent/event/types/ExecutionState
+- ../executor-lifecycle/shouldCleanupExecutorOnTerminalEvent
+- vitest/describe
+- vitest/expect
+- vitest/it
+
+### Community 79 — manifest (6 nodes, cohesion: 0.33)
+
+- manifest
+- deepmerge/deepmerge
+- node:fs/fs
+- withExternallyConnectableHzgm()
+- withOperaSidebar()
+- withSidePanel()
+
+### Community 80 — AgentContext (6 nodes, cohesion: 0.33)
+
+- AgentContext
+- .constructor()
+- .emitEvent()
+- .pause()
+- .resume()
+- .stop()
+
+### Community 81 — getMessageFromLocale (6 nodes, cohesion: 0.33)
+
+- getMessageFromLocale
+- getMessageFromLocale()
+- ../locales/en/messages.json/enMessage
+- ../locales/pt_BR/messages.json/pt_BRMessage
+- ../locales/zh_CN/messages.json/zh_CNMessage
+- ../locales/zh_TW/messages.json/zh_TWMessage
 
 ### Community 82 — make-entry-point-plugin (6 nodes, cohesion: 0.40)
 
@@ -1311,62 +1297,65 @@
 - vite/PluginOption
 - makeEntryPointPlugin()
 
-### Community 83 — initClient (6 nodes, cohesion: 0.33)
+### Community 83 — manager (6 nodes, cohesion: 0.33)
 
-- initClient
-- ../constant/DO_UPDATE
-- ../constant/DONE_UPDATE
-- ../constant/LOCAL_RELOAD_SOCKET_URL
-- ../interpreter/MessageInterpreter
-- initClient()
+- manager
+- ../../log/createLogger
+- ./types/AgentEvent
+- ./types/EventCallback
+- ./types/EventType
+- ./types/ExecutionState
 
-### Community 84 — withSuspense (5 nodes, cohesion: 0.40)
+### Community 84 — view (6 nodes, cohesion: 0.33)
 
-- withSuspense
-- react/ComponentType
-- react/ReactElement
-- react/Suspense
-- withSuspense()
+- view
+- DOMHistoryElement
+- .constructor()
+- .toDict()
+- HashedDomElement
+- .constructor()
 
-### Community 85 — speechToText (5 nodes, cohesion: 0.40)
+### Community 85 — enhancedSnapshot (6 nodes, cohesion: 0.47)
 
-- speechToText
-- ../base/base/createStorage
-- ../base/enums/StorageEnum
-- ../base/types/BaseStorage
-- validateSpeechToTextModelConfig()
+- enhancedSnapshot
+- buildSnapshotLookup()
+- ./domService/DOMRect
+- ./domService/SnapshotNode
+- parseComputedStyles()
+- parseRareBooleanData()
 
-### Community 86 — clickableElementDetector (5 nodes, cohesion: 0.40)
+### Community 86 — .attachPage() (6 nodes, cohesion: 0.53)
 
-- clickableElementDetector
-- ClickableElementDetector
-- .isInteractive()
-- ./domService/NodeType
-- ./enhancedDOMTreeNode/EnhancedDOMTreeNode
+- .attachPage()
+- .attachToTabInBackground()
+- ._getOrCreatePage()
+- .openInactiveTab()
+- .switchTab()
+- .waitForTabEvents()
 
-### Community 87 — .getScrollInfo() (5 nodes, cohesion: 0.40)
+### Community 87 — closePlanDedicatedTabIfAny() (5 nodes, cohesion: 2.00)
 
-- .getScrollInfo()
-- .removeHighlight()
-- .takeScreenshot()
-- .title()
-- ._updateState()
+- closePlanDedicatedTabIfAny()
+- isHzgmTechSenderUrl()
+- isScriptableTabUrl()
+- setupExecutor()
+- subscribeToExecutorEvents()
 
-### Community 88 — utils (5 nodes, cohesion: 0.40)
-
-- utils
-- cn()
-- clsx/ClassValue
-- clsx/clsx
-- tailwind-merge/twMerge
-
-### Community 89 — useStorage (5 nodes, cohesion: 0.50)
+### Community 88 — useStorage (5 nodes, cohesion: 0.50)
 
 - useStorage
 - @extension/storage/BaseStorage
 - react/useSyncExternalStore
 - useStorage()
 - wrapPromise()
+
+### Community 89 — index (5 nodes, cohesion: 0.40)
+
+- index
+- react-dom/client/createRoot
+- @src/index.css
+- @src/SidePanel/SidePanel
+- init()
 
 ### Community 90 — ensureBuildDirectoryExists() (5 nodes, cohesion: 2.40)
 
@@ -1376,21 +1365,21 @@
 - toMB()
 - zipBundle()
 
-### Community 91 — .goBack() (5 nodes, cohesion: 0.40)
+### Community 91 — ._applyBoundingBoxFiltering() (5 nodes, cohesion: 0.40)
 
-- .goBack()
-- .goForward()
-- .navigateTo()
-- .refreshPage()
-- .waitForPageAndFramesLoad()
+- ._applyBoundingBoxFiltering()
+- ._createSimplifiedTree()
+- ._getChildrenAndShadowRoots()
+- ._optimizeTree()
+- .serializeAccessibleElements()
 
-### Community 92 — type (5 nodes, cohesion: 0.40)
+### Community 92 — withSuspense (5 nodes, cohesion: 0.40)
 
-- type
-- ../locales/en/messages.json/enMessage
-- ../locales/pt_BR/messages.json/pt_BRMessage
-- ../locales/zh_CN/messages.json/zh_CNMessage
-- ../locales/zh_TW/messages.json/zh_TWMessage
+- withSuspense
+- react/ComponentType
+- react/ReactElement
+- react/Suspense
+- withSuspense()
 
 ### Community 93 — patterns (5 nodes, cohesion: 0.40)
 
@@ -1400,23 +1389,39 @@
 - ./types/ThreatType
 - isPreserveTag()
 
-### Community 94 — .addMessageWithTokens() (5 nodes, cohesion: 0.40)
+### Community 94 — speechToText (5 nodes, cohesion: 0.40)
 
-- .addMessageWithTokens()
-- .addNewTask()
-- .addPlan()
-- .addStateMessage()
-- ._filterSensitiveData()
+- speechToText
+- ../base/base/createStorage
+- ../base/enums/StorageEnum
+- ../base/types/BaseStorage
+- validateSpeechToTextModelConfig()
 
-### Community 95 — closePlanDedicatedTabIfAny() (5 nodes, cohesion: 2.00)
+### Community 95 — utils (5 nodes, cohesion: 0.40)
 
-- closePlanDedicatedTabIfAny()
-- isHzgmTechSenderUrl()
-- isScriptableTabUrl()
-- setupExecutor()
-- subscribeToExecutorEvents()
+- utils
+- cn()
+- clsx/ClassValue
+- clsx/clsx
+- tailwind-merge/twMerge
 
-### Community 96 — favorites (5 nodes, cohesion: 0.40)
+### Community 96 — .getScrollInfo() (5 nodes, cohesion: 0.40)
+
+- .getScrollInfo()
+- .removeHighlight()
+- .takeScreenshot()
+- .title()
+- ._updateState()
+
+### Community 97 — .goBack() (5 nodes, cohesion: 0.40)
+
+- .goBack()
+- .goForward()
+- .navigateTo()
+- .refreshPage()
+- .waitForPageAndFramesLoad()
+
+### Community 98 — favorites (5 nodes, cohesion: 0.40)
 
 - favorites
 - createFavoritesStorage()
@@ -1424,48 +1429,36 @@
 - ../base/enums/StorageEnum
 - ../base/types/BaseStorage
 
-### Community 97 — index (5 nodes, cohesion: 0.40)
+### Community 99 — .addModelOutput() (5 nodes, cohesion: 0.60)
 
-- index
-- react-dom/client/createRoot
-- @src/index.css
-- @src/SidePanel/SidePanel
-- init()
+- .addModelOutput()
+- .addToolMessage()
+- .initTaskMessages()
+- .nextToolId()
+- .taskInstructions()
 
-### Community 98 — i18n-prod (4 nodes, cohesion: 0.50)
+### Community 100 — type (5 nodes, cohesion: 0.40)
 
-- i18n-prod
-- ./type/DevLocale
-- ./type/MessageKey
-- t()
+- type
+- ../locales/en/messages.json/enMessage
+- ../locales/pt_BR/messages.json/pt_BRMessage
+- ../locales/zh_CN/messages.json/zh_CNMessage
+- ../locales/zh_TW/messages.json/zh_TWMessage
 
-### Community 99 — convert (4 nodes, cohesion: 0.50)
+### Community 101 — clickableElementDetector (5 nodes, cohesion: 0.40)
 
-- convert
-- ../lib/helper.js/convertOpenAISchemaToGemini
-- ../lib/helper.js/stringifyCustom
-- ../lib/json_schema.js/jsonNavigatorOutputSchema
+- clickableElementDetector
+- ClickableElementDetector
+- .isInteractive()
+- ./domService/NodeType
+- ./enhancedDOMTreeNode/EnhancedDOMTreeNode
 
-### Community 100 — watch-public-plugin (4 nodes, cohesion: 0.50)
+### Community 102 — withUI (4 nodes, cohesion: 0.50)
 
-- watch-public-plugin
-- fast-glob/fg
-- vite/PluginOption
-- watchPublicPlugin()
-
-### Community 101 — flatten (4 nodes, cohesion: 0.50)
-
-- flatten
-- ../lib/helper.js/dereferenceJsonSchema
-- ../lib/helper.js/stringifyCustom
-- ../lib/json_schema.js/jsonNavigatorOutputSchema
-
-### Community 102 — impl (4 nodes, cohesion: 0.50)
-
-- impl
-- convertToFirefoxCompatibleManifest()
-- ./type/Manifest
-- ./type/ManifestParserInterface
+- withUI
+- deepmerge/deepmerge
+- tailwindcss/types/config/Config
+- withUI()
 
 ### Community 103 — types (4 nodes, cohesion: 0.50)
 
@@ -1474,284 +1467,312 @@
 - ./constant/DO_UPDATE
 - ./constant/DONE_UPDATE
 
-### Community 104 — withUI (4 nodes, cohesion: 0.50)
+### Community 104 — convert (4 nodes, cohesion: 0.50)
 
-- withUI
-- deepmerge/deepmerge
-- tailwindcss/types/config/Config
-- withUI()
+- convert
+- ../lib/helper.js/convertOpenAISchemaToGemini
+- ../lib/helper.js/stringifyCustom
+- ../lib/json_schema.js/jsonNavigatorOutputSchema
 
-### Community 105 — executor-lifecycle (4 nodes, cohesion: 0.67)
-
-- executor-lifecycle
-- ./agent/event/types/ExecutionState
-- isTerminalTaskExecutionState()
-- shouldCleanupExecutorOnTerminalEvent()
-
-### Community 106 — event (4 nodes, cohesion: 0.50)
-
-- event
-- AgentEvent
-- .constructor()
-- @extension/storage/Actors
-
-### Community 107 — Button (4 nodes, cohesion: 0.50)
+### Community 105 — Button (4 nodes, cohesion: 0.50)
 
 - Button
 - Button()
 - react/ComponentPropsWithoutRef
 - ../utils/cn
 
-### Community 108 — util (4 nodes, cohesion: 0.50)
+### Community 106 — flatten (4 nodes, cohesion: 0.50)
+
+- flatten
+- ../lib/helper.js/dereferenceJsonSchema
+- ../lib/helper.js/stringifyCustom
+- ../lib/json_schema.js/jsonNavigatorOutputSchema
+
+### Community 107 — executor-lifecycle (4 nodes, cohesion: 0.67)
+
+- executor-lifecycle
+- ./agent/event/types/ExecutionState
+- isTerminalTaskExecutionState()
+- shouldCleanupExecutorOnTerminalEvent()
+
+### Community 108 — event (4 nodes, cohesion: 0.50)
+
+- event
+- AgentEvent
+- .constructor()
+- @extension/storage/Actors
+
+### Community 109 — watch-public-plugin (4 nodes, cohesion: 0.50)
+
+- watch-public-plugin
+- fast-glob/fg
+- vite/PluginOption
+- watchPublicPlugin()
+
+### Community 110 — impl (4 nodes, cohesion: 0.50)
+
+- impl
+- convertToFirefoxCompatibleManifest()
+- ./type/Manifest
+- ./type/ManifestParserInterface
+
+### Community 111 — i18n-prod (4 nodes, cohesion: 0.50)
+
+- i18n-prod
+- ./type/DevLocale
+- ./type/MessageKey
+- t()
+
+### Community 112 — util (4 nodes, cohesion: 0.50)
 
 - util
 - capTextLength()
 - isNewTabPage()
 - isUrlAllowed()
 
-### Community 109 — raw_types (3 nodes, cohesion: 0.67)
-
-- raw_types
-- ./history/view/CoordinateSet
-- ./history/view/ViewportInfo
-
-### Community 110 — utils (3 nodes, cohesion: 0.67)
-
-- utils
-- generateNewTaskId()
-- getCurrentTimestampStr()
-
-### Community 111 — index (3 nodes, cohesion: 0.67)
+### Community 113 — index (3 nodes, cohesion: 0.67)
 
 - index
 - ./lib/zip-bundle/zipBundle
 - node:path/resolve
 
-### Community 112 — internal (3 nodes, cohesion: 0.67)
-
-- internal
-- ./external/externalPublishMessageSchema
-- zod/z
-
-### Community 113 — index (3 nodes, cohesion: 0.67)
-
-- index
-- ./lib/i18n-dev/t
-- ./lib/i18n/t
-
-### Community 114 — tailwind.config (3 nodes, cohesion: 0.67)
-
-- tailwind.config
-- @extension/tailwindcss-config/baseConfig
-- tailwindcss/types/config/Config
-
-### Community 115 — types (3 nodes, cohesion: 0.67)
-
-- types
-- AgentEvent
-- .constructor()
-
-### Community 116 — logger (3 nodes, cohesion: 0.67)
+### Community 114 — logger (3 nodes, cohesion: 0.67)
 
 - logger
 - colorLog()
 - @extension/shared/ValueOf
 
-### Community 117 — refresh (3 nodes, cohesion: 0.67)
-
-- refresh
-- addRefresh()
-- ../initializers/initClient/initClient
-
-### Community 118 — reload (3 nodes, cohesion: 0.67)
-
-- reload
-- addReload()
-- ../initializers/initClient/initClient
-
-### Community 119 — PlanHistoryList (3 nodes, cohesion: 0.67)
-
-- PlanHistoryList
-- @extension/storage/PlanRun
-- @extension/storage/PlanSessionMetadata
-
-### Community 120 — tailwind.config (3 nodes, cohesion: 0.67)
-
-- tailwind.config
-- @extension/tailwindcss-config/baseConfig
-- @extension/ui/withUI
-
-### Community 121 — PlanListSidebar (3 nodes, cohesion: 0.67)
-
-- PlanListSidebar
-- @extension/i18n/t
-- @extension/storage/PlanSessionMetadata
-
-### Community 122 — index (3 nodes, cohesion: 0.67)
+### Community 115 — index (3 nodes, cohesion: 0.67)
 
 - index
 - ./withErrorBoundary/withErrorBoundary
 - ./withSuspense/withSuspense
 
-### Community 123 — schemas (2 nodes, cohesion: 1.00)
+### Community 116 — raw_types (3 nodes, cohesion: 0.67)
 
-- schemas
+- raw_types
+- ./history/view/CoordinateSet
+- ./history/view/ViewportInfo
+
+### Community 117 — PlanListSidebar (3 nodes, cohesion: 0.67)
+
+- PlanListSidebar
+- @extension/i18n/t
+- @extension/storage/PlanSessionMetadata
+
+### Community 118 — tailwind.config (3 nodes, cohesion: 0.67)
+
+- tailwind.config
+- @extension/tailwindcss-config/baseConfig
+- tailwindcss/types/config/Config
+
+### Community 119 — index (3 nodes, cohesion: 0.67)
+
+- index
+- ./lib/i18n-dev/t
+- ./lib/i18n/t
+
+### Community 120 — utils (3 nodes, cohesion: 0.67)
+
+- utils
+- generateNewTaskId()
+- getCurrentTimestampStr()
+
+### Community 121 — tailwind.config (3 nodes, cohesion: 0.67)
+
+- tailwind.config
+- @extension/tailwindcss-config/baseConfig
+- @extension/ui/withUI
+
+### Community 122 — reload (3 nodes, cohesion: 0.67)
+
+- reload
+- addReload()
+- ../initializers/initClient/initClient
+
+### Community 123 — internal (3 nodes, cohesion: 0.67)
+
+- internal
+- ./external/externalPublishMessageSchema
 - zod/z
 
-### Community 124 — log (2 nodes, cohesion: 1.00)
+### Community 124 — refresh (3 nodes, cohesion: 0.67)
 
-- log
-- createLogger()
+- refresh
+- addRefresh()
+- ../initializers/initClient/initClient
 
-### Community 125 — planner (2 nodes, cohesion: 1.00)
+### Community 125 — types (3 nodes, cohesion: 0.67)
+
+- types
+- AgentEvent
+- .constructor()
+
+### Community 126 — PlanHistoryList (3 nodes, cohesion: 0.67)
+
+- PlanHistoryList
+- @extension/storage/PlanRun
+- @extension/storage/PlanSessionMetadata
+
+### Community 127 — planner (2 nodes, cohesion: 1.00)
 
 - planner
 - ./common/commonSecurityRules
 
-### Community 126 — index (2 nodes, cohesion: 1.00)
-
-- index
-- ./impl/ManifestParserImpl
-
-### Community 127 — tailwind.config (2 nodes, cohesion: 1.00)
+### Community 128 — tailwind.config (2 nodes, cohesion: 1.00)
 
 - tailwind.config
 - tailwindcss/types/config/Config
 
-### Community 128 — types (2 nodes, cohesion: 1.00)
-
-- types
-- ./enums/StorageEnum
-
-### Community 129 — navigator (2 nodes, cohesion: 1.00)
-
-- navigator
-- ./common/commonSecurityRules
-
-### Community 130 — external (2 nodes, cohesion: 1.00)
+### Community 129 — external (2 nodes, cohesion: 1.00)
 
 - external
 - zod/z
 
-### Community 131 — constant (1 nodes, cohesion: 1.00)
+### Community 130 — log (2 nodes, cohesion: 1.00)
 
-- constant
+- log
+- createLogger()
 
-### Community 132 — index (1 nodes, cohesion: 1.00)
+### Community 131 — navigator (2 nodes, cohesion: 1.00)
+
+- navigator
+- ./common/commonSecurityRules
+
+### Community 132 — index (2 nodes, cohesion: 1.00)
 
 - index
+- ./impl/ManifestParserImpl
 
-### Community 133 — index (1 nodes, cohesion: 1.00)
+### Community 133 — types (2 nodes, cohesion: 1.00)
 
-- index
+- types
+- ./enums/StorageEnum
 
-### Community 134 — json_schema (1 nodes, cohesion: 1.00)
+### Community 134 — schemas (2 nodes, cohesion: 1.00)
 
-- json_schema
+- schemas
+- zod/z
 
 ### Community 135 — index (1 nodes, cohesion: 1.00)
 
 - index
 
-### Community 136 — index (1 nodes, cohesion: 1.00)
+### Community 136 — vite-env.d (1 nodes, cohesion: 1.00)
 
-- index
+- vite-env.d
 
 ### Community 137 — index (1 nodes, cohesion: 1.00)
 
 - index
 
-### Community 138 — index (1 nodes, cohesion: 1.00)
+### Community 138 — common (1 nodes, cohesion: 1.00)
 
-- index
+- common
 
-### Community 139 — index (1 nodes, cohesion: 1.00)
+### Community 139 — manager (1 nodes, cohesion: 1.00)
 
-- index
+- manager
 
-### Community 140 — vite-env.d (1 nodes, cohesion: 1.00)
+### Community 140 — types (1 nodes, cohesion: 1.00)
 
-- vite-env.d
+- types
 
 ### Community 141 — index (1 nodes, cohesion: 1.00)
 
 - index
 
-### Community 142 — index (1 nodes, cohesion: 1.00)
+### Community 142 — message (1 nodes, cohesion: 1.00)
 
-- index
+- message
 
-### Community 143 — types (1 nodes, cohesion: 1.00)
+### Community 143 — enums (1 nodes, cohesion: 1.00)
 
-- types
+- enums
 
-### Community 144 — types (1 nodes, cohesion: 1.00)
+### Community 144 — shared-types (1 nodes, cohesion: 1.00)
 
-- types
+- shared-types
 
 ### Community 145 — index (1 nodes, cohesion: 1.00)
 
 - index
 
-### Community 146 — message (1 nodes, cohesion: 1.00)
-
-- message
-
-### Community 147 — index (1 nodes, cohesion: 1.00)
+### Community 146 — index (1 nodes, cohesion: 1.00)
 
 - index
+
+### Community 147 — constant (1 nodes, cohesion: 1.00)
+
+- constant
 
 ### Community 148 — index (1 nodes, cohesion: 1.00)
 
 - index
 
-### Community 149 — permission (1 nodes, cohesion: 1.00)
-
-- permission
-
-### Community 150 — shared-types (1 nodes, cohesion: 1.00)
-
-- shared-types
-
-### Community 151 — index (1 nodes, cohesion: 1.00)
+### Community 149 — index (1 nodes, cohesion: 1.00)
 
 - index
 
-### Community 152 — buildDomTree (1 nodes, cohesion: 1.00)
+### Community 150 — index (1 nodes, cohesion: 1.00)
 
-- buildDomTree
+- index
+
+### Community 151 — json_schema (1 nodes, cohesion: 1.00)
+
+- json_schema
+
+### Community 152 — index (1 nodes, cohesion: 1.00)
+
+- index
 
 ### Community 153 — index (1 nodes, cohesion: 1.00)
 
 - index
 
-### Community 154 — common (1 nodes, cohesion: 1.00)
-
-- common
-
-### Community 155 — index (1 nodes, cohesion: 1.00)
+### Community 154 — index (1 nodes, cohesion: 1.00)
 
 - index
 
-### Community 156 — types (1 nodes, cohesion: 1.00)
-
-- types
-
-### Community 157 — enums (1 nodes, cohesion: 1.00)
-
-- enums
-
-### Community 158 — type (1 nodes, cohesion: 1.00)
+### Community 155 — type (1 nodes, cohesion: 1.00)
 
 - type
 
-### Community 159 — types (1 nodes, cohesion: 1.00)
+### Community 156 — index (1 nodes, cohesion: 1.00)
+
+- index
+
+### Community 157 — buildDomTree (1 nodes, cohesion: 1.00)
+
+- buildDomTree
+
+### Community 158 — types (1 nodes, cohesion: 1.00)
 
 - types
 
-### Community 160 — manager (1 nodes, cohesion: 1.00)
+### Community 159 — index (1 nodes, cohesion: 1.00)
 
-- manager
+- index
+
+### Community 160 — permission (1 nodes, cohesion: 1.00)
+
+- permission
+
+### Community 161 — types (1 nodes, cohesion: 1.00)
+
+- types
+
+### Community 162 — index (1 nodes, cohesion: 1.00)
+
+- index
+
+### Community 163 — index (1 nodes, cohesion: 1.00)
+
+- index
+
+### Community 164 — types (1 nodes, cohesion: 1.00)
+
+- types
 
 ## 🕳️ Knowledge Gaps
 
@@ -1790,13 +1811,13 @@
 
 ## ❓ Suggested Questions
 
-1. How does 'chrome_extension_src_background_browser_page_ts_iscdpevaluationblockedurl' relate to 3 different communities (.getScrollInfo(), page, build_initial_state())?
-1. How does 'chrome_extension_src_background_browser_page_ts_page_getstate' relate to 3 different communities (.goBack(), build_initial_state(), .getScrollInfo())?
-1. How does 'chrome_extension_src_background_agent_messages_service_ts_messagemanager' relate to 3 different communities (.addMessageWithTokens(), MessageManager, service)?
-1. How does 'chrome_extension_src_background_browser_page_ts_page' relate to 4 different communities (build_initial_state(), .getScrollInfo(), page, .goBack())?
-1. How does 'chrome_extension_src_background_browser_page_ts_page_inputtextelementnode' relate to 3 different communities (.goBack(), build_initial_state(), .getScrollInfo())?
-1. What role does 'vite-env.d' play? It has no connections in the graph.
-1. What role does 'types' play? It has no connections in the graph.
+1. How does 'chrome_extension_src_background_browser_page_ts_page_inputtextelementnode' relate to 4 different communities (._findNearestScrollableElement(), .getScrollInfo(), build_initial_state(), .goBack())?
+1. How does 'chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer' relate to 3 different communities (domSerializer, capTextLength(), ._applyBoundingBoxFiltering())?
+1. How does 'chrome_extension_src_background_agent_executor_ts_executor' relate to 3 different communities (Executor, executor, .execute())?
+1. How does 'chrome_extension_src_background_browser_page_ts_page' relate to 5 different communities (build_initial_state(), ._findNearestScrollableElement(), .goBack(), page, .getScrollInfo())?
+1. How does 'chrome_extension_src_background_agent_executor_ts' relate to 3 different communities (executor, Executor, .execute())?
+1. How does 'chrome_extension_src_background_browser_page_ts_page_clickelementnode' relate to 3 different communities (.getScrollInfo(), ._findNearestScrollableElement(), build_initial_state())?
+1. How does 'chrome_extension_src_background_browser_page_ts_iscdpevaluationblockedurl' relate to 3 different communities (build_initial_state(), page, .getScrollInfo())?
 
 ---
 _Generated by graphify-rs_

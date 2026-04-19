@@ -1,17 +1,19 @@
-# Community 100: watch-public-plugin
+# Community 100: type
 
-**Members:** 4
+**Members:** 5
 
 ## Nodes
 
-- **watch-public-plugin** (`packages_hmr_lib_plugins_watch_public_plugin_ts`, File, degree: 3)
-- **fast-glob/fg** (`packages_hmr_lib_plugins_watch_public_plugin_ts_import_fast_glob_fg`, Module, degree: 1)
-- **vite/PluginOption** (`packages_hmr_lib_plugins_watch_public_plugin_ts_import_vite_pluginoption`, Module, degree: 1)
-- **watchPublicPlugin()** (`packages_hmr_lib_plugins_watch_public_plugin_ts_watchpublicplugin`, Function, degree: 1)
+- **type** (`packages_i18n_lib_type_ts`, File, degree: 4)
+- **../locales/en/messages.json/enMessage** (`packages_i18n_lib_type_ts_import_locales_en_messages_json_enmessage`, Module, degree: 1)
+- **../locales/pt_BR/messages.json/pt_BRMessage** (`packages_i18n_lib_type_ts_import_locales_pt_br_messages_json_pt_brmessage`, Module, degree: 1)
+- **../locales/zh_CN/messages.json/zh_CNMessage** (`packages_i18n_lib_type_ts_import_locales_zh_cn_messages_json_zh_cnmessage`, Module, degree: 1)
+- **../locales/zh_TW/messages.json/zh_TWMessage** (`packages_i18n_lib_type_ts_import_locales_zh_tw_messages_json_zh_twmessage`, Module, degree: 1)
 
 ## Relationships
 
-- packages_hmr_lib_plugins_watch_public_plugin_ts → packages_hmr_lib_plugins_watch_public_plugin_ts_import_vite_pluginoption (imports)
-- packages_hmr_lib_plugins_watch_public_plugin_ts → packages_hmr_lib_plugins_watch_public_plugin_ts_import_fast_glob_fg (imports)
-- packages_hmr_lib_plugins_watch_public_plugin_ts → packages_hmr_lib_plugins_watch_public_plugin_ts_watchpublicplugin (defines)
+- packages_i18n_lib_type_ts → packages_i18n_lib_type_ts_import_locales_en_messages_json_enmessage (imports)
+- packages_i18n_lib_type_ts → packages_i18n_lib_type_ts_import_locales_pt_br_messages_json_pt_brmessage (imports)
+- packages_i18n_lib_type_ts → packages_i18n_lib_type_ts_import_locales_zh_cn_messages_json_zh_cnmessage (imports)
+- packages_i18n_lib_type_ts → packages_i18n_lib_type_ts_import_locales_zh_tw_messages_json_zh_twmessage (imports)
 

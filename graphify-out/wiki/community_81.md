@@ -1,23 +1,21 @@
-# Community 81: enhancedSnapshot
+# Community 81: getMessageFromLocale
 
 **Members:** 6
 
 ## Nodes
 
-- **enhancedSnapshot** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts`, File, degree: 5)
-- **buildSnapshotLookup()** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_buildsnapshotlookup`, Function, degree: 3)
-- **./domService/DOMRect** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_import_domservice_domrect`, Module, degree: 1)
-- **./domService/SnapshotNode** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_import_domservice_snapshotnode`, Module, degree: 1)
-- **parseComputedStyles()** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parsecomputedstyles`, Function, degree: 2)
-- **parseRareBooleanData()** (`chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parserarebooleandata`, Function, degree: 2)
+- **getMessageFromLocale** (`packages_i18n_lib_getmessagefromlocale_ts`, File, degree: 5)
+- **getMessageFromLocale()** (`packages_i18n_lib_getmessagefromlocale_ts_getmessagefromlocale`, Function, degree: 1)
+- **../locales/en/messages.json/enMessage** (`packages_i18n_lib_getmessagefromlocale_ts_import_locales_en_messages_json_enmessage`, Module, degree: 1)
+- **../locales/pt_BR/messages.json/pt_BRMessage** (`packages_i18n_lib_getmessagefromlocale_ts_import_locales_pt_br_messages_json_pt_brmessage`, Module, degree: 1)
+- **../locales/zh_CN/messages.json/zh_CNMessage** (`packages_i18n_lib_getmessagefromlocale_ts_import_locales_zh_cn_messages_json_zh_cnmessage`, Module, degree: 1)
+- **../locales/zh_TW/messages.json/zh_TWMessage** (`packages_i18n_lib_getmessagefromlocale_ts_import_locales_zh_tw_messages_json_zh_twmessage`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_import_domservice_domrect (imports)
-- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_import_domservice_snapshotnode (imports)
-- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parserarebooleandata (defines)
-- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parsecomputedstyles (defines)
-- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_buildsnapshotlookup (defines)
-- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_buildsnapshotlookup → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parsecomputedstyles (calls)
-- chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_buildsnapshotlookup → chrome_extension_src_background_browser_dom_enhancedsnapshot_ts_parserarebooleandata (calls)
+- packages_i18n_lib_getmessagefromlocale_ts → packages_i18n_lib_getmessagefromlocale_ts_import_locales_en_messages_json_enmessage (imports)
+- packages_i18n_lib_getmessagefromlocale_ts → packages_i18n_lib_getmessagefromlocale_ts_import_locales_pt_br_messages_json_pt_brmessage (imports)
+- packages_i18n_lib_getmessagefromlocale_ts → packages_i18n_lib_getmessagefromlocale_ts_import_locales_zh_cn_messages_json_zh_cnmessage (imports)
+- packages_i18n_lib_getmessagefromlocale_ts → packages_i18n_lib_getmessagefromlocale_ts_import_locales_zh_tw_messages_json_zh_twmessage (imports)
+- packages_i18n_lib_getmessagefromlocale_ts → packages_i18n_lib_getmessagefromlocale_ts_getmessagefromlocale (defines)
 

@@ -1,17 +1,19 @@
-# Community 101: flatten
+# Community 101: clickableElementDetector
 
-**Members:** 4
+**Members:** 5
 
 ## Nodes
 
-- **flatten** (`packages_schema_utils_examples_flatten_ts`, File, degree: 3)
-- **../lib/helper.js/dereferenceJsonSchema** (`packages_schema_utils_examples_flatten_ts_import_lib_helper_js_dereferencejsonschema`, Module, degree: 1)
-- **../lib/helper.js/stringifyCustom** (`packages_schema_utils_examples_flatten_ts_import_lib_helper_js_stringifycustom`, Module, degree: 1)
-- **../lib/json_schema.js/jsonNavigatorOutputSchema** (`packages_schema_utils_examples_flatten_ts_import_lib_json_schema_js_jsonnavigatoroutputschema`, Module, degree: 1)
+- **clickableElementDetector** (`chrome_extension_src_background_browser_dom_clickableelementdetector_ts`, File, degree: 3)
+- **ClickableElementDetector** (`chrome_extension_src_background_browser_dom_clickableelementdetector_ts_clickableelementdetector`, Class, degree: 2)
+- **.isInteractive()** (`chrome_extension_src_background_browser_dom_clickableelementdetector_ts_clickableelementdetector_isinteractive`, Method, degree: 1)
+- **./domService/NodeType** (`chrome_extension_src_background_browser_dom_clickableelementdetector_ts_import_domservice_nodetype`, Module, degree: 1)
+- **./enhancedDOMTreeNode/EnhancedDOMTreeNode** (`chrome_extension_src_background_browser_dom_clickableelementdetector_ts_import_enhanceddomtreenode_enhanceddomtreenode`, Module, degree: 1)
 
 ## Relationships
 
-- packages_schema_utils_examples_flatten_ts → packages_schema_utils_examples_flatten_ts_import_lib_helper_js_dereferencejsonschema (imports)
-- packages_schema_utils_examples_flatten_ts → packages_schema_utils_examples_flatten_ts_import_lib_helper_js_stringifycustom (imports)
-- packages_schema_utils_examples_flatten_ts → packages_schema_utils_examples_flatten_ts_import_lib_json_schema_js_jsonnavigatoroutputschema (imports)
+- chrome_extension_src_background_browser_dom_clickableelementdetector_ts → chrome_extension_src_background_browser_dom_clickableelementdetector_ts_import_enhanceddomtreenode_enhanceddomtreenode (imports)
+- chrome_extension_src_background_browser_dom_clickableelementdetector_ts → chrome_extension_src_background_browser_dom_clickableelementdetector_ts_import_domservice_nodetype (imports)
+- chrome_extension_src_background_browser_dom_clickableelementdetector_ts → chrome_extension_src_background_browser_dom_clickableelementdetector_ts_clickableelementdetector (defines)
+- chrome_extension_src_background_browser_dom_clickableelementdetector_ts_clickableelementdetector → chrome_extension_src_background_browser_dom_clickableelementdetector_ts_clickableelementdetector_isinteractive (defines)
 

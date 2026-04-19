@@ -1,15 +1,15 @@
-# Community 119: PlanHistoryList
+# Community 119: index
 
 **Members:** 3
 
 ## Nodes
 
-- **PlanHistoryList** (`pages_side_panel_src_components_planhistorylist_tsx`, File, degree: 2)
-- **@extension/storage/PlanRun** (`pages_side_panel_src_components_planhistorylist_tsx_import_extension_storage_planrun`, Module, degree: 1)
-- **@extension/storage/PlanSessionMetadata** (`pages_side_panel_src_components_planhistorylist_tsx_import_extension_storage_plansessionmetadata`, Module, degree: 1)
+- **index** (`packages_i18n_index_ts`, File, degree: 2)
+- **./lib/i18n-dev/t** (`packages_i18n_index_ts_import_lib_i18n_dev_t`, Module, degree: 1)
+- **./lib/i18n/t** (`packages_i18n_index_ts_import_lib_i18n_t`, Module, degree: 1)
 
 ## Relationships
 
-- pages_side_panel_src_components_planhistorylist_tsx → pages_side_panel_src_components_planhistorylist_tsx_import_extension_storage_planrun (imports)
-- pages_side_panel_src_components_planhistorylist_tsx → pages_side_panel_src_components_planhistorylist_tsx_import_extension_storage_plansessionmetadata (imports)
+- packages_i18n_index_ts → packages_i18n_index_ts_import_lib_i18n_t (imports)
+- packages_i18n_index_ts → packages_i18n_index_ts_import_lib_i18n_dev_t (imports)
 

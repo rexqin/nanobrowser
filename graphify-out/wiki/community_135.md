@@ -4,5 +4,5 @@
 
 ## Nodes
 
-- **index** (`packages_schema_utils_index_ts`, File, degree: 0)
+- **index** (`packages_shared_lib_hooks_index_ts`, File, degree: 0)
 

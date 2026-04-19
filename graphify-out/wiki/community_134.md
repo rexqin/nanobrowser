@@ -1,8 +1,13 @@
-# Community 134: json_schema
+# Community 134: schemas
 
-**Members:** 1
+**Members:** 2
 
 ## Nodes
 
-- **json_schema** (`packages_schema_utils_lib_json_schema_ts`, File, degree: 0)
+- **schemas** (`chrome_extension_src_background_agent_actions_schemas_ts`, File, degree: 1)
+- **zod/z** (`chrome_extension_src_background_agent_actions_schemas_ts_import_zod_z`, Module, degree: 1)
+
+## Relationships
+
+- chrome_extension_src_background_agent_actions_schemas_ts → chrome_extension_src_background_agent_actions_schemas_ts_import_zod_z (imports)
 

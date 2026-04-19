@@ -1,30 +1,30 @@
-# Community 46: domSerializer
+# Community 46: domTreeValidator
 
 **Members:** 10
 
 ## Nodes
 
-- **domSerializer** (`chrome_extension_src_background_browser_dom_domserializer_ts`, File, degree: 8)
-- **./clickableElementDetector/ClickableElementDetector** (`chrome_extension_src_background_browser_dom_domserializer_ts_import_clickableelementdetector_clickableelementdetector`, Module, degree: 1)
-- **./domService/DOMRect** (`chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_domrect`, Module, degree: 1)
-- **./domService/EnhancedDOMTreeNode** (`chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_enhanceddomtreenode`, Module, degree: 1)
-- **./domService/NodeType** (`chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_nodetype`, Module, degree: 1)
-- **./serializedDOMState/SerializedDOMState** (`chrome_extension_src_background_browser_dom_domserializer_ts_import_serializeddomstate_serializeddomstate`, Module, degree: 1)
-- **SimplifiedNode** (`chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode`, Class, degree: 4)
-- **._cleanOriginalNodeJson()** (`chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_cleanoriginalnodejson`, Method, degree: 2)
-- **.constructor()** (`chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_constructor`, Method, degree: 1)
-- **.toJSON()** (`chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_tojson`, Method, degree: 2)
+- **domTreeValidator** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts`, File, degree: 4)
+- **DOMTreeValidator** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator`, Class, degree: 6)
+- **._countTotalChildren()** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_counttotalchildren`, Method, degree: 2)
+- **.generateReport()** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_generatereport`, Method, degree: 1)
+- **.quickCheck()** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_quickcheck`, Method, degree: 1)
+- **.validateOriginalTree()** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_validateoriginaltree`, Method, degree: 1)
+- **.validateSimplifiedTree()** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_validatesimplifiedtree`, Method, degree: 2)
+- **./domSerializer.js/SimplifiedNode** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domserializer_js_simplifiednode`, Module, degree: 1)
+- **./domService.js/EnhancedDOMTreeNode** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domservice_js_enhanceddomtreenode`, Module, degree: 1)
+- **./domService.js/NodeType** (`chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domservice_js_nodetype`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_enhanceddomtreenode (imports)
-- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_domrect (imports)
-- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_nodetype (imports)
-- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_import_serializeddomstate_serializeddomstate (imports)
-- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_import_clickableelementdetector_clickableelementdetector (imports)
-- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode (defines)
-- chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode → chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_constructor (defines)
-- chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode → chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_cleanoriginalnodejson (defines)
-- chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode → chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_tojson (defines)
-- chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_tojson → chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_cleanoriginalnodejson (calls)
+- chrome_extension_src_background_browser_dom_domtreevalidator_ts → chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domservice_js_nodetype (imports)
+- chrome_extension_src_background_browser_dom_domtreevalidator_ts → chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domservice_js_enhanceddomtreenode (imports)
+- chrome_extension_src_background_browser_dom_domtreevalidator_ts → chrome_extension_src_background_browser_dom_domtreevalidator_ts_import_domserializer_js_simplifiednode (imports)
+- chrome_extension_src_background_browser_dom_domtreevalidator_ts → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator (defines)
+- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_validatesimplifiedtree (defines)
+- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_counttotalchildren (defines)
+- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_validateoriginaltree (defines)
+- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_generatereport (defines)
+- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_quickcheck (defines)
+- chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_validatesimplifiedtree → chrome_extension_src_background_browser_dom_domtreevalidator_ts_domtreevalidator_counttotalchildren (calls)
 

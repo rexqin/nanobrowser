@@ -1,17 +1,17 @@
-# Community 108: util
+# Community 108: event
 
 **Members:** 4
 
 ## Nodes
 
-- **util** (`chrome_extension_src_background_browser_util_ts`, File, degree: 3)
-- **capTextLength()** (`chrome_extension_src_background_browser_util_ts_captextlength`, Function, degree: 1)
-- **isNewTabPage()** (`chrome_extension_src_background_browser_util_ts_isnewtabpage`, Function, degree: 1)
-- **isUrlAllowed()** (`chrome_extension_src_background_browser_util_ts_isurlallowed`, Function, degree: 1)
+- **event** (`pages_side_panel_src_types_event_ts`, File, degree: 2)
+- **AgentEvent** (`pages_side_panel_src_types_event_ts_agentevent`, Class, degree: 2)
+- **.constructor()** (`pages_side_panel_src_types_event_ts_agentevent_constructor`, Method, degree: 1)
+- **@extension/storage/Actors** (`pages_side_panel_src_types_event_ts_import_extension_storage_actors`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_util_ts → chrome_extension_src_background_browser_util_ts_isurlallowed (defines)
-- chrome_extension_src_background_browser_util_ts → chrome_extension_src_background_browser_util_ts_isnewtabpage (defines)
-- chrome_extension_src_background_browser_util_ts → chrome_extension_src_background_browser_util_ts_captextlength (defines)
+- pages_side_panel_src_types_event_ts → pages_side_panel_src_types_event_ts_import_extension_storage_actors (imports)
+- pages_side_panel_src_types_event_ts → pages_side_panel_src_types_event_ts_agentevent (defines)
+- pages_side_panel_src_types_event_ts_agentevent → pages_side_panel_src_types_event_ts_agentevent_constructor (defines)
 

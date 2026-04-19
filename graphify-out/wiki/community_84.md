@@ -1,19 +1,21 @@
-# Community 84: withSuspense
+# Community 84: view
 
-**Members:** 5
+**Members:** 6
 
 ## Nodes
 
-- **withSuspense** (`packages_shared_lib_hoc_withsuspense_tsx`, File, degree: 4)
-- **react/ComponentType** (`packages_shared_lib_hoc_withsuspense_tsx_import_react_componenttype`, Module, degree: 1)
-- **react/ReactElement** (`packages_shared_lib_hoc_withsuspense_tsx_import_react_reactelement`, Module, degree: 1)
-- **react/Suspense** (`packages_shared_lib_hoc_withsuspense_tsx_import_react_suspense`, Module, degree: 1)
-- **withSuspense()** (`packages_shared_lib_hoc_withsuspense_tsx_withsuspense`, Function, degree: 1)
+- **view** (`chrome_extension_src_background_browser_dom_history_view_ts`, File, degree: 2)
+- **DOMHistoryElement** (`chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement`, Class, degree: 3)
+- **.constructor()** (`chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement_constructor`, Method, degree: 1)
+- **.toDict()** (`chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement_todict`, Method, degree: 1)
+- **HashedDomElement** (`chrome_extension_src_background_browser_dom_history_view_ts_hasheddomelement`, Class, degree: 2)
+- **.constructor()** (`chrome_extension_src_background_browser_dom_history_view_ts_hasheddomelement_constructor`, Method, degree: 1)
 
 ## Relationships
 
-- packages_shared_lib_hoc_withsuspense_tsx → packages_shared_lib_hoc_withsuspense_tsx_import_react_componenttype (imports)
-- packages_shared_lib_hoc_withsuspense_tsx → packages_shared_lib_hoc_withsuspense_tsx_import_react_reactelement (imports)
-- packages_shared_lib_hoc_withsuspense_tsx → packages_shared_lib_hoc_withsuspense_tsx_import_react_suspense (imports)
-- packages_shared_lib_hoc_withsuspense_tsx → packages_shared_lib_hoc_withsuspense_tsx_withsuspense (defines)
+- chrome_extension_src_background_browser_dom_history_view_ts → chrome_extension_src_background_browser_dom_history_view_ts_hasheddomelement (defines)
+- chrome_extension_src_background_browser_dom_history_view_ts_hasheddomelement → chrome_extension_src_background_browser_dom_history_view_ts_hasheddomelement_constructor (defines)
+- chrome_extension_src_background_browser_dom_history_view_ts → chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement (defines)
+- chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement → chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement_constructor (defines)
+- chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement → chrome_extension_src_background_browser_dom_history_view_ts_domhistoryelement_todict (defines)
 

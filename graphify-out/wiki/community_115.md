@@ -1,15 +1,15 @@
-# Community 115: types
+# Community 115: index
 
 **Members:** 3
 
 ## Nodes
 
-- **types** (`chrome_extension_src_background_agent_event_types_ts`, File, degree: 1)
-- **AgentEvent** (`chrome_extension_src_background_agent_event_types_ts_agentevent`, Class, degree: 2)
-- **.constructor()** (`chrome_extension_src_background_agent_event_types_ts_agentevent_constructor`, Method, degree: 1)
+- **index** (`packages_shared_lib_hoc_index_ts`, File, degree: 2)
+- **./withErrorBoundary/withErrorBoundary** (`packages_shared_lib_hoc_index_ts_import_witherrorboundary_witherrorboundary`, Module, degree: 1)
+- **./withSuspense/withSuspense** (`packages_shared_lib_hoc_index_ts_import_withsuspense_withsuspense`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_agent_event_types_ts → chrome_extension_src_background_agent_event_types_ts_agentevent (defines)
-- chrome_extension_src_background_agent_event_types_ts_agentevent → chrome_extension_src_background_agent_event_types_ts_agentevent_constructor (defines)
+- packages_shared_lib_hoc_index_ts → packages_shared_lib_hoc_index_ts_import_withsuspense_withsuspense (imports)
+- packages_shared_lib_hoc_index_ts → packages_shared_lib_hoc_index_ts_import_witherrorboundary_witherrorboundary (imports)
 

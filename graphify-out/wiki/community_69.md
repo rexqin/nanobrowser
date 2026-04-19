@@ -1,26 +1,23 @@
-# Community 69: refresh
+# Community 69: AnalyticsSettings
 
 **Members:** 7
 
 ## Nodes
 
-- **refresh** (`chrome_extension_utils_refresh_js`, File, degree: 3)
-- **addRefresh()** (`chrome_extension_utils_refresh_js_addrefresh`, Function, degree: 2)
-- **initClient()** (`chrome_extension_utils_refresh_js_initclient`, Function, degree: 4)
-- **MessageInterpreter** (`chrome_extension_utils_refresh_js_messageinterpreter`, Class, degree: 4)
-- **.constructor()** (`chrome_extension_utils_refresh_js_messageinterpreter_constructor`, Method, degree: 1)
-- **.receive()** (`chrome_extension_utils_refresh_js_messageinterpreter_receive`, Method, degree: 2)
-- **.send()** (`chrome_extension_utils_refresh_js_messageinterpreter_send`, Method, degree: 2)
+- **AnalyticsSettings** (`pages_options_src_components_analyticssettings_tsx`, File, degree: 6)
+- **handleToggleAnalytics()** (`pages_options_src_components_analyticssettings_tsx_handletoggleanalytics`, Function, degree: 1)
+- **@extension/i18n/t** (`pages_options_src_components_analyticssettings_tsx_import_extension_i18n_t`, Module, degree: 1)
+- **@extension/storage/AnalyticsSettingsConfig** (`pages_options_src_components_analyticssettings_tsx_import_extension_storage_analyticssettingsconfig`, Module, degree: 1)
+- **@extension/storage/analyticsSettingsStore** (`pages_options_src_components_analyticssettings_tsx_import_extension_storage_analyticssettingsstore`, Module, degree: 1)
+- **react/useEffect** (`pages_options_src_components_analyticssettings_tsx_import_react_useeffect`, Module, degree: 1)
+- **react/useState** (`pages_options_src_components_analyticssettings_tsx_import_react_usestate`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_utils_refresh_js → chrome_extension_utils_refresh_js_messageinterpreter (defines)
-- chrome_extension_utils_refresh_js_messageinterpreter → chrome_extension_utils_refresh_js_messageinterpreter_constructor (defines)
-- chrome_extension_utils_refresh_js_messageinterpreter → chrome_extension_utils_refresh_js_messageinterpreter_send (defines)
-- chrome_extension_utils_refresh_js_messageinterpreter → chrome_extension_utils_refresh_js_messageinterpreter_receive (defines)
-- chrome_extension_utils_refresh_js → chrome_extension_utils_refresh_js_initclient (defines)
-- chrome_extension_utils_refresh_js → chrome_extension_utils_refresh_js_addrefresh (defines)
-- chrome_extension_utils_refresh_js_initclient → chrome_extension_utils_refresh_js_messageinterpreter_receive (calls)
-- chrome_extension_utils_refresh_js_initclient → chrome_extension_utils_refresh_js_messageinterpreter_send (calls)
-- chrome_extension_utils_refresh_js_addrefresh → chrome_extension_utils_refresh_js_initclient (calls)
+- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_import_react_usestate (imports)
+- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_import_react_useeffect (imports)
+- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_import_extension_storage_analyticssettingsstore (imports)
+- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_import_extension_storage_analyticssettingsconfig (imports)
+- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_import_extension_i18n_t (imports)
+- pages_options_src_components_analyticssettings_tsx → pages_options_src_components_analyticssettings_tsx_handletoggleanalytics (defines)
 

@@ -1,17 +1,21 @@
-# Community 99: convert
+# Community 99: .addModelOutput()
 
-**Members:** 4
+**Members:** 5
 
 ## Nodes
 
-- **convert** (`packages_schema_utils_examples_convert_ts`, File, degree: 3)
-- **../lib/helper.js/convertOpenAISchemaToGemini** (`packages_schema_utils_examples_convert_ts_import_lib_helper_js_convertopenaischematogemini`, Module, degree: 1)
-- **../lib/helper.js/stringifyCustom** (`packages_schema_utils_examples_convert_ts_import_lib_helper_js_stringifycustom`, Module, degree: 1)
-- **../lib/json_schema.js/jsonNavigatorOutputSchema** (`packages_schema_utils_examples_convert_ts_import_lib_json_schema_js_jsonnavigatoroutputschema`, Module, degree: 1)
+- **.addModelOutput()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_addmodeloutput`, Method, degree: 4)
+- **.addToolMessage()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_addtoolmessage`, Method, degree: 5)
+- **.initTaskMessages()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_inittaskmessages`, Method, degree: 5)
+- **.nextToolId()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_nexttoolid`, Method, degree: 4)
+- **.taskInstructions()** (`chrome_extension_src_background_agent_messages_service_ts_messagemanager_taskinstructions`, Method, degree: 2)
 
 ## Relationships
 
-- packages_schema_utils_examples_convert_ts → packages_schema_utils_examples_convert_ts_import_lib_helper_js_convertopenaischematogemini (imports)
-- packages_schema_utils_examples_convert_ts → packages_schema_utils_examples_convert_ts_import_lib_helper_js_stringifycustom (imports)
-- packages_schema_utils_examples_convert_ts → packages_schema_utils_examples_convert_ts_import_lib_json_schema_js_jsonnavigatoroutputschema (imports)
+- chrome_extension_src_background_agent_messages_service_ts_messagemanager_inittaskmessages → chrome_extension_src_background_agent_messages_service_ts_messagemanager_addtoolmessage (calls)
+- chrome_extension_src_background_agent_messages_service_ts_messagemanager_inittaskmessages → chrome_extension_src_background_agent_messages_service_ts_messagemanager_taskinstructions (calls)
+- chrome_extension_src_background_agent_messages_service_ts_messagemanager_inittaskmessages → chrome_extension_src_background_agent_messages_service_ts_messagemanager_nexttoolid (calls)
+- chrome_extension_src_background_agent_messages_service_ts_messagemanager_addmodeloutput → chrome_extension_src_background_agent_messages_service_ts_messagemanager_addtoolmessage (calls)
+- chrome_extension_src_background_agent_messages_service_ts_messagemanager_addmodeloutput → chrome_extension_src_background_agent_messages_service_ts_messagemanager_nexttoolid (calls)
+- chrome_extension_src_background_agent_messages_service_ts_messagemanager_addtoolmessage → chrome_extension_src_background_agent_messages_service_ts_messagemanager_nexttoolid (calls)
 

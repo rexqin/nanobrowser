@@ -1,8 +1,8 @@
-# Community 159: types
+# Community 159: index
 
 **Members:** 1
 
 ## Nodes
 
-- **types** (`packages_storage_lib_plan_types_ts`, File, degree: 0)
+- **index** (`packages_hmr_index_ts`, File, degree: 0)
 

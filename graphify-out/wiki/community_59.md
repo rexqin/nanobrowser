@@ -1,25 +1,25 @@
-# Community 59: views
+# Community 59: GeneralSettings
 
 **Members:** 8
 
 ## Nodes
 
-- **views** (`chrome_extension_src_background_browser_dom_views_ts`, File, degree: 10)
-- **constructor()** (`chrome_extension_src_background_browser_dom_views_ts_constructor`, Function, degree: 1)
-- **domElementNodeToDict()** (`chrome_extension_src_background_browser_dom_views_ts_domelementnodetodict`, Function, degree: 1)
-- **./history/service/HistoryTreeProcessor** (`chrome_extension_src_background_browser_dom_views_ts_import_history_service_historytreeprocessor`, Module, degree: 1)
-- **./history/view/CoordinateSet** (`chrome_extension_src_background_browser_dom_views_ts_import_history_view_coordinateset`, Module, degree: 1)
-- **./history/view/HashedDomElement** (`chrome_extension_src_background_browser_dom_views_ts_import_history_view_hasheddomelement`, Module, degree: 1)
-- **./history/view/ViewportInfo** (`chrome_extension_src_background_browser_dom_views_ts_import_history_view_viewportinfo`, Module, degree: 1)
-- **../util/capTextLength** (`chrome_extension_src_background_browser_dom_views_ts_import_util_captextlength`, Module, degree: 1)
+- **GeneralSettings** (`pages_options_src_components_generalsettings_tsx`, File, degree: 7)
+- **@extension/i18n/t** (`pages_options_src_components_generalsettings_tsx_import_extension_i18n_t`, Module, degree: 1)
+- **@extension/storage/DEFAULT_GENERAL_SETTINGS** (`pages_options_src_components_generalsettings_tsx_import_extension_storage_default_general_settings`, Module, degree: 1)
+- **@extension/storage/GeneralSettingsConfig** (`pages_options_src_components_generalsettings_tsx_import_extension_storage_generalsettingsconfig`, Module, degree: 1)
+- **@extension/storage/generalSettingsStore** (`pages_options_src_components_generalsettings_tsx_import_extension_storage_generalsettingsstore`, Module, degree: 1)
+- **react/useEffect** (`pages_options_src_components_generalsettings_tsx_import_react_useeffect`, Module, degree: 1)
+- **react/useState** (`pages_options_src_components_generalsettings_tsx_import_react_usestate`, Module, degree: 1)
+- **updateSetting()** (`pages_options_src_components_generalsettings_tsx_updatesetting`, Function, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_dom_views_ts → chrome_extension_src_background_browser_dom_views_ts_import_history_view_coordinateset (imports)
-- chrome_extension_src_background_browser_dom_views_ts → chrome_extension_src_background_browser_dom_views_ts_import_history_view_hasheddomelement (imports)
-- chrome_extension_src_background_browser_dom_views_ts → chrome_extension_src_background_browser_dom_views_ts_import_history_view_viewportinfo (imports)
-- chrome_extension_src_background_browser_dom_views_ts → chrome_extension_src_background_browser_dom_views_ts_import_history_service_historytreeprocessor (imports)
-- chrome_extension_src_background_browser_dom_views_ts → chrome_extension_src_background_browser_dom_views_ts_import_util_captextlength (imports)
-- chrome_extension_src_background_browser_dom_views_ts → chrome_extension_src_background_browser_dom_views_ts_constructor (defines)
-- chrome_extension_src_background_browser_dom_views_ts → chrome_extension_src_background_browser_dom_views_ts_domelementnodetodict (defines)
+- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_react_usestate (imports)
+- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_react_useeffect (imports)
+- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_extension_storage_generalsettingsconfig (imports)
+- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_extension_storage_generalsettingsstore (imports)
+- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_extension_storage_default_general_settings (imports)
+- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_import_extension_i18n_t (imports)
+- pages_options_src_components_generalsettings_tsx → pages_options_src_components_generalsettings_tsx_updatesetting (defines)
 

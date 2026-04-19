@@ -1,19 +1,19 @@
-# Community 91: .goBack()
+# Community 91: ._applyBoundingBoxFiltering()
 
 **Members:** 5
 
 ## Nodes
 
-- **.goBack()** (`chrome_extension_src_background_browser_page_ts_page_goback`, Method, degree: 2)
-- **.goForward()** (`chrome_extension_src_background_browser_page_ts_page_goforward`, Method, degree: 2)
-- **.navigateTo()** (`chrome_extension_src_background_browser_page_ts_page_navigateto`, Method, degree: 2)
-- **.refreshPage()** (`chrome_extension_src_background_browser_page_ts_page_refreshpage`, Method, degree: 2)
-- **.waitForPageAndFramesLoad()** (`chrome_extension_src_background_browser_page_ts_page_waitforpageandframesload`, Method, degree: 10)
+- **._applyBoundingBoxFiltering()** (`chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_applyboundingboxfiltering`, Method, degree: 3)
+- **._createSimplifiedTree()** (`chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_createsimplifiedtree`, Method, degree: 4)
+- **._getChildrenAndShadowRoots()** (`chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_getchildrenandshadowroots`, Method, degree: 2)
+- **._optimizeTree()** (`chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_optimizetree`, Method, degree: 2)
+- **.serializeAccessibleElements()** (`chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_serializeaccessibleelements`, Method, degree: 5)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_page_ts_page_navigateto → chrome_extension_src_background_browser_page_ts_page_waitforpageandframesload (calls)
-- chrome_extension_src_background_browser_page_ts_page_refreshpage → chrome_extension_src_background_browser_page_ts_page_waitforpageandframesload (calls)
-- chrome_extension_src_background_browser_page_ts_page_goback → chrome_extension_src_background_browser_page_ts_page_waitforpageandframesload (calls)
-- chrome_extension_src_background_browser_page_ts_page_goforward → chrome_extension_src_background_browser_page_ts_page_waitforpageandframesload (calls)
+- chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_serializeaccessibleelements → chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_optimizetree (calls)
+- chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_serializeaccessibleelements → chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_applyboundingboxfiltering (calls)
+- chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_serializeaccessibleelements → chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_createsimplifiedtree (calls)
+- chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_createsimplifiedtree → chrome_extension_src_background_browser_dom_domserializer_ts_domtreeserializer_getchildrenandshadowroots (calls)
 

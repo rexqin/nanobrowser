@@ -1,17 +1,17 @@
-# Community 102: impl
+# Community 102: withUI
 
 **Members:** 4
 
 ## Nodes
 
-- **impl** (`packages_dev_utils_lib_manifest_parser_impl_ts`, File, degree: 3)
-- **convertToFirefoxCompatibleManifest()** (`packages_dev_utils_lib_manifest_parser_impl_ts_converttofirefoxcompatiblemanifest`, Function, degree: 1)
-- **./type/Manifest** (`packages_dev_utils_lib_manifest_parser_impl_ts_import_type_manifest`, Module, degree: 1)
-- **./type/ManifestParserInterface** (`packages_dev_utils_lib_manifest_parser_impl_ts_import_type_manifestparserinterface`, Module, degree: 1)
+- **withUI** (`packages_ui_lib_withui_ts`, File, degree: 3)
+- **deepmerge/deepmerge** (`packages_ui_lib_withui_ts_import_deepmerge_deepmerge`, Module, degree: 1)
+- **tailwindcss/types/config/Config** (`packages_ui_lib_withui_ts_import_tailwindcss_types_config_config`, Module, degree: 1)
+- **withUI()** (`packages_ui_lib_withui_ts_withui`, Function, degree: 1)
 
 ## Relationships
 
-- packages_dev_utils_lib_manifest_parser_impl_ts → packages_dev_utils_lib_manifest_parser_impl_ts_import_type_manifestparserinterface (imports)
-- packages_dev_utils_lib_manifest_parser_impl_ts → packages_dev_utils_lib_manifest_parser_impl_ts_import_type_manifest (imports)
-- packages_dev_utils_lib_manifest_parser_impl_ts → packages_dev_utils_lib_manifest_parser_impl_ts_converttofirefoxcompatiblemanifest (defines)
+- packages_ui_lib_withui_ts → packages_ui_lib_withui_ts_import_deepmerge_deepmerge (imports)
+- packages_ui_lib_withui_ts → packages_ui_lib_withui_ts_import_tailwindcss_types_config_config (imports)
+- packages_ui_lib_withui_ts → packages_ui_lib_withui_ts_withui (defines)
 

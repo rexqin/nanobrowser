@@ -1,29 +1,35 @@
-# Community 47: watch-rebuild-plugin
+# Community 47: DomService
 
 **Members:** 10
 
 ## Nodes
 
-- **watch-rebuild-plugin** (`packages_hmr_lib_plugins_watch_rebuild_plugin_ts`, File, degree: 9)
-- **../constant/BUILD_COMPLETE** (`packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_constant_build_complete`, Module, degree: 1)
-- **../constant/LOCAL_RELOAD_SOCKET_URL** (`packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_constant_local_reload_socket_url`, Module, degree: 1)
-- **../interpreter/MessageInterpreter** (`packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_interpreter_messageinterpreter`, Module, degree: 1)
-- **node:fs/fs** (`packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_node_fs_fs`, Module, degree: 1)
-- **node:path/path** (`packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_node_path_path`, Module, degree: 1)
-- **../types/PluginConfig** (`packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_types_pluginconfig`, Module, degree: 1)
-- **vite/PluginOption** (`packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_vite_pluginoption`, Module, degree: 1)
-- **ws/WebSocket** (`packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_ws_websocket`, Module, degree: 1)
-- **watchRebuildPlugin()** (`packages_hmr_lib_plugins_watch_rebuild_plugin_ts_watchrebuildplugin`, Function, degree: 1)
+- **DomService** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice`, Class, degree: 10)
+- **.buildEnhancedAXNode()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_buildenhancedaxnode`, Method, degree: 2)
+- **.constructor()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_constructor`, Method, degree: 1)
+- **.detectPaginationButtons()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_detectpaginationbuttons`, Method, degree: 1)
+- **.getAllTrees()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_getalltrees`, Method, degree: 4)
+- **.getAXTreeForAllFrames()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_getaxtreeforallframes`, Method, degree: 2)
+- **.getDomTree()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree`, Method, degree: 5)
+- **.getSerializedDomTree()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_getserializeddomtree`, Method, degree: 2)
+- **.getViewportRatio()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_getviewportratio`, Method, degree: 2)
+- **.isElementVisibleAccordingToAllParents()** (`chrome_extension_src_background_browser_dom_domservice_ts_domservice_iselementvisibleaccordingtoallparents`, Method, degree: 2)
 
 ## Relationships
 
-- packages_hmr_lib_plugins_watch_rebuild_plugin_ts → packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_node_fs_fs (imports)
-- packages_hmr_lib_plugins_watch_rebuild_plugin_ts → packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_node_path_path (imports)
-- packages_hmr_lib_plugins_watch_rebuild_plugin_ts → packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_vite_pluginoption (imports)
-- packages_hmr_lib_plugins_watch_rebuild_plugin_ts → packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_ws_websocket (imports)
-- packages_hmr_lib_plugins_watch_rebuild_plugin_ts → packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_interpreter_messageinterpreter (imports)
-- packages_hmr_lib_plugins_watch_rebuild_plugin_ts → packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_constant_build_complete (imports)
-- packages_hmr_lib_plugins_watch_rebuild_plugin_ts → packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_constant_local_reload_socket_url (imports)
-- packages_hmr_lib_plugins_watch_rebuild_plugin_ts → packages_hmr_lib_plugins_watch_rebuild_plugin_ts_import_types_pluginconfig (imports)
-- packages_hmr_lib_plugins_watch_rebuild_plugin_ts → packages_hmr_lib_plugins_watch_rebuild_plugin_ts_watchrebuildplugin (defines)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_constructor (defines)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_buildenhancedaxnode (defines)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getviewportratio (defines)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_iselementvisibleaccordingtoallparents (defines)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getaxtreeforallframes (defines)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getalltrees (defines)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree (defines)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getserializeddomtree (defines)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice → chrome_extension_src_background_browser_dom_domservice_ts_domservice_detectpaginationbuttons (defines)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getalltrees → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getviewportratio (calls)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getalltrees → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getaxtreeforallframes (calls)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getalltrees (calls)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree → chrome_extension_src_background_browser_dom_domservice_ts_domservice_buildenhancedaxnode (calls)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree → chrome_extension_src_background_browser_dom_domservice_ts_domservice_iselementvisibleaccordingtoallparents (calls)
+- chrome_extension_src_background_browser_dom_domservice_ts_domservice_getserializeddomtree → chrome_extension_src_background_browser_dom_domservice_ts_domservice_getdomtree (calls)
 

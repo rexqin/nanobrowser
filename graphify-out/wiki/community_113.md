@@ -4,12 +4,12 @@
 
 ## Nodes
 
-- **index** (`packages_i18n_index_ts`, File, degree: 2)
-- **./lib/i18n-dev/t** (`packages_i18n_index_ts_import_lib_i18n_dev_t`, Module, degree: 1)
-- **./lib/i18n/t** (`packages_i18n_index_ts_import_lib_i18n_t`, Module, degree: 1)
+- **index** (`packages_zipper_index_ts`, File, degree: 2)
+- **./lib/zip-bundle/zipBundle** (`packages_zipper_index_ts_import_lib_zip_bundle_zipbundle`, Module, degree: 1)
+- **node:path/resolve** (`packages_zipper_index_ts_import_node_path_resolve`, Module, degree: 1)
 
 ## Relationships
 
-- packages_i18n_index_ts → packages_i18n_index_ts_import_lib_i18n_t (imports)
-- packages_i18n_index_ts → packages_i18n_index_ts_import_lib_i18n_dev_t (imports)
+- packages_zipper_index_ts → packages_zipper_index_ts_import_node_path_resolve (imports)
+- packages_zipper_index_ts → packages_zipper_index_ts_import_lib_zip_bundle_zipbundle (imports)
 

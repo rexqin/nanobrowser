@@ -4,5 +4,5 @@
 
 ## Nodes
 
-- **index** (`packages_hmr_index_ts`, File, degree: 0)
+- **index** (`packages_shared_lib_utils_index_ts`, File, degree: 0)
 

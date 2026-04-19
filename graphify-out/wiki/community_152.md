@@ -1,8 +1,8 @@
-# Community 152: buildDomTree
+# Community 152: index
 
 **Members:** 1
 
 ## Nodes
 
-- **buildDomTree** (`chrome_extension_public_builddomtree_js`, File, degree: 0)
+- **index** (`packages_hmr_lib_plugins_index_ts`, File, degree: 0)
 

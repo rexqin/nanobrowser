@@ -1,8 +1,8 @@
-# Community 155: index
+# Community 155: type
 
 **Members:** 1
 
 ## Nodes
 
-- **index** (`packages_shared_index_ts`, File, degree: 0)
+- **type** (`packages_dev_utils_lib_manifest_parser_type_ts`, File, degree: 0)
 

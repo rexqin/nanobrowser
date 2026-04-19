@@ -1,23 +1,23 @@
-# Community 70: generalSettings
+# Community 70: MessageHistory
 
 **Members:** 7
 
 ## Nodes
 
-- **generalSettings** (`packages_storage_lib_settings_generalsettings_ts`, File, degree: 6)
-- **getSettings()** (`packages_storage_lib_settings_generalsettings_ts_getsettings`, Function, degree: 1)
-- **../base/base/createStorage** (`packages_storage_lib_settings_generalsettings_ts_import_base_base_createstorage`, Module, degree: 1)
-- **../base/enums/StorageEnum** (`packages_storage_lib_settings_generalsettings_ts_import_base_enums_storageenum`, Module, degree: 1)
-- **../base/types/BaseStorage** (`packages_storage_lib_settings_generalsettings_ts_import_base_types_basestorage`, Module, degree: 1)
-- **resetToDefaults()** (`packages_storage_lib_settings_generalsettings_ts_resettodefaults`, Function, degree: 1)
-- **updateSettings()** (`packages_storage_lib_settings_generalsettings_ts_updatesettings`, Function, degree: 1)
+- **MessageHistory** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory`, Class, degree: 7)
+- **.addMessage()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_addmessage`, Method, degree: 1)
+- **.getMessages()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_getmessages`, Method, degree: 1)
+- **.getTotalTokens()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_gettotaltokens`, Method, degree: 1)
+- **.removeLastStateMessage()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_removelaststatemessage`, Method, degree: 1)
+- **.removeMessage()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_removemessage`, Method, degree: 1)
+- **.removeOldestMessage()** (`chrome_extension_src_background_agent_messages_views_ts_messagehistory_removeoldestmessage`, Method, degree: 1)
 
 ## Relationships
 
-- packages_storage_lib_settings_generalsettings_ts → packages_storage_lib_settings_generalsettings_ts_import_base_enums_storageenum (imports)
-- packages_storage_lib_settings_generalsettings_ts → packages_storage_lib_settings_generalsettings_ts_import_base_base_createstorage (imports)
-- packages_storage_lib_settings_generalsettings_ts → packages_storage_lib_settings_generalsettings_ts_import_base_types_basestorage (imports)
-- packages_storage_lib_settings_generalsettings_ts → packages_storage_lib_settings_generalsettings_ts_updatesettings (defines)
-- packages_storage_lib_settings_generalsettings_ts → packages_storage_lib_settings_generalsettings_ts_getsettings (defines)
-- packages_storage_lib_settings_generalsettings_ts → packages_storage_lib_settings_generalsettings_ts_resettodefaults (defines)
+- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_addmessage (defines)
+- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_removemessage (defines)
+- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_removelaststatemessage (defines)
+- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_getmessages (defines)
+- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_gettotaltokens (defines)
+- chrome_extension_src_background_agent_messages_views_ts_messagehistory → chrome_extension_src_background_agent_messages_views_ts_messagehistory_removeoldestmessage (defines)
 

@@ -1,25 +1,26 @@
-# Community 62: history
+# Community 62: sanitizer
 
 **Members:** 8
 
 ## Nodes
 
-- **history** (`chrome_extension_src_background_agent_history_ts`, File, degree: 5)
-- **AgentStepHistory** (`chrome_extension_src_background_agent_history_ts_agentstephistory`, Class, degree: 2)
-- **.constructor()** (`chrome_extension_src_background_agent_history_ts_agentstephistory_constructor`, Method, degree: 1)
-- **AgentStepRecord** (`chrome_extension_src_background_agent_history_ts_agentsteprecord`, Class, degree: 2)
-- **.constructor()** (`chrome_extension_src_background_agent_history_ts_agentsteprecord_constructor`, Method, degree: 1)
-- **../browser/views/BrowserStateHistory** (`chrome_extension_src_background_agent_history_ts_import_browser_views_browserstatehistory`, Module, degree: 1)
-- **./types/ActionResult** (`chrome_extension_src_background_agent_history_ts_import_types_actionresult`, Module, degree: 1)
-- **./types/StepMetadata** (`chrome_extension_src_background_agent_history_ts_import_types_stepmetadata`, Module, degree: 1)
+- **sanitizer** (`chrome_extension_src_background_services_guardrails_sanitizer_ts`, File, degree: 7)
+- **cleanEmptyTags()** (`chrome_extension_src_background_services_guardrails_sanitizer_ts_cleanemptytags`, Function, degree: 2)
+- **detectThreats()** (`chrome_extension_src_background_services_guardrails_sanitizer_ts_detectthreats`, Function, degree: 1)
+- **./patterns/getPatterns** (`chrome_extension_src_background_services_guardrails_sanitizer_ts_import_patterns_getpatterns`, Module, degree: 1)
+- **@src/background/log/createLogger** (`chrome_extension_src_background_services_guardrails_sanitizer_ts_import_src_background_log_createlogger`, Module, degree: 1)
+- **./types/SanitizationResult** (`chrome_extension_src_background_services_guardrails_sanitizer_ts_import_types_sanitizationresult`, Module, degree: 1)
+- **./types/ThreatType** (`chrome_extension_src_background_services_guardrails_sanitizer_ts_import_types_threattype`, Module, degree: 1)
+- **sanitizeContent()** (`chrome_extension_src_background_services_guardrails_sanitizer_ts_sanitizecontent`, Function, degree: 2)
 
 ## Relationships
 
-- chrome_extension_src_background_agent_history_ts → chrome_extension_src_background_agent_history_ts_import_types_actionresult (imports)
-- chrome_extension_src_background_agent_history_ts → chrome_extension_src_background_agent_history_ts_import_types_stepmetadata (imports)
-- chrome_extension_src_background_agent_history_ts → chrome_extension_src_background_agent_history_ts_import_browser_views_browserstatehistory (imports)
-- chrome_extension_src_background_agent_history_ts → chrome_extension_src_background_agent_history_ts_agentsteprecord (defines)
-- chrome_extension_src_background_agent_history_ts_agentsteprecord → chrome_extension_src_background_agent_history_ts_agentsteprecord_constructor (defines)
-- chrome_extension_src_background_agent_history_ts → chrome_extension_src_background_agent_history_ts_agentstephistory (defines)
-- chrome_extension_src_background_agent_history_ts_agentstephistory → chrome_extension_src_background_agent_history_ts_agentstephistory_constructor (defines)
+- chrome_extension_src_background_services_guardrails_sanitizer_ts → chrome_extension_src_background_services_guardrails_sanitizer_ts_import_types_sanitizationresult (imports)
+- chrome_extension_src_background_services_guardrails_sanitizer_ts → chrome_extension_src_background_services_guardrails_sanitizer_ts_import_types_threattype (imports)
+- chrome_extension_src_background_services_guardrails_sanitizer_ts → chrome_extension_src_background_services_guardrails_sanitizer_ts_import_patterns_getpatterns (imports)
+- chrome_extension_src_background_services_guardrails_sanitizer_ts → chrome_extension_src_background_services_guardrails_sanitizer_ts_import_src_background_log_createlogger (imports)
+- chrome_extension_src_background_services_guardrails_sanitizer_ts → chrome_extension_src_background_services_guardrails_sanitizer_ts_sanitizecontent (defines)
+- chrome_extension_src_background_services_guardrails_sanitizer_ts → chrome_extension_src_background_services_guardrails_sanitizer_ts_detectthreats (defines)
+- chrome_extension_src_background_services_guardrails_sanitizer_ts → chrome_extension_src_background_services_guardrails_sanitizer_ts_cleanemptytags (defines)
+- chrome_extension_src_background_services_guardrails_sanitizer_ts_sanitizecontent → chrome_extension_src_background_services_guardrails_sanitizer_ts_cleanemptytags (calls)
 

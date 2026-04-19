@@ -1,25 +1,29 @@
-# Community 57: views
+# Community 57: _buildDomTree()
 
 **Members:** 8
 
 ## Nodes
 
-- **views** (`chrome_extension_src_background_agent_messages_views_ts`, File, degree: 6)
-- **@langchain/core/messages/BaseMessage** (`chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_basemessage`, Module, degree: 1)
-- **@langchain/core/messages/HumanMessage** (`chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_humanmessage`, Module, degree: 1)
-- **@langchain/core/messages/SystemMessage** (`chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_systemmessage`, Module, degree: 1)
-- **ManagedMessage** (`chrome_extension_src_background_agent_messages_views_ts_managedmessage`, Class, degree: 2)
-- **.constructor()** (`chrome_extension_src_background_agent_messages_views_ts_managedmessage_constructor`, Method, degree: 1)
-- **MessageMetadata** (`chrome_extension_src_background_agent_messages_views_ts_messagemetadata`, Class, degree: 2)
-- **.constructor()** (`chrome_extension_src_background_agent_messages_views_ts_messagemetadata_constructor`, Method, degree: 1)
+- **_buildDomTree()** (`chrome_extension_src_background_browser_dom_service_ts_builddomtree`, Function, degree: 9)
+- **constructFrameTree()** (`chrome_extension_src_background_browser_dom_service_ts_constructframetree`, Function, degree: 6)
+- **getClickableElements()** (`chrome_extension_src_background_browser_dom_service_ts_getclickableelements`, Function, degree: 2)
+- **_getMaxHighlighIndex()** (`chrome_extension_src_background_browser_dom_service_ts_getmaxhighlighindex`, Function, degree: 4)
+- **_getMaxID()** (`chrome_extension_src_background_browser_dom_service_ts_getmaxid`, Function, degree: 3)
+- **_getRawDomTreeNodes()** (`chrome_extension_src_background_browser_dom_service_ts_getrawdomtreenodes`, Function, degree: 3)
+- **_locateMatchingIframeNode()** (`chrome_extension_src_background_browser_dom_service_ts_locatematchingiframenode`, Function, degree: 2)
+- **_visibleIFramesFailedLoading()** (`chrome_extension_src_background_browser_dom_service_ts_visibleiframesfailedloading`, Function, degree: 4)
 
 ## Relationships
 
-- chrome_extension_src_background_agent_messages_views_ts → chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_basemessage (imports)
-- chrome_extension_src_background_agent_messages_views_ts → chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_humanmessage (imports)
-- chrome_extension_src_background_agent_messages_views_ts → chrome_extension_src_background_agent_messages_views_ts_import_langchain_core_messages_systemmessage (imports)
-- chrome_extension_src_background_agent_messages_views_ts → chrome_extension_src_background_agent_messages_views_ts_messagemetadata (defines)
-- chrome_extension_src_background_agent_messages_views_ts_messagemetadata → chrome_extension_src_background_agent_messages_views_ts_messagemetadata_constructor (defines)
-- chrome_extension_src_background_agent_messages_views_ts → chrome_extension_src_background_agent_messages_views_ts_managedmessage (defines)
-- chrome_extension_src_background_agent_messages_views_ts_managedmessage → chrome_extension_src_background_agent_messages_views_ts_managedmessage_constructor (defines)
+- chrome_extension_src_background_browser_dom_service_ts_getclickableelements → chrome_extension_src_background_browser_dom_service_ts_builddomtree (calls)
+- chrome_extension_src_background_browser_dom_service_ts_builddomtree → chrome_extension_src_background_browser_dom_service_ts_getmaxhighlighindex (calls)
+- chrome_extension_src_background_browser_dom_service_ts_builddomtree → chrome_extension_src_background_browser_dom_service_ts_constructframetree (calls)
+- chrome_extension_src_background_browser_dom_service_ts_builddomtree → chrome_extension_src_background_browser_dom_service_ts_getmaxid (calls)
+- chrome_extension_src_background_browser_dom_service_ts_builddomtree → chrome_extension_src_background_browser_dom_service_ts_visibleiframesfailedloading (calls)
+- chrome_extension_src_background_browser_dom_service_ts_constructframetree → chrome_extension_src_background_browser_dom_service_ts_getmaxhighlighindex (calls)
+- chrome_extension_src_background_browser_dom_service_ts_constructframetree → chrome_extension_src_background_browser_dom_service_ts_locatematchingiframenode (calls)
+- chrome_extension_src_background_browser_dom_service_ts_constructframetree → chrome_extension_src_background_browser_dom_service_ts_getmaxid (calls)
+- chrome_extension_src_background_browser_dom_service_ts_constructframetree → chrome_extension_src_background_browser_dom_service_ts_visibleiframesfailedloading (calls)
+- chrome_extension_src_background_browser_dom_service_ts_getmaxhighlighindex → chrome_extension_src_background_browser_dom_service_ts_getrawdomtreenodes (calls)
+- chrome_extension_src_background_browser_dom_service_ts_visibleiframesfailedloading → chrome_extension_src_background_browser_dom_service_ts_getrawdomtreenodes (calls)
 

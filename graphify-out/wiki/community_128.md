@@ -1,13 +1,13 @@
-# Community 128: types
+# Community 128: tailwind.config
 
 **Members:** 2
 
 ## Nodes
 
-- **types** (`packages_storage_lib_base_types_ts`, File, degree: 1)
-- **./enums/StorageEnum** (`packages_storage_lib_base_types_ts_import_enums_storageenum`, Module, degree: 1)
+- **tailwind.config** (`packages_tailwind_config_tailwind_config_ts`, File, degree: 1)
+- **tailwindcss/types/config/Config** (`packages_tailwind_config_tailwind_config_ts_import_tailwindcss_types_config_config`, Module, degree: 1)
 
 ## Relationships
 
-- packages_storage_lib_base_types_ts → packages_storage_lib_base_types_ts_import_enums_storageenum (imports)
+- packages_tailwind_config_tailwind_config_ts → packages_tailwind_config_tailwind_config_ts_import_tailwindcss_types_config_config (imports)
 

@@ -1,29 +1,32 @@
-# Community 45: index
+# Community 45: DOMElementNode
 
 **Members:** 10
 
 ## Nodes
 
-- **index** (`packages_zipper_lib_zip_bundle_index_ts`, File, degree: 14)
-- **fast-glob/glob** (`packages_zipper_lib_zip_bundle_index_ts_import_fast_glob_glob`, Module, degree: 1)
-- **fflate/AsyncZipDeflate** (`packages_zipper_lib_zip_bundle_index_ts_import_fflate_asynczipdeflate`, Module, degree: 1)
-- **fflate/Zip** (`packages_zipper_lib_zip_bundle_index_ts_import_fflate_zip`, Module, degree: 1)
-- **node:fs/createReadStream** (`packages_zipper_lib_zip_bundle_index_ts_import_node_fs_createreadstream`, Module, degree: 1)
-- **node:fs/createWriteStream** (`packages_zipper_lib_zip_bundle_index_ts_import_node_fs_createwritestream`, Module, degree: 1)
-- **node:fs/existsSync** (`packages_zipper_lib_zip_bundle_index_ts_import_node_fs_existssync`, Module, degree: 1)
-- **node:fs/mkdirSync** (`packages_zipper_lib_zip_bundle_index_ts_import_node_fs_mkdirsync`, Module, degree: 1)
-- **node:path/posix** (`packages_zipper_lib_zip_bundle_index_ts_import_node_path_posix`, Module, degree: 1)
-- **node:path/resolve** (`packages_zipper_lib_zip_bundle_index_ts_import_node_path_resolve`, Module, degree: 1)
+- **DOMElementNode** (`chrome_extension_src_background_browser_dom_views_ts_domelementnode`, Class, degree: 10)
+- **.clearHashCache()** (`chrome_extension_src_background_browser_dom_views_ts_domelementnode_clearhashcache`, Method, degree: 1)
+- **.clickableElementsToString()** (`chrome_extension_src_background_browser_dom_views_ts_domelementnode_clickableelementstostring`, Method, degree: 3)
+- **.constructor()** (`chrome_extension_src_background_browser_dom_views_ts_domelementnode_constructor`, Method, degree: 1)
+- **.convertSimpleXPathToCssSelector()** (`chrome_extension_src_background_browser_dom_views_ts_domelementnode_convertsimplexpathtocssselector`, Method, degree: 2)
+- **.enhancedCssSelectorForElement()** (`chrome_extension_src_background_browser_dom_views_ts_domelementnode_enhancedcssselectorforelement`, Method, degree: 3)
+- **.getAllTextTillNextClickableElement()** (`chrome_extension_src_background_browser_dom_views_ts_domelementnode_getalltexttillnextclickableelement`, Method, degree: 2)
+- **.getEnhancedCssSelector()** (`chrome_extension_src_background_browser_dom_views_ts_domelementnode_getenhancedcssselector`, Method, degree: 2)
+- **.getFileUploadElement()** (`chrome_extension_src_background_browser_dom_views_ts_domelementnode_getfileuploadelement`, Method, degree: 1)
+- **.hasParentWithHighlightIndex()** (`chrome_extension_src_background_browser_dom_views_ts_domtextnode_hasparentwithhighlightindex`, Method, degree: 2)
 
 ## Relationships
 
-- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_fs_createreadstream (imports)
-- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_fs_createwritestream (imports)
-- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_fs_existssync (imports)
-- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_fs_mkdirsync (imports)
-- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_path_posix (imports)
-- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_node_path_resolve (imports)
-- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_fast_glob_glob (imports)
-- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_fflate_asynczipdeflate (imports)
-- packages_zipper_lib_zip_bundle_index_ts → packages_zipper_lib_zip_bundle_index_ts_import_fflate_zip (imports)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode → chrome_extension_src_background_browser_dom_views_ts_domelementnode_constructor (defines)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode → chrome_extension_src_background_browser_dom_views_ts_domelementnode_clearhashcache (defines)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode → chrome_extension_src_background_browser_dom_views_ts_domelementnode_getalltexttillnextclickableelement (defines)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode → chrome_extension_src_background_browser_dom_views_ts_domelementnode_clickableelementstostring (defines)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode → chrome_extension_src_background_browser_dom_views_ts_domelementnode_getfileuploadelement (defines)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode → chrome_extension_src_background_browser_dom_views_ts_domelementnode_getenhancedcssselector (defines)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode → chrome_extension_src_background_browser_dom_views_ts_domelementnode_convertsimplexpathtocssselector (defines)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode → chrome_extension_src_background_browser_dom_views_ts_domelementnode_enhancedcssselectorforelement (defines)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode_clickableelementstostring → chrome_extension_src_background_browser_dom_views_ts_domelementnode_getalltexttillnextclickableelement (calls)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode_clickableelementstostring → chrome_extension_src_background_browser_dom_views_ts_domtextnode_hasparentwithhighlightindex (calls)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode_getenhancedcssselector → chrome_extension_src_background_browser_dom_views_ts_domelementnode_enhancedcssselectorforelement (calls)
+- chrome_extension_src_background_browser_dom_views_ts_domelementnode_enhancedcssselectorforelement → chrome_extension_src_background_browser_dom_views_ts_domelementnode_convertsimplexpathtocssselector (calls)
 

@@ -1,8 +1,8 @@
-# Community 154: common
+# Community 154: index
 
 **Members:** 1
 
 ## Nodes
 
-- **common** (`chrome_extension_src_background_agent_prompts_templates_common_ts`, File, degree: 0)
+- **index** (`packages_storage_lib_chat_index_ts`, File, degree: 0)
 

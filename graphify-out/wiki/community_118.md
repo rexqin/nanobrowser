@@ -1,15 +1,15 @@
-# Community 118: reload
+# Community 118: tailwind.config
 
 **Members:** 3
 
 ## Nodes
 
-- **reload** (`packages_hmr_lib_injections_reload_ts`, File, degree: 2)
-- **addReload()** (`packages_hmr_lib_injections_reload_ts_addreload`, Function, degree: 1)
-- **../initializers/initClient/initClient** (`packages_hmr_lib_injections_reload_ts_import_initializers_initclient_initclient`, Module, degree: 1)
+- **tailwind.config** (`pages_side_panel_tailwind_config_ts`, File, degree: 2)
+- **@extension/tailwindcss-config/baseConfig** (`pages_side_panel_tailwind_config_ts_import_extension_tailwindcss_config_baseconfig`, Module, degree: 1)
+- **tailwindcss/types/config/Config** (`pages_side_panel_tailwind_config_ts_import_tailwindcss_types_config_config`, Module, degree: 1)
 
 ## Relationships
 
-- packages_hmr_lib_injections_reload_ts → packages_hmr_lib_injections_reload_ts_import_initializers_initclient_initclient (imports)
-- packages_hmr_lib_injections_reload_ts → packages_hmr_lib_injections_reload_ts_addreload (defines)
+- pages_side_panel_tailwind_config_ts → pages_side_panel_tailwind_config_ts_import_extension_tailwindcss_config_baseconfig (imports)
+- pages_side_panel_tailwind_config_ts → pages_side_panel_tailwind_config_ts_import_tailwindcss_types_config_config (imports)
 

@@ -1,13 +1,13 @@
-# Community 130: external
+# Community 130: log
 
 **Members:** 2
 
 ## Nodes
 
-- **external** (`packages_shared_lib_message_external_ts`, File, degree: 1)
-- **zod/z** (`packages_shared_lib_message_external_ts_import_zod_z`, Module, degree: 1)
+- **log** (`chrome_extension_src_background_log_ts`, File, degree: 1)
+- **createLogger()** (`chrome_extension_src_background_log_ts_createlogger`, Function, degree: 1)
 
 ## Relationships
 
-- packages_shared_lib_message_external_ts → packages_shared_lib_message_external_ts_import_zod_z (imports)
+- chrome_extension_src_background_log_ts → chrome_extension_src_background_log_ts_createlogger (defines)
 

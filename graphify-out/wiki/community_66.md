@@ -1,29 +1,26 @@
-# Community 66: helper
+# Community 66: Action
 
-**Members:** 7
+**Members:** 8
 
 ## Nodes
 
-- **helper** (`packages_schema_utils_lib_helper_ts`, File, degree: 6)
-- **convertOpenAISchemaToGemini()** (`packages_schema_utils_lib_helper_ts_convertopenaischematogemini`, Function, degree: 4)
-- **dereferenceJsonSchema()** (`packages_schema_utils_lib_helper_ts_dereferencejsonschema`, Function, degree: 3)
-- **processPropertiesForGemini()** (`packages_schema_utils_lib_helper_ts_processpropertiesforgemini`, Function, degree: 4)
-- **processPropertyForGemini()** (`packages_schema_utils_lib_helper_ts_processpropertyforgemini`, Function, degree: 4)
-- **processSchemaNode()** (`packages_schema_utils_lib_helper_ts_processschemanode`, Function, degree: 2)
-- **stringifyCustom()** (`packages_schema_utils_lib_helper_ts_stringifycustom`, Function, degree: 1)
+- **Action** (`chrome_extension_src_background_agent_actions_builder_ts_action`, Class, degree: 7)
+- **.call()** (`chrome_extension_src_background_agent_actions_builder_ts_action_call`, Method, degree: 1)
+- **.constructor()** (`chrome_extension_src_background_agent_actions_builder_ts_action_constructor`, Method, degree: 1)
+- **.getIndexArg()** (`chrome_extension_src_background_agent_actions_builder_ts_action_getindexarg`, Method, degree: 1)
+- **.name()** (`chrome_extension_src_background_agent_actions_builder_ts_action_name`, Method, degree: 3)
+- **.prompt()** (`chrome_extension_src_background_agent_actions_builder_ts_action_prompt`, Method, degree: 2)
+- **.setIndexArg()** (`chrome_extension_src_background_agent_actions_builder_ts_action_setindexarg`, Method, degree: 1)
+- **buildDynamicActionSchema()** (`chrome_extension_src_background_agent_actions_builder_ts_builddynamicactionschema`, Function, degree: 2)
 
 ## Relationships
 
-- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_dereferencejsonschema (defines)
-- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_processschemanode (defines)
-- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_convertopenaischematogemini (defines)
-- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_processpropertiesforgemini (defines)
-- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_processpropertyforgemini (defines)
-- packages_schema_utils_lib_helper_ts → packages_schema_utils_lib_helper_ts_stringifycustom (defines)
-- packages_schema_utils_lib_helper_ts_dereferencejsonschema → packages_schema_utils_lib_helper_ts_processschemanode (calls)
-- packages_schema_utils_lib_helper_ts_convertopenaischematogemini → packages_schema_utils_lib_helper_ts_processpropertiesforgemini (calls)
-- packages_schema_utils_lib_helper_ts_convertopenaischematogemini → packages_schema_utils_lib_helper_ts_processpropertyforgemini (calls)
-- packages_schema_utils_lib_helper_ts_convertopenaischematogemini → packages_schema_utils_lib_helper_ts_dereferencejsonschema (calls)
-- packages_schema_utils_lib_helper_ts_processpropertiesforgemini → packages_schema_utils_lib_helper_ts_processpropertyforgemini (calls)
-- packages_schema_utils_lib_helper_ts_processpropertyforgemini → packages_schema_utils_lib_helper_ts_processpropertiesforgemini (calls)
+- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_constructor (defines)
+- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_call (defines)
+- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_name (defines)
+- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_prompt (defines)
+- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_getindexarg (defines)
+- chrome_extension_src_background_agent_actions_builder_ts_action → chrome_extension_src_background_agent_actions_builder_ts_action_setindexarg (defines)
+- chrome_extension_src_background_agent_actions_builder_ts_action_prompt → chrome_extension_src_background_agent_actions_builder_ts_action_name (calls)
+- chrome_extension_src_background_agent_actions_builder_ts_builddynamicactionschema → chrome_extension_src_background_agent_actions_builder_ts_action_name (calls)
 

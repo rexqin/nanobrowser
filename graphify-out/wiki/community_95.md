@@ -1,35 +1,19 @@
-# Community 95: closePlanDedicatedTabIfAny()
+# Community 95: utils
 
 **Members:** 5
 
 ## Nodes
 
-- **closePlanDedicatedTabIfAny()** (`chrome_extension_src_background_index_ts_closeplandedicatedtabifany`, Function, degree: 9)
-- **isHzgmTechSenderUrl()** (`chrome_extension_src_background_index_ts_ishzgmtechsenderurl`, Function, degree: 9)
-- **isScriptableTabUrl()** (`chrome_extension_src_background_index_ts_isscriptabletaburl`, Function, degree: 9)
-- **setupExecutor()** (`chrome_extension_src_background_index_ts_setupexecutor`, Function, degree: 9)
-- **subscribeToExecutorEvents()** (`chrome_extension_src_background_index_ts_subscribetoexecutorevents`, Function, degree: 9)
+- **utils** (`packages_ui_lib_utils_ts`, File, degree: 4)
+- **cn()** (`packages_ui_lib_utils_ts_cn`, Function, degree: 1)
+- **clsx/ClassValue** (`packages_ui_lib_utils_ts_import_clsx_classvalue`, Module, degree: 1)
+- **clsx/clsx** (`packages_ui_lib_utils_ts_import_clsx_clsx`, Module, degree: 1)
+- **tailwind-merge/twMerge** (`packages_ui_lib_utils_ts_import_tailwind_merge_twmerge`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_index_ts_isscriptabletaburl → chrome_extension_src_background_index_ts_ishzgmtechsenderurl (uses)
-- chrome_extension_src_background_index_ts_isscriptabletaburl → chrome_extension_src_background_index_ts_closeplandedicatedtabifany (uses)
-- chrome_extension_src_background_index_ts_isscriptabletaburl → chrome_extension_src_background_index_ts_setupexecutor (uses)
-- chrome_extension_src_background_index_ts_isscriptabletaburl → chrome_extension_src_background_index_ts_subscribetoexecutorevents (uses)
-- chrome_extension_src_background_index_ts_ishzgmtechsenderurl → chrome_extension_src_background_index_ts_isscriptabletaburl (uses)
-- chrome_extension_src_background_index_ts_ishzgmtechsenderurl → chrome_extension_src_background_index_ts_closeplandedicatedtabifany (uses)
-- chrome_extension_src_background_index_ts_ishzgmtechsenderurl → chrome_extension_src_background_index_ts_setupexecutor (uses)
-- chrome_extension_src_background_index_ts_ishzgmtechsenderurl → chrome_extension_src_background_index_ts_subscribetoexecutorevents (uses)
-- chrome_extension_src_background_index_ts_closeplandedicatedtabifany → chrome_extension_src_background_index_ts_isscriptabletaburl (uses)
-- chrome_extension_src_background_index_ts_closeplandedicatedtabifany → chrome_extension_src_background_index_ts_ishzgmtechsenderurl (uses)
-- chrome_extension_src_background_index_ts_closeplandedicatedtabifany → chrome_extension_src_background_index_ts_setupexecutor (uses)
-- chrome_extension_src_background_index_ts_closeplandedicatedtabifany → chrome_extension_src_background_index_ts_subscribetoexecutorevents (uses)
-- chrome_extension_src_background_index_ts_setupexecutor → chrome_extension_src_background_index_ts_isscriptabletaburl (uses)
-- chrome_extension_src_background_index_ts_setupexecutor → chrome_extension_src_background_index_ts_ishzgmtechsenderurl (uses)
-- chrome_extension_src_background_index_ts_setupexecutor → chrome_extension_src_background_index_ts_closeplandedicatedtabifany (uses)
-- chrome_extension_src_background_index_ts_setupexecutor → chrome_extension_src_background_index_ts_subscribetoexecutorevents (uses)
-- chrome_extension_src_background_index_ts_subscribetoexecutorevents → chrome_extension_src_background_index_ts_isscriptabletaburl (uses)
-- chrome_extension_src_background_index_ts_subscribetoexecutorevents → chrome_extension_src_background_index_ts_ishzgmtechsenderurl (uses)
-- chrome_extension_src_background_index_ts_subscribetoexecutorevents → chrome_extension_src_background_index_ts_closeplandedicatedtabifany (uses)
-- chrome_extension_src_background_index_ts_subscribetoexecutorevents → chrome_extension_src_background_index_ts_setupexecutor (uses)
+- packages_ui_lib_utils_ts → packages_ui_lib_utils_ts_import_clsx_classvalue (imports)
+- packages_ui_lib_utils_ts → packages_ui_lib_utils_ts_import_clsx_clsx (imports)
+- packages_ui_lib_utils_ts → packages_ui_lib_utils_ts_import_tailwind_merge_twmerge (imports)
+- packages_ui_lib_utils_ts → packages_ui_lib_utils_ts_cn (defines)
 

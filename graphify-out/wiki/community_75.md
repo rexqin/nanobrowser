@@ -1,21 +1,21 @@
-# Community 75: manifest
+# Community 75: index
 
 **Members:** 6
 
 ## Nodes
 
-- **manifest** (`chrome_extension_manifest_js`, File, degree: 5)
-- **deepmerge/deepmerge** (`chrome_extension_manifest_js_import_deepmerge_deepmerge`, Module, degree: 1)
-- **node:fs/fs** (`chrome_extension_manifest_js_import_node_fs_fs`, Module, degree: 1)
-- **withExternallyConnectableHzgm()** (`chrome_extension_manifest_js_withexternallyconnectablehzgm`, Function, degree: 1)
-- **withOperaSidebar()** (`chrome_extension_manifest_js_withoperasidebar`, Function, degree: 1)
-- **withSidePanel()** (`chrome_extension_manifest_js_withsidepanel`, Function, degree: 1)
+- **index** (`pages_options_src_index_tsx`, File, degree: 5)
+- **@extension/ui/dist/global.css** (`pages_options_src_index_tsx_import_extension_ui_dist_global_css`, Module, degree: 1)
+- **react-dom/client/createRoot** (`pages_options_src_index_tsx_import_react_dom_client_createroot`, Module, degree: 1)
+- **@src/index.css** (`pages_options_src_index_tsx_import_src_index_css`, Module, degree: 1)
+- **@src/Options/Options** (`pages_options_src_index_tsx_import_src_options_options`, Module, degree: 1)
+- **init()** (`pages_options_src_index_tsx_init`, Function, degree: 1)
 
 ## Relationships
 
-- chrome_extension_manifest_js → chrome_extension_manifest_js_import_node_fs_fs (imports)
-- chrome_extension_manifest_js → chrome_extension_manifest_js_import_deepmerge_deepmerge (imports)
-- chrome_extension_manifest_js → chrome_extension_manifest_js_withsidepanel (defines)
-- chrome_extension_manifest_js → chrome_extension_manifest_js_withoperasidebar (defines)
-- chrome_extension_manifest_js → chrome_extension_manifest_js_withexternallyconnectablehzgm (defines)
+- pages_options_src_index_tsx → pages_options_src_index_tsx_import_react_dom_client_createroot (imports)
+- pages_options_src_index_tsx → pages_options_src_index_tsx_import_src_index_css (imports)
+- pages_options_src_index_tsx → pages_options_src_index_tsx_import_extension_ui_dist_global_css (imports)
+- pages_options_src_index_tsx → pages_options_src_index_tsx_import_src_options_options (imports)
+- pages_options_src_index_tsx → pages_options_src_index_tsx_init (defines)
 

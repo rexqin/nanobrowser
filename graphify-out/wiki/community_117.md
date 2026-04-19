@@ -1,15 +1,15 @@
-# Community 117: refresh
+# Community 117: PlanListSidebar
 
 **Members:** 3
 
 ## Nodes
 
-- **refresh** (`packages_hmr_lib_injections_refresh_ts`, File, degree: 2)
-- **addRefresh()** (`packages_hmr_lib_injections_refresh_ts_addrefresh`, Function, degree: 1)
-- **../initializers/initClient/initClient** (`packages_hmr_lib_injections_refresh_ts_import_initializers_initclient_initclient`, Module, degree: 1)
+- **PlanListSidebar** (`pages_side_panel_src_components_planlistsidebar_tsx`, File, degree: 2)
+- **@extension/i18n/t** (`pages_side_panel_src_components_planlistsidebar_tsx_import_extension_i18n_t`, Module, degree: 1)
+- **@extension/storage/PlanSessionMetadata** (`pages_side_panel_src_components_planlistsidebar_tsx_import_extension_storage_plansessionmetadata`, Module, degree: 1)
 
 ## Relationships
 
-- packages_hmr_lib_injections_refresh_ts → packages_hmr_lib_injections_refresh_ts_import_initializers_initclient_initclient (imports)
-- packages_hmr_lib_injections_refresh_ts → packages_hmr_lib_injections_refresh_ts_addrefresh (defines)
+- pages_side_panel_src_components_planlistsidebar_tsx → pages_side_panel_src_components_planlistsidebar_tsx_import_extension_storage_plansessionmetadata (imports)
+- pages_side_panel_src_components_planlistsidebar_tsx → pages_side_panel_src_components_planlistsidebar_tsx_import_extension_i18n_t (imports)
 

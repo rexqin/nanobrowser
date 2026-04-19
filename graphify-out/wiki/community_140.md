@@ -1,8 +1,8 @@
-# Community 140: vite-env.d
+# Community 140: types
 
 **Members:** 1
 
 ## Nodes
 
-- **vite-env.d** (`vite_env_d_ts`, File, degree: 0)
+- **types** (`packages_storage_lib_settings_types_ts`, File, degree: 0)
 

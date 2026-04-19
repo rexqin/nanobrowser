@@ -1,25 +1,27 @@
-# Community 53: domService
+# Community 53: planner
 
-**Members:** 8
+**Members:** 9
 
 ## Nodes
 
-- **domService** (`chrome_extension_src_background_browser_dom_domservice_ts`, File, degree: 8)
-- **./domSerializer/DOMTreeSerializer** (`chrome_extension_src_background_browser_dom_domservice_ts_import_domserializer_domtreeserializer`, Module, degree: 1)
-- **./enhancedDOMTreeNode/EnhancedDOMTreeNode** (`chrome_extension_src_background_browser_dom_domservice_ts_import_enhanceddomtreenode_enhanceddomtreenode`, Module, degree: 1)
-- **./enhancedSnapshot/buildSnapshotLookup** (`chrome_extension_src_background_browser_dom_domservice_ts_import_enhancedsnapshot_buildsnapshotlookup`, Module, degree: 1)
-- **./enhancedSnapshot/REQUIRED_COMPUTED_STYLES** (`chrome_extension_src_background_browser_dom_domservice_ts_import_enhancedsnapshot_required_computed_styles`, Module, degree: 1)
-- **puppeteer-core/CDPSession** (`chrome_extension_src_background_browser_dom_domservice_ts_import_puppeteer_core_cdpsession`, Module, degree: 1)
-- **puppeteer-core/Page** (`chrome_extension_src_background_browser_dom_domservice_ts_import_puppeteer_core_page`, Module, degree: 1)
-- **./serializedDOMState/SerializedDOMState** (`chrome_extension_src_background_browser_dom_domservice_ts_import_serializeddomstate_serializeddomstate`, Module, degree: 1)
+- **planner** (`chrome_extension_src_background_agent_prompts_planner_ts`, File, degree: 6)
+- **./base/BasePrompt** (`chrome_extension_src_background_agent_prompts_planner_ts_import_base_baseprompt`, Module, degree: 1)
+- **@langchain/core/messages/HumanMessage** (`chrome_extension_src_background_agent_prompts_planner_ts_import_langchain_core_messages_humanmessage`, Module, degree: 1)
+- **@langchain/core/messages/SystemMessage** (`chrome_extension_src_background_agent_prompts_planner_ts_import_langchain_core_messages_systemmessage`, Module, degree: 1)
+- **@src/background/agent/types/AgentContext** (`chrome_extension_src_background_agent_prompts_planner_ts_import_src_background_agent_types_agentcontext`, Module, degree: 1)
+- **./templates/planner/plannerSystemPromptTemplate** (`chrome_extension_src_background_agent_prompts_planner_ts_import_templates_planner_plannersystemprompttemplate`, Module, degree: 1)
+- **PlannerPrompt** (`chrome_extension_src_background_agent_prompts_planner_ts_plannerprompt`, Class, degree: 3)
+- **.getSystemMessage()** (`chrome_extension_src_background_agent_prompts_planner_ts_plannerprompt_getsystemmessage`, Method, degree: 1)
+- **.getUserMessage()** (`chrome_extension_src_background_agent_prompts_planner_ts_plannerprompt_getusermessage`, Method, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_dom_domservice_ts → chrome_extension_src_background_browser_dom_domservice_ts_import_puppeteer_core_page (imports)
-- chrome_extension_src_background_browser_dom_domservice_ts → chrome_extension_src_background_browser_dom_domservice_ts_import_puppeteer_core_cdpsession (imports)
-- chrome_extension_src_background_browser_dom_domservice_ts → chrome_extension_src_background_browser_dom_domservice_ts_import_enhanceddomtreenode_enhanceddomtreenode (imports)
-- chrome_extension_src_background_browser_dom_domservice_ts → chrome_extension_src_background_browser_dom_domservice_ts_import_enhancedsnapshot_buildsnapshotlookup (imports)
-- chrome_extension_src_background_browser_dom_domservice_ts → chrome_extension_src_background_browser_dom_domservice_ts_import_enhancedsnapshot_required_computed_styles (imports)
-- chrome_extension_src_background_browser_dom_domservice_ts → chrome_extension_src_background_browser_dom_domservice_ts_import_domserializer_domtreeserializer (imports)
-- chrome_extension_src_background_browser_dom_domservice_ts → chrome_extension_src_background_browser_dom_domservice_ts_import_serializeddomstate_serializeddomstate (imports)
+- chrome_extension_src_background_agent_prompts_planner_ts → chrome_extension_src_background_agent_prompts_planner_ts_import_base_baseprompt (imports)
+- chrome_extension_src_background_agent_prompts_planner_ts → chrome_extension_src_background_agent_prompts_planner_ts_import_langchain_core_messages_humanmessage (imports)
+- chrome_extension_src_background_agent_prompts_planner_ts → chrome_extension_src_background_agent_prompts_planner_ts_import_langchain_core_messages_systemmessage (imports)
+- chrome_extension_src_background_agent_prompts_planner_ts → chrome_extension_src_background_agent_prompts_planner_ts_import_src_background_agent_types_agentcontext (imports)
+- chrome_extension_src_background_agent_prompts_planner_ts → chrome_extension_src_background_agent_prompts_planner_ts_import_templates_planner_plannersystemprompttemplate (imports)
+- chrome_extension_src_background_agent_prompts_planner_ts → chrome_extension_src_background_agent_prompts_planner_ts_plannerprompt (defines)
+- chrome_extension_src_background_agent_prompts_planner_ts_plannerprompt → chrome_extension_src_background_agent_prompts_planner_ts_plannerprompt_getsystemmessage (defines)
+- chrome_extension_src_background_agent_prompts_planner_ts_plannerprompt → chrome_extension_src_background_agent_prompts_planner_ts_plannerprompt_getusermessage (defines)
 

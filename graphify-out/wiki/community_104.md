@@ -1,17 +1,17 @@
-# Community 104: withUI
+# Community 104: convert
 
 **Members:** 4
 
 ## Nodes
 
-- **withUI** (`packages_ui_lib_withui_ts`, File, degree: 3)
-- **deepmerge/deepmerge** (`packages_ui_lib_withui_ts_import_deepmerge_deepmerge`, Module, degree: 1)
-- **tailwindcss/types/config/Config** (`packages_ui_lib_withui_ts_import_tailwindcss_types_config_config`, Module, degree: 1)
-- **withUI()** (`packages_ui_lib_withui_ts_withui`, Function, degree: 1)
+- **convert** (`packages_schema_utils_examples_convert_ts`, File, degree: 3)
+- **../lib/helper.js/convertOpenAISchemaToGemini** (`packages_schema_utils_examples_convert_ts_import_lib_helper_js_convertopenaischematogemini`, Module, degree: 1)
+- **../lib/helper.js/stringifyCustom** (`packages_schema_utils_examples_convert_ts_import_lib_helper_js_stringifycustom`, Module, degree: 1)
+- **../lib/json_schema.js/jsonNavigatorOutputSchema** (`packages_schema_utils_examples_convert_ts_import_lib_json_schema_js_jsonnavigatoroutputschema`, Module, degree: 1)
 
 ## Relationships
 
-- packages_ui_lib_withui_ts → packages_ui_lib_withui_ts_import_deepmerge_deepmerge (imports)
-- packages_ui_lib_withui_ts → packages_ui_lib_withui_ts_import_tailwindcss_types_config_config (imports)
-- packages_ui_lib_withui_ts → packages_ui_lib_withui_ts_withui (defines)
+- packages_schema_utils_examples_convert_ts → packages_schema_utils_examples_convert_ts_import_lib_helper_js_convertopenaischematogemini (imports)
+- packages_schema_utils_examples_convert_ts → packages_schema_utils_examples_convert_ts_import_lib_helper_js_stringifycustom (imports)
+- packages_schema_utils_examples_convert_ts → packages_schema_utils_examples_convert_ts_import_lib_json_schema_js_jsonnavigatoroutputschema (imports)
 

@@ -1,15 +1,17 @@
-# Community 112: internal
+# Community 112: util
 
-**Members:** 3
+**Members:** 4
 
 ## Nodes
 
-- **internal** (`packages_shared_lib_message_internal_ts`, File, degree: 2)
-- **./external/externalPublishMessageSchema** (`packages_shared_lib_message_internal_ts_import_external_externalpublishmessageschema`, Module, degree: 1)
-- **zod/z** (`packages_shared_lib_message_internal_ts_import_zod_z`, Module, degree: 1)
+- **util** (`chrome_extension_src_background_browser_util_ts`, File, degree: 3)
+- **capTextLength()** (`chrome_extension_src_background_browser_util_ts_captextlength`, Function, degree: 1)
+- **isNewTabPage()** (`chrome_extension_src_background_browser_util_ts_isnewtabpage`, Function, degree: 1)
+- **isUrlAllowed()** (`chrome_extension_src_background_browser_util_ts_isurlallowed`, Function, degree: 1)
 
 ## Relationships
 
-- packages_shared_lib_message_internal_ts → packages_shared_lib_message_internal_ts_import_zod_z (imports)
-- packages_shared_lib_message_internal_ts → packages_shared_lib_message_internal_ts_import_external_externalpublishmessageschema (imports)
+- chrome_extension_src_background_browser_util_ts → chrome_extension_src_background_browser_util_ts_isurlallowed (defines)
+- chrome_extension_src_background_browser_util_ts → chrome_extension_src_background_browser_util_ts_isnewtabpage (defines)
+- chrome_extension_src_background_browser_util_ts → chrome_extension_src_background_browser_util_ts_captextlength (defines)
 

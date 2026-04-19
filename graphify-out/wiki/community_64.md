@@ -1,29 +1,25 @@
-# Community 64: _buildDomTree()
+# Community 64: history
 
 **Members:** 8
 
 ## Nodes
 
-- **_buildDomTree()** (`chrome_extension_src_background_browser_dom_service_ts_builddomtree`, Function, degree: 9)
-- **constructFrameTree()** (`chrome_extension_src_background_browser_dom_service_ts_constructframetree`, Function, degree: 6)
-- **getClickableElements()** (`chrome_extension_src_background_browser_dom_service_ts_getclickableelements`, Function, degree: 2)
-- **_getMaxHighlighIndex()** (`chrome_extension_src_background_browser_dom_service_ts_getmaxhighlighindex`, Function, degree: 4)
-- **_getMaxID()** (`chrome_extension_src_background_browser_dom_service_ts_getmaxid`, Function, degree: 3)
-- **_getRawDomTreeNodes()** (`chrome_extension_src_background_browser_dom_service_ts_getrawdomtreenodes`, Function, degree: 3)
-- **_locateMatchingIframeNode()** (`chrome_extension_src_background_browser_dom_service_ts_locatematchingiframenode`, Function, degree: 2)
-- **_visibleIFramesFailedLoading()** (`chrome_extension_src_background_browser_dom_service_ts_visibleiframesfailedloading`, Function, degree: 4)
+- **history** (`chrome_extension_src_background_agent_history_ts`, File, degree: 5)
+- **AgentStepHistory** (`chrome_extension_src_background_agent_history_ts_agentstephistory`, Class, degree: 2)
+- **.constructor()** (`chrome_extension_src_background_agent_history_ts_agentstephistory_constructor`, Method, degree: 1)
+- **AgentStepRecord** (`chrome_extension_src_background_agent_history_ts_agentsteprecord`, Class, degree: 2)
+- **.constructor()** (`chrome_extension_src_background_agent_history_ts_agentsteprecord_constructor`, Method, degree: 1)
+- **../browser/views/BrowserStateHistory** (`chrome_extension_src_background_agent_history_ts_import_browser_views_browserstatehistory`, Module, degree: 1)
+- **./types/ActionResult** (`chrome_extension_src_background_agent_history_ts_import_types_actionresult`, Module, degree: 1)
+- **./types/StepMetadata** (`chrome_extension_src_background_agent_history_ts_import_types_stepmetadata`, Module, degree: 1)
 
 ## Relationships
 
-- chrome_extension_src_background_browser_dom_service_ts_getclickableelements → chrome_extension_src_background_browser_dom_service_ts_builddomtree (calls)
-- chrome_extension_src_background_browser_dom_service_ts_builddomtree → chrome_extension_src_background_browser_dom_service_ts_getmaxhighlighindex (calls)
-- chrome_extension_src_background_browser_dom_service_ts_builddomtree → chrome_extension_src_background_browser_dom_service_ts_constructframetree (calls)
-- chrome_extension_src_background_browser_dom_service_ts_builddomtree → chrome_extension_src_background_browser_dom_service_ts_getmaxid (calls)
-- chrome_extension_src_background_browser_dom_service_ts_builddomtree → chrome_extension_src_background_browser_dom_service_ts_visibleiframesfailedloading (calls)
-- chrome_extension_src_background_browser_dom_service_ts_constructframetree → chrome_extension_src_background_browser_dom_service_ts_getmaxhighlighindex (calls)
-- chrome_extension_src_background_browser_dom_service_ts_constructframetree → chrome_extension_src_background_browser_dom_service_ts_locatematchingiframenode (calls)
-- chrome_extension_src_background_browser_dom_service_ts_constructframetree → chrome_extension_src_background_browser_dom_service_ts_getmaxid (calls)
-- chrome_extension_src_background_browser_dom_service_ts_constructframetree → chrome_extension_src_background_browser_dom_service_ts_visibleiframesfailedloading (calls)
-- chrome_extension_src_background_browser_dom_service_ts_getmaxhighlighindex → chrome_extension_src_background_browser_dom_service_ts_getrawdomtreenodes (calls)
-- chrome_extension_src_background_browser_dom_service_ts_visibleiframesfailedloading → chrome_extension_src_background_browser_dom_service_ts_getrawdomtreenodes (calls)
+- chrome_extension_src_background_agent_history_ts → chrome_extension_src_background_agent_history_ts_import_types_actionresult (imports)
+- chrome_extension_src_background_agent_history_ts → chrome_extension_src_background_agent_history_ts_import_types_stepmetadata (imports)
+- chrome_extension_src_background_agent_history_ts → chrome_extension_src_background_agent_history_ts_import_browser_views_browserstatehistory (imports)
+- chrome_extension_src_background_agent_history_ts → chrome_extension_src_background_agent_history_ts_agentsteprecord (defines)
+- chrome_extension_src_background_agent_history_ts_agentsteprecord → chrome_extension_src_background_agent_history_ts_agentsteprecord_constructor (defines)
+- chrome_extension_src_background_agent_history_ts → chrome_extension_src_background_agent_history_ts_agentstephistory (defines)
+- chrome_extension_src_background_agent_history_ts_agentstephistory → chrome_extension_src_background_agent_history_ts_agentstephistory_constructor (defines)
 

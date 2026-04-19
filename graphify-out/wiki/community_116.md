@@ -1,15 +1,15 @@
-# Community 116: logger
+# Community 116: raw_types
 
 **Members:** 3
 
 ## Nodes
 
-- **logger** (`packages_dev_utils_lib_logger_ts`, File, degree: 2)
-- **colorLog()** (`packages_dev_utils_lib_logger_ts_colorlog`, Function, degree: 1)
-- **@extension/shared/ValueOf** (`packages_dev_utils_lib_logger_ts_import_extension_shared_valueof`, Module, degree: 1)
+- **raw_types** (`chrome_extension_src_background_browser_dom_raw_types_ts`, File, degree: 2)
+- **./history/view/CoordinateSet** (`chrome_extension_src_background_browser_dom_raw_types_ts_import_history_view_coordinateset`, Module, degree: 1)
+- **./history/view/ViewportInfo** (`chrome_extension_src_background_browser_dom_raw_types_ts_import_history_view_viewportinfo`, Module, degree: 1)
 
 ## Relationships
 
-- packages_dev_utils_lib_logger_ts → packages_dev_utils_lib_logger_ts_import_extension_shared_valueof (imports)
-- packages_dev_utils_lib_logger_ts → packages_dev_utils_lib_logger_ts_colorlog (defines)
+- chrome_extension_src_background_browser_dom_raw_types_ts → chrome_extension_src_background_browser_dom_raw_types_ts_import_history_view_coordinateset (imports)
+- chrome_extension_src_background_browser_dom_raw_types_ts → chrome_extension_src_background_browser_dom_raw_types_ts_import_history_view_viewportinfo (imports)
 

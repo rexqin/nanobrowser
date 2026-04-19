@@ -1,15 +1,15 @@
-# Community 122: index
+# Community 122: reload
 
 **Members:** 3
 
 ## Nodes
 
-- **index** (`packages_shared_lib_hoc_index_ts`, File, degree: 2)
-- **./withErrorBoundary/withErrorBoundary** (`packages_shared_lib_hoc_index_ts_import_witherrorboundary_witherrorboundary`, Module, degree: 1)
-- **./withSuspense/withSuspense** (`packages_shared_lib_hoc_index_ts_import_withsuspense_withsuspense`, Module, degree: 1)
+- **reload** (`packages_hmr_lib_injections_reload_ts`, File, degree: 2)
+- **addReload()** (`packages_hmr_lib_injections_reload_ts_addreload`, Function, degree: 1)
+- **../initializers/initClient/initClient** (`packages_hmr_lib_injections_reload_ts_import_initializers_initclient_initclient`, Module, degree: 1)
 
 ## Relationships
 
-- packages_shared_lib_hoc_index_ts → packages_shared_lib_hoc_index_ts_import_withsuspense_withsuspense (imports)
-- packages_shared_lib_hoc_index_ts → packages_shared_lib_hoc_index_ts_import_witherrorboundary_witherrorboundary (imports)
+- packages_hmr_lib_injections_reload_ts → packages_hmr_lib_injections_reload_ts_import_initializers_initclient_initclient (imports)
+- packages_hmr_lib_injections_reload_ts → packages_hmr_lib_injections_reload_ts_addreload (defines)
 

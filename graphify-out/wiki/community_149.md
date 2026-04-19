@@ -1,8 +1,8 @@
-# Community 149: permission
+# Community 149: index
 
 **Members:** 1
 
 ## Nodes
 
-- **permission** (`chrome_extension_public_permission_permission_js`, File, degree: 0)
+- **index** (`packages_schema_utils_index_ts`, File, degree: 0)
 

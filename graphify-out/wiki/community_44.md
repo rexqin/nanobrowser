@@ -1,29 +1,30 @@
-# Community 44: FirewallSettings
+# Community 44: domSerializer
 
 **Members:** 10
 
 ## Nodes
 
-- **FirewallSettings** (`pages_options_src_components_firewallsettings_tsx`, File, degree: 9)
-- **handleAddUrl()** (`pages_options_src_components_firewallsettings_tsx_handleaddurl`, Function, degree: 1)
-- **handleRemoveUrl()** (`pages_options_src_components_firewallsettings_tsx_handleremoveurl`, Function, degree: 1)
-- **handleToggleFirewall()** (`pages_options_src_components_firewallsettings_tsx_handletogglefirewall`, Function, degree: 1)
-- **@extension/i18n/t** (`pages_options_src_components_firewallsettings_tsx_import_extension_i18n_t`, Module, degree: 1)
-- **@extension/storage/firewallStore** (`pages_options_src_components_firewallsettings_tsx_import_extension_storage_firewallstore`, Module, degree: 1)
-- **@extension/ui/Button** (`pages_options_src_components_firewallsettings_tsx_import_extension_ui_button`, Module, degree: 1)
-- **react/useCallback** (`pages_options_src_components_firewallsettings_tsx_import_react_usecallback`, Module, degree: 1)
-- **react/useEffect** (`pages_options_src_components_firewallsettings_tsx_import_react_useeffect`, Module, degree: 1)
-- **react/useState** (`pages_options_src_components_firewallsettings_tsx_import_react_usestate`, Module, degree: 1)
+- **domSerializer** (`chrome_extension_src_background_browser_dom_domserializer_ts`, File, degree: 8)
+- **./clickableElementDetector/ClickableElementDetector** (`chrome_extension_src_background_browser_dom_domserializer_ts_import_clickableelementdetector_clickableelementdetector`, Module, degree: 1)
+- **./domService/DOMRect** (`chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_domrect`, Module, degree: 1)
+- **./domService/EnhancedDOMTreeNode** (`chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_enhanceddomtreenode`, Module, degree: 1)
+- **./domService/NodeType** (`chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_nodetype`, Module, degree: 1)
+- **./serializedDOMState/SerializedDOMState** (`chrome_extension_src_background_browser_dom_domserializer_ts_import_serializeddomstate_serializeddomstate`, Module, degree: 1)
+- **SimplifiedNode** (`chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode`, Class, degree: 4)
+- **._cleanOriginalNodeJson()** (`chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_cleanoriginalnodejson`, Method, degree: 2)
+- **.constructor()** (`chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_constructor`, Method, degree: 1)
+- **.toJSON()** (`chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_tojson`, Method, degree: 2)
 
 ## Relationships
 
-- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_react_usestate (imports)
-- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_react_useeffect (imports)
-- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_react_usecallback (imports)
-- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_extension_storage_firewallstore (imports)
-- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_extension_ui_button (imports)
-- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_import_extension_i18n_t (imports)
-- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_handletogglefirewall (defines)
-- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_handleaddurl (defines)
-- pages_options_src_components_firewallsettings_tsx → pages_options_src_components_firewallsettings_tsx_handleremoveurl (defines)
+- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_enhanceddomtreenode (imports)
+- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_domrect (imports)
+- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_import_domservice_nodetype (imports)
+- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_import_serializeddomstate_serializeddomstate (imports)
+- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_import_clickableelementdetector_clickableelementdetector (imports)
+- chrome_extension_src_background_browser_dom_domserializer_ts → chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode (defines)
+- chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode → chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_constructor (defines)
+- chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode → chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_cleanoriginalnodejson (defines)
+- chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode → chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_tojson (defines)
+- chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_tojson → chrome_extension_src_background_browser_dom_domserializer_ts_simplifiednode_cleanoriginalnodejson (calls)
 

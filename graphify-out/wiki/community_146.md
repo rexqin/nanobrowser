@@ -1,8 +1,8 @@
-# Community 146: message
+# Community 146: index
 
 **Members:** 1
 
 ## Nodes
 
-- **message** (`pages_side_panel_src_types_message_ts`, File, degree: 0)
+- **index** (`packages_storage_lib_settings_index_ts`, File, degree: 0)
 

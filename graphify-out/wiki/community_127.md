@@ -1,13 +1,13 @@
-# Community 127: tailwind.config
+# Community 127: planner
 
 **Members:** 2
 
 ## Nodes
 
-- **tailwind.config** (`packages_tailwind_config_tailwind_config_ts`, File, degree: 1)
-- **tailwindcss/types/config/Config** (`packages_tailwind_config_tailwind_config_ts_import_tailwindcss_types_config_config`, Module, degree: 1)
+- **planner** (`chrome_extension_src_background_agent_prompts_templates_planner_ts`, File, degree: 1)
+- **./common/commonSecurityRules** (`chrome_extension_src_background_agent_prompts_templates_planner_ts_import_common_commonsecurityrules`, Module, degree: 1)
 
 ## Relationships
 
-- packages_tailwind_config_tailwind_config_ts → packages_tailwind_config_tailwind_config_ts_import_tailwindcss_types_config_config (imports)
+- chrome_extension_src_background_agent_prompts_templates_planner_ts → chrome_extension_src_background_agent_prompts_templates_planner_ts_import_common_commonsecurityrules (imports)
 

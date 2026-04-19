@@ -1,8 +1,8 @@
-# Community 150: shared-types
+# Community 150: index
 
 **Members:** 1
 
 ## Nodes
 
-- **shared-types** (`packages_shared_lib_utils_shared_types_ts`, File, degree: 0)
+- **index** (`packages_ui_index_ts`, File, degree: 0)
 
