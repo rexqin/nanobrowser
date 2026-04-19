@@ -89,12 +89,12 @@ export { REQUIRED_COMPUTED_STYLES } from './enhancedSnapshot';
 
 export class DomService {
   declare readonly _serviceBrand: undefined;
-  // @ts-expect-error - 将在未来用于跨域 iframe 处理
+
   private _crossOriginIframes: boolean = false;
-  // @ts-expect-error - 将在未来用于绘制顺序过滤
+
   private _paintOrderFiltering: boolean = true;
   private maxIframes: number = 100;
-  // @ts-expect-error - 将在未来用于限制 iframe 深度
+
   private _maxIframeDepth: number = 5;
 
   constructor(

@@ -1,6 +1,15 @@
 import type { DOMRect, EnhancedAXNode, SnapshotNode } from './domService';
 import { NodeType } from './domService';
-import { createHash } from 'crypto';
+
+/** SHA-256 十六进制摘要的前 16 个字符解析为 number（与 Node createHash 行为一致） */
+async function sha256DigestPrefixToInt(input: string): Promise<number> {
+  const data = new TextEncoder().encode(input);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const digest = Array.from(new Uint8Array(hashBuffer))
+    .map(b => b.toString(16).padStart(2, '0'))
+    .join('');
+  return parseInt(digest.substring(0, 16), 16);
+}
 
 // 静态属性列表（用于哈希计算）
 const STATIC_ATTRIBUTES = new Set(['id', 'name', 'type', 'role', 'class', 'data-testid', 'data-cy', 'data-id']);
@@ -498,7 +507,7 @@ export class EnhancedDOMTreeNode {
   /**
    * 基于父分支路径和属性对元素进行哈希
    */
-  get elementHash(): number {
+  get elementHash(): Promise<number> {
     return this.hash();
   }
 
@@ -513,7 +522,7 @@ export class EnhancedDOMTreeNode {
   /**
    * 基于父分支路径和属性对元素进行哈希
    */
-  hash(): number {
+  async hash(): Promise<number> {
     // 获取父分支路径
     const parentBranchPath = this._getParentBranchPath();
     const parentBranchPathString = parentBranchPath.join('/');
@@ -526,20 +535,16 @@ export class EnhancedDOMTreeNode {
 
     // 组合两者进行最终哈希
     const combinedString = `${parentBranchPathString}|${attributesString}`;
-    const elementHash = createHash('sha256').update(combinedString).digest('hex');
-
-    // 转换为 int - 使用前 16 个字符并从十六进制转换为 int
-    return parseInt(elementHash.substring(0, 16), 16);
+    return sha256DigestPrefixToInt(combinedString);
   }
 
   /**
    * 基于父分支路径对元素进行哈希
    */
-  parentBranchHash(): number {
+  async parentBranchHash(): Promise<number> {
     const parentBranchPath = this._getParentBranchPath();
     const parentBranchPathString = parentBranchPath.join('/');
-    const elementHash = createHash('sha256').update(parentBranchPathString).digest('hex');
-    return parseInt(elementHash.substring(0, 16), 16);
+    return sha256DigestPrefixToInt(parentBranchPathString);
   }
 
   /**

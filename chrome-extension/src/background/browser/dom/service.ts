@@ -2,82 +2,14 @@ import { createLogger } from '@src/background/log';
 import type { BuildDomTreeArgs, RawDomTreeNode, RawDomElementNode, BuildDomTreeResult } from './raw_types';
 import { type DOMState, type DOMBaseNode, DOMElementNode, DOMTextNode } from './views';
 import type { ViewportInfo } from './history/view';
-import { isNewTabPage } from '../util';
 
+import { isNewTabPage } from '../util';
+import { DomService } from './domService';
+import type { Page as PuppeteerPage, CDPSession as PuppeteerCDPSession } from 'puppeteer-core';
 const logger = createLogger('DOMService');
 
 function isNotNull<T>(item: T | null | undefined): item is T {
   return item != null;
-}
-
-type CdpNode = {
-  nodeId?: number;
-  backendNodeId?: number;
-  nodeName?: string;
-  children?: CdpNode[];
-};
-
-type CdpSessionLike = {
-  send: (method: string, params?: Record<string, unknown>) => Promise<unknown>;
-  detach?: () => Promise<void>;
-};
-
-function countCdpDomNodes(node: CdpNode | undefined): number {
-  if (!node) return 0;
-  let count = 1;
-  for (const child of node.children ?? []) {
-    count += countCdpDomNodes(child);
-  }
-  return count;
-}
-
-async function logCdpTreesInDev(tabId: number, url: string, cdpSession?: CdpSessionLike | null): Promise<void> {
-  if (!import.meta.env.DEV) return;
-  if (!cdpSession) {
-    return;
-  }
-  try {
-    const domRes = (await cdpSession.send('DOM.getDocument', {
-      depth: -1,
-      pierce: true,
-    })) as { root?: CdpNode };
-    const domNodeCount = countCdpDomNodes(domRes.root);
-    const domPreview = (domRes.root?.children ?? []).slice(0, 10).map(child => ({
-      nodeId: child.nodeId,
-      backendNodeId: child.backendNodeId,
-      nodeName: child.nodeName,
-      childCount: child.children?.length ?? 0,
-    }));
-
-    const axRes = (await cdpSession.send('Accessibility.getFullAXTree', {})) as {
-      nodes?: Array<Record<string, unknown>>;
-    };
-    const axNodes = axRes.nodes ?? [];
-    const axPreview = axNodes.slice(0, 12).map(node => ({
-      nodeId: node.nodeId,
-      role: (node.role as { value?: string } | undefined)?.value,
-      name: (node.name as { value?: string } | undefined)?.value,
-      ignored: node.ignored,
-      backendDOMNodeId: node.backendDOMNodeId,
-    }));
-
-    logger.debug('CDP DOM/AX tree snapshot (DEV)', {
-      tabId,
-      url,
-      domNodeCount,
-      domPreviewCount: domPreview.length,
-      domPreview,
-      axNodeCount: axNodes.length,
-      axPreviewCount: axPreview.length,
-      axPreview,
-    });
-  } catch (error) {
-    logger.warning('Failed to capture CDP DOM/AX tree in DEV via Puppeteer session', {
-      tabId,
-      url,
-      error: error instanceof Error ? error.message : String(error),
-    });
-  }
 }
 
 export interface ReadabilityResult {
@@ -167,17 +99,13 @@ export async function getClickableElements(
   focusElement = -1,
   viewportExpansion = 0,
   debugMode = false,
-  cdpSession?: CdpSessionLike | null,
+  page?: PuppeteerPage | null,
 ): Promise<DOMState> {
-  if (debugMode) {
-    logger.debug('getClickableElements start', {
-      tabId,
-      url,
-      showHighlightElements,
-      focusElement,
-      viewportExpansion,
-    });
+  const cdpSession = await page?.createCDPSession();
+  if (!cdpSession) {
+    throw new Error('Failed to create CDP session');
   }
+
   const [elementTree, selectorMap] = await _buildDomTree(
     tabId,
     url,
@@ -186,13 +114,14 @@ export async function getClickableElements(
     viewportExpansion,
     debugMode,
     cdpSession,
+    page,
   );
-  if (debugMode) {
-    logger.debug('getClickableElements done', {
-      selectorMapSize: selectorMap.size,
-      elementTreeTagName: elementTree.tagName,
-    });
-  }
+
+  logger.debug('getClickableElements done', {
+    selectorMapSize: selectorMap.size,
+    elementTreeTagName: elementTree.tagName,
+  });
+
   return { elementTree, selectorMap };
 }
 
@@ -203,8 +132,13 @@ async function _buildDomTree(
   focusElement = -1,
   viewportExpansion = 0,
   debugMode = false,
-  cdpSession?: CdpSessionLike | null,
+  cdpSession?: PuppeteerCDPSession,
+  page?: PuppeteerPage,
 ): Promise<[DOMElementNode, Map<number, DOMElementNode>]> {
+  if (!cdpSession || !page) {
+    throw new Error('Failed to create CDP session or page');
+  }
+
   // If URL is provided and it's about:blank, return a minimal DOM tree
   if (isNewTabPage(url) || url.startsWith('chrome://')) {
     const elementTree = new DOMElementNode({
@@ -240,17 +174,17 @@ async function _buildDomTree(
       },
     ],
   });
-
-  await logCdpTreesInDev(tabId, url, cdpSession);
+  const domService = new DomService();
+  const [serializedDomState, enhancedDomTree, timingInfo] = await domService.getSerializedDomTree(
+    page,
+    cdpSession,
+    tabId,
+  );
 
   // First cast to unknown, then to BuildDomTreeResult
   let mainFramePage = mainFrameResult[0]?.result as unknown as BuildDomTreeResult;
   if (!mainFramePage || !mainFramePage.map || !mainFramePage.rootId) {
     throw new Error('Failed to build DOM tree: No result returned or invalid structure');
-  }
-
-  if (debugMode && mainFramePage.perfMetrics) {
-    logger.debug('DOM Tree Building Performance Metrics (main-frame):', mainFramePage.perfMetrics);
   }
 
   // If the root frame was unable to parse child iframes (e.g. cross-origin frame policies),

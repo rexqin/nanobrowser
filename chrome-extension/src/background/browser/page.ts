@@ -1,16 +1,17 @@
 import 'webextension-polyfill';
-import {
-  connect,
-  ExtensionTransport,
-  type HTTPRequest,
-  type HTTPResponse,
-  type ProtocolType,
-  type KeyInput,
-} from 'puppeteer-core/lib/esm/puppeteer/puppeteer-core-browser.js';
-import type { Browser } from 'puppeteer-core/lib/esm/puppeteer/api/Browser.js';
-import type { Page as PuppeteerPage } from 'puppeteer-core/lib/esm/puppeteer/api/Page.js';
-import type { ElementHandle } from 'puppeteer-core/lib/esm/puppeteer/api/ElementHandle.js';
-import type { Frame } from 'puppeteer-core/lib/esm/puppeteer/api/Frame.js';
+import { connect, ExtensionTransport } from 'puppeteer-core';
+
+import type {
+  Page as PuppeteerPage,
+  Browser,
+  ElementHandle,
+  Frame,
+  KeyInput,
+  ProtocolType,
+  HTTPRequest,
+  HTTPResponse,
+} from 'puppeteer-core';
+
 import {
   getClickableElements as _getClickableElements,
   removeHighlights as _removeHighlights,
@@ -92,22 +93,6 @@ export default class Page {
   private _cachedStateClickableElementsHashes: CachedStateClickableElementsHashes | null = null;
   private _evaluateWrapped = false;
 
-  private _getMainCdpSession(): {
-    send: (method: string, params?: Record<string, unknown>) => Promise<unknown>;
-  } | null {
-    if (!this._puppeteerPage) return null;
-    const pageLike = this._puppeteerPage as unknown as {
-      _client?: () => { send: (method: string, params?: unknown) => Promise<unknown> };
-    };
-    const client = pageLike._client?.();
-    if (!client) return null;
-    return {
-      send: async (method: string, params?: Record<string, unknown>) => {
-        return await client.send(method, params);
-      },
-    };
-  }
-
   constructor(tabId: number, url: string, title: string, config: Partial<BrowserContextConfig> = {}) {
     this._tabId = tabId;
     this._config = { ...DEFAULT_BROWSER_CONTEXT_CONFIG, ...config };
@@ -153,6 +138,7 @@ export default class Page {
 
     const [page] = await browser.pages();
     this._puppeteerPage = page;
+
     this._wrapEvaluateForDebug();
 
     // Add anti-detection scripts
@@ -264,6 +250,7 @@ export default class Page {
       await this._browser.disconnect();
       this._browser = null;
       this._puppeteerPage = null;
+
       // reset the state
       this._state = build_initial_state(this._tabId);
     }
@@ -286,7 +273,7 @@ export default class Page {
       focusElement,
       this._config.viewportExpansion,
       import.meta.env.DEV,
-      this._getMainCdpSession(),
+      this._puppeteerPage,
     );
   }
 
@@ -337,7 +324,7 @@ export default class Page {
     }
 
     // Check if the current element is scrollable
-    const isScrollable = await element.evaluate((el: Element) => {
+    const isScrollable = await element.evaluate((el: Node) => {
       if (!(el instanceof HTMLElement)) return false;
       const style = window.getComputedStyle(el);
       const hasVerticalScrollbar = el.scrollHeight > el.clientHeight;
@@ -355,16 +342,19 @@ export default class Page {
     }
 
     // Check parent elements
-    let currentElement: ElementHandle<Element> | null = element;
+    let currentElement: ElementHandle | null = element;
 
     try {
       while (currentElement) {
         // Get the parent element (as an ElementHandle) of the current element
-        const parentHandle = (await currentElement.evaluateHandle(
-          (el: Element) => el.parentElement,
+        const parentHandle = (await currentElement.evaluateHandle((el: Node) =>
+          el instanceof Element ? el.parentElement : null,
         )) as ElementHandle<Element> | null;
 
-        const parentElement = parentHandle ? await parentHandle.asElement() : null;
+        // asElement() is typed as ElementHandle<Node>; DOM parent chain only yields Elements here.
+        const parentElement = (parentHandle ? await parentHandle.asElement() : null) as
+          | ElementHandle<Element>
+          | null;
 
         if (!parentElement) {
           // Reached the root without finding a scrollable ancestor
@@ -372,7 +362,7 @@ export default class Page {
           break;
         }
 
-        const parentIsScrollable = await parentElement.evaluate((el: Element) => {
+        const parentIsScrollable = await parentElement.evaluate((el: Node) => {
           if (!(el instanceof HTMLElement)) return false;
           const style = window.getComputedStyle(el);
           const hasVerticalScrollbar = el.scrollHeight > el.clientHeight;
