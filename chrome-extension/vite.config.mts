@@ -10,6 +10,12 @@ const srcDir = resolve(rootDir, 'src');
 
 const outDir = resolve(rootDir, '..', 'dist');
 
+/** Puppeteer 的 package exports 在 ESM 下指向 Node 入口，会打进 @puppeteer/browsers（node:url 等）；扩展必须用浏览器入口 */
+const puppeteerCoreBrowser = resolve(
+  rootDir,
+  'node_modules/puppeteer-core/lib/esm/puppeteer/puppeteer-core-browser.js',
+);
+
 export default defineConfig(({ mode }) => {
   // Load environment variables from the parent directory
   const env = loadEnv(mode, resolve(rootDir, '..'), 'VITE_');
@@ -20,6 +26,7 @@ export default defineConfig(({ mode }) => {
       '@root': rootDir,
       '@src': srcDir,
       '@assets': resolve(srcDir, 'assets'),
+      'puppeteer-core': puppeteerCoreBrowser,
     },
     conditions: ['browser', 'module', 'import', 'default'],
     mainFields: ['browser', 'module', 'main']
