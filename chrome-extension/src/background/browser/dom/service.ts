@@ -101,7 +101,7 @@ export async function getClickableElements(
   debugMode = false,
   page?: PuppeteerPage | null,
 ): Promise<DOMState> {
-  const cdpSession = await page?.createCDPSession();
+  const cdpSession = await page?._client();
   if (!cdpSession) {
     throw new Error('Failed to create CDP session');
   }

@@ -352,9 +352,7 @@ export default class Page {
         )) as ElementHandle<Element> | null;
 
         // asElement() is typed as ElementHandle<Node>; DOM parent chain only yields Elements here.
-        const parentElement = (parentHandle ? await parentHandle.asElement() : null) as
-          | ElementHandle<Element>
-          | null;
+        const parentElement = (parentHandle ? await parentHandle.asElement() : null) as ElementHandle<Element> | null;
 
         if (!parentElement) {
           // Reached the root without finding a scrollable ancestor
