@@ -1587,7 +1587,7 @@ export default class Page {
     if (elementNode.children && currentDepth < maxDepth) {
       for (const child of elementNode.children) {
         if ('tagName' in child) {
-          // DOMElementNode type guard
+          // EnhancedDOMTreeNode type guard
           if (this.isFileUploader(child as EnhancedDOMTreeNode, maxDepth, currentDepth + 1)) {
             return true;
           }

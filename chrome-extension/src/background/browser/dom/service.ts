@@ -38,7 +38,7 @@ export interface EnhancedDOMState {
  * @param showHighlightElements - Whether to show the highlight elements.
  * @param focusElement - The element to focus on.
  * @param viewportExpansion - The viewport expansion to use.
- * @returns A DOMState object containing the clickable elements for the current page.
+ * @returns EnhancedDOMState containing tree and serialized state for current page.
  */
 export async function getClickableElements(
   tabId: number,

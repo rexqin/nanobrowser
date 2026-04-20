@@ -116,8 +116,8 @@ async function _xpathHash(xpath: string | null): Promise<string> {
  * Currently unused but kept for potential future use
  */
 /* 
-async function _textHash(domElement: DOMElementNode): Promise<string> {
-  const textString = domElement.getAllTextTillNextClickableElement();
+async function _textHash(domElement: EnhancedDOMTreeNode): Promise<string> {
+  const textString = domElement.getAllChildrenText();
   return createSHA256Hash(textString);
 }
 */
