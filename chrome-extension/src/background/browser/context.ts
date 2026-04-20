@@ -105,51 +105,61 @@ export default class BrowserContext {
     }
   }
 
-  public async getCurrentPage(): Promise<Page> {
-    // 1. If _currentTabId not set, query the active tab and attach it
-    if (!this._currentTabId) {
-      let activeTab: chrome.tabs.Tab;
-      const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
-      if (!tab?.id) {
-        // open a new tab with blank page
-        const newTab = await chrome.tabs.create({ url: this._config.homePageUrl });
-        if (!newTab.id) {
-          // this should rarely happen
-          throw new Error('No tab ID available');
-        }
-        activeTab = newTab;
-      } else {
-        activeTab = tab;
-      }
-      logger.info('active tab', activeTab.id, activeTab.url, activeTab.title);
-      const page = await this._getOrCreatePage(activeTab);
-      await this.attachPage(page);
-      this._currentTabId = activeTab.id || null;
-      return page;
+  /**
+   * 当前窗口无可用活动标签时，打开首页标签作为兜底。
+   */
+  private async _resolveActiveTabOrCreateHome(): Promise<chrome.tabs.Tab> {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+    if (tab?.id) {
+      return tab;
     }
+    const newTab = await chrome.tabs.create({ url: this._config.homePageUrl });
+    if (!newTab.id) {
+      throw new Error('No tab ID available');
+    }
+    return newTab;
+  }
 
-    // 2. If _currentTabId is set but not in attachedPages, attach the tab
-    const existingPage = this._attachedPages.get(this._currentTabId);
-    if (!existingPage) {
-      let tab: chrome.tabs.Tab;
+  /**
+   * 为指定 tab 创建/复用 Page、执行 attach，并写入当前 tab id。
+   */
+  private async _bindPageToCurrentTab(tab: chrome.tabs.Tab): Promise<Page> {
+    const page = await this._getOrCreatePage(tab);
+    await this.attachPage(page);
+    this._currentTabId = tab.id ?? null;
+    return page;
+  }
+
+  /**
+   * 返回当前逻辑 tab 对应的 Page：已 attach 则直接复用；否则按 tab id 拉 tab 并 attach；
+   * 若尚未指定当前 tab，则取活动 tab（或新建首页 tab）再 attach。
+   */
+  public async getCurrentPage(): Promise<Page> {
+    const tabId = this._currentTabId;
+
+    if (tabId !== null) {
+      const cached = this._attachedPages.get(tabId);
+      if (cached) {
+        return cached;
+      }
+
       try {
-        tab = await chrome.tabs.get(this._currentTabId);
+        const tab = await chrome.tabs.get(tabId);
+        logger.info('getCurrentPage attach tab', tab.id, tab.url, tab.title);
+        return await this._bindPageToCurrentTab(tab);
       } catch (error) {
         if (isNoTabError(error)) {
-          logger.info(`Current tab ${this._currentTabId} no longer exists, falling back to active tab`);
+          logger.info(`Current tab ${tabId} no longer exists, falling back to active tab`);
           this._currentTabId = null;
           return this.getCurrentPage();
         }
         throw error;
       }
-      const page = await this._getOrCreatePage(tab);
-      // set current tab id to null if the page is not attached successfully
-      await this.attachPage(page);
-      return page;
     }
 
-    // 3. Return existing page from attachedPages
-    return existingPage;
+    const tab = await this._resolveActiveTabOrCreateHome();
+    logger.info('getCurrentPage active tab', tab.id, tab.url, tab.title);
+    return await this._bindPageToCurrentTab(tab);
   }
 
   /**
@@ -477,9 +487,7 @@ export default class BrowserContext {
   public async getState(cacheClickableElementsHashes = false): Promise<BrowserState> {
     const currentPage = await this.getCurrentPage();
 
-    const pageState = !currentPage
-      ? build_initial_state()
-      : await currentPage.getState(cacheClickableElementsHashes);
+    const pageState = !currentPage ? build_initial_state() : await currentPage.getState(cacheClickableElementsHashes);
     const tabInfos = await this.getTabInfos();
     const browserState: BrowserState = {
       ...pageState,

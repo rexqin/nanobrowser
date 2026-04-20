@@ -304,18 +304,18 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
       for (const r of this.context.actionResults) {
         if (r.includeInMemory) {
           if (r.extractedContent) {
-            const msg = new HumanMessage(`Action result: ${r.extractedContent}`);
-            // logger.info('Adding action result to memory', msg.content);
+            const msg = new HumanMessage(`动作结果：${r.extractedContent}`);
+            // logger.info('将动作结果写入记忆', msg.content);
             messageManager.addMessageWithTokens(msg);
           }
           if (r.error) {
-            // Get error text and convert to string
+            // 获取错误文本并转换为字符串
             const errorText = r.error.toString().trim();
 
-            // Get only the last line of the error
+            // 仅保留错误的最后一行
             const lastLine = errorText.split('\n').pop() || '';
 
-            const msg = new HumanMessage(`Action error: ${lastLine}`);
+            const msg = new HumanMessage(`动作错误：${lastLine}`);
             logger.info('Adding action error to memory', msg.content);
             messageManager.addMessageWithTokens(msg);
           }
