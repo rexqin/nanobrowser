@@ -1,20 +1,8 @@
 import { createLogger } from '@src/background/log';
-import { type DOMState, type DOMBaseNode, DOMElementNode, DOMTextNode } from './views';
-
-import { isNewTabPage } from '../util';
-import { DomService, NodeType } from './domService';
-import type { SimplifiedNode } from './domSerializer';
+import { DomService, EnhancedDOMTreeNode, NodeType } from './domService';
+import { SerializedDOMState } from './serializedDOMState';
 import type { Page as PuppeteerPage, CDPSession as PuppeteerCDPSession } from 'puppeteer-core';
 const logger = createLogger('DOMService');
-
-/** Page 的主 CDP 客户端；公开类型不含 `_client`，扩展里也不能用 `createCDPSession()` */
-function getPuppeteerPageMainClient(page: PuppeteerPage | null | undefined): PuppeteerCDPSession | null {
-  if (page == null) {
-    return null;
-  }
-  const client = (page as unknown as { _client?: () => PuppeteerCDPSession })._client?.();
-  return client ?? null;
-}
 
 export interface ReadabilityResult {
   title: string;
@@ -38,6 +26,11 @@ export interface FrameInfo {
   title: string | null;
 }
 
+export interface EnhancedDOMState {
+  elementTree: EnhancedDOMTreeNode;
+  serializedDomState: SerializedDOMState;
+}
+
 /**
  * Get the clickable elements for the current page.
  * @param tabId - The ID of the tab to get the clickable elements for.
@@ -54,13 +47,13 @@ export async function getClickableElements(
   viewportExpansion = 0,
   debugMode = false,
   page?: PuppeteerPage,
-): Promise<DOMState> {
-  const cdpSession = getPuppeteerPageMainClient(page);
+  cdpSession?: PuppeteerCDPSession,
+): Promise<EnhancedDOMState> {
   if (!cdpSession) {
     throw new Error('Failed to get CDP session (page missing or not connected)');
   }
 
-  const [elementTree, selectorMap] = await _buildDomTree(
+  const [enhancedDomTree, serializedDomState] = await _buildDomTree(
     tabId,
     url,
     focusElement,
@@ -71,94 +64,14 @@ export async function getClickableElements(
   );
 
   logger.debug('getClickableElements done', {
-    selectorMapSize: selectorMap.size,
-    elementTreeTagName: elementTree.tagName,
+    selectorMapSize: serializedDomState.selectorMap.size,
+    elementTreeTagName: enhancedDomTree.tagName,
   });
 
-  return { elementTree, selectorMap };
-}
-
-/**
- * 将 `SerializedDOMState` 的简化树转为 `DOMElementNode` 树，并构建与 LLM 中 `[backendNodeId]` 一致的 selectorMap。
- */
-function domStateFromSerializedRoot(root: SimplifiedNode | null): [DOMElementNode, Map<number, DOMElementNode>] {
-  const selectorMap = new Map<number, DOMElementNode>();
-
-  const convert = (node: SimplifiedNode, parent: DOMElementNode | null): DOMBaseNode => {
-    const orig = node.originalNode;
-
-    if (orig.nodeType === NodeType.TEXT_NODE) {
-      const text = orig.nodeValue ?? '';
-      const visible = orig.isVisible !== false;
-      return new DOMTextNode(text, visible, parent ?? undefined);
-    }
-
-    const snap = orig.snapshotNode;
-    const isVisible =
-      orig.isVisible !== false &&
-      (snap?.clientRects != null ||
-        orig.nodeType === NodeType.ELEMENT_NODE ||
-        orig.nodeType === NodeType.DOCUMENT_FRAGMENT_NODE);
-
-    const domEl = new DOMElementNode({
-      tagName: orig.tagName || null,
-      xpath: orig.xpath,
-      attributes: { ...orig.attributes },
-      children: [],
-      isVisible: Boolean(isVisible),
-      isInteractive: node.isInteractive,
-      isTopElement: false,
-      isInViewport: Boolean(snap?.bounds && snap.bounds.width > 0 && snap.bounds.height > 0),
-      shadowRoot: Boolean(orig.shadowRootType),
-      highlightIndex: node.isInteractive ? orig.backendNodeId : null,
-      isNew: node.isNew,
-      parent,
-    });
-
-    for (const child of node.children) {
-      domEl.children.push(convert(child, domEl));
-    }
-
-    if (node.isInteractive) {
-      selectorMap.set(orig.backendNodeId, domEl);
-    }
-
-    return domEl;
+  return {
+    elementTree: enhancedDomTree,
+    serializedDomState: serializedDomState,
   };
-
-  if (!root) {
-    const elementTree = new DOMElementNode({
-      tagName: 'body',
-      xpath: '',
-      attributes: {},
-      children: [],
-      isVisible: false,
-      isInteractive: false,
-      isTopElement: false,
-      isInViewport: false,
-      parent: null,
-    });
-    return [elementTree, selectorMap];
-  }
-
-  const built = convert(root, null);
-  if (built instanceof DOMElementNode) {
-    return [built, selectorMap];
-  }
-
-  const elementTree = new DOMElementNode({
-    tagName: 'body',
-    xpath: '',
-    attributes: {},
-    children: [built],
-    isVisible: true,
-    isInteractive: false,
-    isTopElement: false,
-    isInViewport: false,
-    parent: null,
-  });
-  built.parent = elementTree;
-  return [elementTree, selectorMap];
 }
 
 async function _buildDomTree(
@@ -170,7 +83,7 @@ async function _buildDomTree(
   debugMode = false,
   cdpSession?: PuppeteerCDPSession,
   page?: PuppeteerPage,
-): Promise<[DOMElementNode, Map<number, DOMElementNode>]> {
+): Promise<[EnhancedDOMTreeNode, SerializedDOMState]> {
   void focusElement;
   void viewportExpansion;
 
@@ -178,30 +91,43 @@ async function _buildDomTree(
     throw new Error('Failed to create CDP session or page');
   }
 
-  // If URL is provided and it's about:blank, return a minimal DOM tree
-  if (isNewTabPage(url) || url.startsWith('chrome://')) {
-    const elementTree = new DOMElementNode({
-      tagName: 'body',
-      xpath: '',
+  // Only return an empty DOM state for invalid URL values.
+  if (!url.trim()) {
+    const elementTree = new EnhancedDOMTreeNode({
+      nodeId: 0,
+      backendNodeId: 0,
+      nodeType: NodeType.ELEMENT_NODE,
+      nodeName: 'body',
+      nodeValue: null,
       attributes: {},
-      children: [],
+      isScrollable: null,
       isVisible: false,
-      isInteractive: false,
-      isTopElement: false,
-      isInViewport: false,
-      parent: null,
+      absolutePosition: null,
+      targetId: '',
+      frameId: null,
+      sessionId: null,
+      contentDocument: null,
+      shadowRootType: null,
+      shadowRoots: null,
+      parentNode: null,
+      childrenNodes: null,
+      axNode: null,
     });
-    return [elementTree, new Map<number, DOMElementNode>()];
+    return [elementTree, new SerializedDOMState(null, new Map())];
   }
 
   const domService = new DomService();
-  const [serializedDomState, , timingInfo] = await domService.getSerializedDomTree(page, cdpSession, tabId.toString());
+  const [serializedDomState, enhancedDomTree, timingInfo] = await domService.getSerializedDomTree(
+    page,
+    cdpSession,
+    tabId.toString(),
+  );
 
   if (debugMode) {
     logger.debug('getSerializedDomTree timing', timingInfo);
   }
 
-  return domStateFromSerializedRoot(serializedDomState._root);
+  return [enhancedDomTree, serializedDomState];
 }
 
 export async function getScrollInfo(tabId: number): Promise<[number, number, number]> {

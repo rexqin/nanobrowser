@@ -72,6 +72,7 @@ export class EnhancedDOMTreeNode {
   attributes: Record<string, string>;
   isScrollable: boolean | null;
   isVisible: boolean | null;
+  isNew: boolean;
   absolutePosition: DOMRect | null;
   targetId: string;
   frameId: string | null;
@@ -130,6 +131,7 @@ export class EnhancedDOMTreeNode {
     this.snapshotNode = data.snapshotNode ?? null;
     this._compoundChildren = data._compoundChildren ?? [];
     this.uuid = data.uuid ?? this._generateUUID();
+    this.isNew = false;
   }
 
   private _generateUUID(): string {
@@ -501,6 +503,187 @@ export class EnhancedDOMTreeNode {
       canScrollLeft: contentLeft > 0,
       canScrollRight: contentRight > 0,
     };
+  }
+
+  enhancedCssSelectorForElement(includeDynamicAttributes = true): string {
+    try {
+      if (!this.xpath) {
+        return '';
+      }
+
+      // Get base selector from XPath
+      let cssSelector = this.convertSimpleXPathToCssSelector(this.xpath);
+
+      // Handle class attributes
+      const classValue = this.attributes.class;
+      if (classValue && includeDynamicAttributes) {
+        // Define a regex pattern for valid class names in CSS
+        const validClassNamePattern = /^[a-zA-Z_][a-zA-Z0-9_-]*$/;
+
+        // Iterate through the class attribute values
+        const classes = classValue.trim().split(/\s+/);
+        for (const className of classes) {
+          // Skip empty class names
+          if (!className.trim()) {
+            continue;
+          }
+
+          // Check if the class name is valid
+          if (validClassNamePattern.test(className)) {
+            // Append the valid class name to the CSS selector
+            cssSelector += `.${className}`;
+          }
+        }
+      }
+
+      // Expanded set of safe attributes that are stable and useful for selection
+      const SAFE_ATTRIBUTES = new Set([
+        // Data attributes (if they're stable in your application)
+        'id',
+        // Standard HTML attributes
+        'name',
+        'type',
+        'placeholder',
+        // Accessibility attributes
+        'aria-label',
+        'aria-labelledby',
+        'aria-describedby',
+        'role',
+        // Common form attributes
+        'for',
+        'autocomplete',
+        'required',
+        'readonly',
+        // Media attributes
+        'alt',
+        'title',
+        'src',
+        // Custom stable attributes
+        'href',
+        'target',
+      ]);
+
+      // Handle other attributes
+      if (includeDynamicAttributes) {
+        SAFE_ATTRIBUTES.add('data-id');
+        SAFE_ATTRIBUTES.add('data-qa');
+        SAFE_ATTRIBUTES.add('data-cy');
+        SAFE_ATTRIBUTES.add('data-testid');
+      }
+
+      // Handle other attributes
+      for (const [attribute, value] of Object.entries(this.attributes)) {
+        if (attribute === 'class') {
+          continue;
+        }
+
+        // Skip invalid attribute names
+        if (!attribute.trim()) {
+          continue;
+        }
+
+        if (!SAFE_ATTRIBUTES.has(attribute)) {
+          continue;
+        }
+
+        // Escape special characters in attribute names
+        const safeAttribute = attribute.replace(':', '\\:');
+
+        // Handle different value cases
+        if (value === '') {
+          cssSelector += `[${safeAttribute}]`;
+        } else if (/["'<>`\n\r\t]/.test(value)) {
+          // Use contains for values with special characters
+          // Regex-substitute any whitespace with a single space, then trim
+          const collapsedValue = value.replace(/\s+/g, ' ').trim();
+          // Escape embedded double-quotes
+          const safeValue = collapsedValue.replace(/"/g, '\\"');
+          cssSelector += `[${safeAttribute}*="${safeValue}"]`;
+        } else {
+          cssSelector += `[${safeAttribute}="${value}"]`;
+        }
+      }
+
+      return cssSelector;
+    } catch (error) {
+      // Fallback to a more basic selector if something goes wrong
+      const tagName = this.tagName || '*';
+      return `${tagName}`;
+    }
+  }
+
+  convertSimpleXPathToCssSelector(xpath: string): string {
+    if (!xpath) {
+      return '';
+    }
+
+    // Remove leading slash if present
+    const cleanXpath = xpath.replace(/^\//, '');
+
+    // Split into parts
+    const parts = cleanXpath.split('/');
+    const cssParts: string[] = [];
+
+    for (const part of parts) {
+      if (!part) {
+        continue;
+      }
+
+      // Handle custom elements with colons by escaping them
+      if (part.includes(':') && !part.includes('[')) {
+        const basePart = part.replace(/:/g, '\\:');
+        cssParts.push(basePart);
+        continue;
+      }
+
+      // Handle index notation [n]
+      if (part.includes('[')) {
+        const bracketIndex = part.indexOf('[');
+        let basePart = part.substring(0, bracketIndex);
+
+        // Handle custom elements with colons in the base part
+        if (basePart.includes(':')) {
+          basePart = basePart.replace(/:/g, '\\:');
+        }
+
+        const indexPart = part.substring(bracketIndex);
+
+        // Handle multiple indices
+        const indices = indexPart
+          .split(']')
+          .slice(0, -1)
+          .map(i => i.replace('[', ''));
+
+        for (const idx of indices) {
+          // Handle numeric indices
+          if (/^\d+$/.test(idx)) {
+            try {
+              const index = Number.parseInt(idx, 10) - 1;
+              basePart += `:nth-of-type(${index + 1})`;
+            } catch (error) {
+              // continue
+            }
+          }
+          // Handle last() function
+          else if (idx === 'last()') {
+            basePart += ':last-of-type';
+          }
+          // Handle position() functions
+          else if (idx.includes('position()')) {
+            if (idx.includes('>1')) {
+              basePart += ':nth-of-type(n+2)';
+            }
+          }
+        }
+
+        cssParts.push(basePart);
+      } else {
+        cssParts.push(part);
+      }
+    }
+
+    const baseSelector = cssParts.join(' > ');
+    return baseSelector;
   }
 
   /**

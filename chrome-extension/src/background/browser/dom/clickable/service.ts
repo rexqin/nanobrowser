@@ -1,9 +1,9 @@
-import { DOMElementNode } from '../views';
+import { EnhancedDOMTreeNode } from '../enhancedDOMTreeNode';
 
 /**
  * Get all clickable elements hashes in the DOM tree
  */
-export async function getClickableElementsHashes(domElement: DOMElementNode): Promise<Set<string>> {
+export async function getClickableElementsHashes(domElement: EnhancedDOMTreeNode): Promise<Set<string>> {
   const clickableElements = getClickableElements(domElement);
   const hashPromises = clickableElements.map(element => hashDomElement(element));
   const hashes = await Promise.all(hashPromises);
@@ -15,30 +15,35 @@ export async function getClickableElementsHashes(domElement: DOMElementNode): Pr
  * to avoid "Maximum call stack size exceeded" errors on deep DOMs.
  * This maintains the exact same pre-order traversal as the original recursive version.
  */
-export function getClickableElements(domElement: DOMElementNode): DOMElementNode[] {
-  const clickableElements: DOMElementNode[] = [];
-  const stack: DOMElementNode[] = [];
+export function getClickableElements(domElement: EnhancedDOMTreeNode): EnhancedDOMTreeNode[] {
+  const clickableElements: EnhancedDOMTreeNode[] = [];
+  const stack: EnhancedDOMTreeNode[] = [];
 
   // Start with all direct children of the root element (in reverse order for correct processing)
   for (let i = domElement.children.length - 1; i >= 0; i--) {
     const child = domElement.children[i];
-    if (child instanceof DOMElementNode) {
+    if (child instanceof EnhancedDOMTreeNode) {
       stack.push(child);
     }
   }
 
   while (stack.length > 0) {
-    const node = stack.pop() as DOMElementNode;
+    const node = stack.pop();
 
+    if (!node) {
+      continue;
+    }
     // Process current node first (pre-order: node before children)
-    if (node.highlightIndex !== null) {
+    if (node.isVisible) {
       clickableElements.push(node);
     }
-
+    if (!node.childrenNodes) {
+      continue;
+    }
     // Add children to stack in reverse order so they're processed in document order
-    for (let i = node.children.length - 1; i >= 0; i--) {
-      const child = node.children[i];
-      if (child instanceof DOMElementNode) {
+    for (let i = node.childrenNodes.length - 1; i >= 0; i--) {
+      const child = node.childrenNodes[i];
+      if (child instanceof EnhancedDOMTreeNode) {
         stack.push(child);
       }
     }
@@ -50,7 +55,7 @@ export function getClickableElements(domElement: DOMElementNode): DOMElementNode
 /**
  * Hash a DOM element for identification
  */
-export async function hashDomElement(domElement: DOMElementNode): Promise<string> {
+export async function hashDomElement(domElement: EnhancedDOMTreeNode): Promise<string> {
   const parentBranchPath = _getParentBranchPath(domElement);
 
   // Run all hash operations in parallel
@@ -67,9 +72,9 @@ export async function hashDomElement(domElement: DOMElementNode): Promise<string
 /**
  * Get the branch path from parent elements
  */
-function _getParentBranchPath(domElement: DOMElementNode): string[] {
-  const parents: DOMElementNode[] = [];
-  let currentElement: DOMElementNode | null = domElement;
+function _getParentBranchPath(domElement: EnhancedDOMTreeNode): string[] {
+  const parents: EnhancedDOMTreeNode[] = [];
+  let currentElement: EnhancedDOMTreeNode | null = domElement;
 
   while (currentElement?.parent !== null) {
     parents.push(currentElement);

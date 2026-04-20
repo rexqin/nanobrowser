@@ -489,7 +489,7 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
 
         // if the action has an index argument, record the interacted element to the result
         if (indexArg !== null) {
-          const domElement = browserState.selectorMap.get(indexArg);
+          const domElement = browserState.serializedDomState.selectorMap.get(indexArg);
           if (domElement) {
             const interactedElement = HistoryTreeProcessor.convertDomElementToHistoryElement(domElement);
             result.interactedElement = interactedElement;
@@ -713,7 +713,7 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
     );
 
     // If no current element found or it doesn't have a highlight index, return null
-    if (!currentElement || currentElement.highlightIndex === null) {
+    if (!currentElement || !currentElement.backendNodeId) {
       return null;
     }
 
@@ -731,14 +731,14 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
     const oldIndex = actionInstance.getIndexArg(actionArgs);
 
     // If the index has changed, update it
-    if (oldIndex !== null && oldIndex !== currentElement.highlightIndex) {
+    if (oldIndex !== null && oldIndex !== currentElement.backendNodeId) {
       // Create a new action object with the updated index
       const updatedAction: Record<string, unknown> = { [actionName]: { ...actionArgs } };
 
       // Update the index in the action arguments
-      actionInstance.setIndexArg(updatedAction[actionName] as Record<string, unknown>, currentElement.highlightIndex);
+      actionInstance.setIndexArg(updatedAction[actionName] as Record<string, unknown>, currentElement.backendNodeId);
 
-      logger.info(`Element moved in DOM, updated index from ${oldIndex} to ${currentElement.highlightIndex}`);
+      logger.info(`Element moved in DOM, updated index from ${oldIndex} to ${currentElement.backendNodeId}`);
       return updatedAction;
     }
 

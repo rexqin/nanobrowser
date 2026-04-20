@@ -1,23 +1,24 @@
-import { DOMElementNode } from '../views';
+import { EnhancedDOMTreeNode } from '../enhancedDOMTreeNode';
+import type { DOMElementNode } from '../views';
 import { DOMHistoryElement, HashedDomElement } from './view';
 
 /**
  * Convert a DOM element to a history element
  */
-export function convertDomElementToHistoryElement(domElement: DOMElementNode): DOMHistoryElement {
+export function convertDomElementToHistoryElement(domElement: EnhancedDOMTreeNode): DOMHistoryElement {
   const parentBranchPath = _getParentBranchPath(domElement);
-  const cssSelector = domElement.getEnhancedCssSelector();
+  const cssSelector = domElement.enhancedCssSelectorForElement();
   return new DOMHistoryElement(
     domElement.tagName ?? '', // Provide empty string as fallback
     domElement.xpath ?? '', // Provide empty string as fallback
-    domElement.highlightIndex ?? null,
+    domElement.backendNodeId ?? null,
     parentBranchPath,
     domElement.attributes,
-    domElement.shadowRoot,
+    domElement.shadowRootType !== null,
     cssSelector,
-    domElement.pageCoordinates ?? null,
-    domElement.viewportCoordinates ?? null,
-    domElement.viewportInfo ?? null,
+    null,
+    null,
+    null,
   );
 }
 
@@ -26,12 +27,12 @@ export function convertDomElementToHistoryElement(domElement: DOMElementNode): D
  */
 export async function findHistoryElementInTree(
   domHistoryElement: DOMHistoryElement,
-  tree: DOMElementNode,
-): Promise<DOMElementNode | null> {
+  tree: EnhancedDOMTreeNode,
+): Promise<EnhancedDOMTreeNode | null> {
   const hashedDomHistoryElement = await hashDomHistoryElement(domHistoryElement);
 
-  const processNode = async (node: DOMElementNode): Promise<DOMElementNode | null> => {
-    if (node.highlightIndex != null) {
+  const processNode = async (node: EnhancedDOMTreeNode): Promise<EnhancedDOMTreeNode | null> => {
+    if (node.backendNodeId != null) {
       const hashedNode = await hashDomElement(node);
       if (
         hashedNode.branchPathHash === hashedDomHistoryElement.branchPathHash &&
@@ -42,7 +43,7 @@ export async function findHistoryElementInTree(
       }
     }
     for (const child of node.children) {
-      if (child instanceof DOMElementNode) {
+      if (child instanceof EnhancedDOMTreeNode) {
         const result = await processNode(child);
         if (result !== null) {
           return result;
@@ -60,7 +61,7 @@ export async function findHistoryElementInTree(
  */
 export async function compareHistoryElementAndDomElement(
   domHistoryElement: DOMHistoryElement,
-  domElement: DOMElementNode,
+  domElement: EnhancedDOMTreeNode | DOMElementNode,
 ): Promise<boolean> {
   const [hashedDomHistoryElement, hashedDomElement] = await Promise.all([
     hashDomHistoryElement(domHistoryElement),
@@ -89,7 +90,7 @@ async function hashDomHistoryElement(domHistoryElement: DOMHistoryElement): Prom
 /**
  * Hash a DOM element
  */
-export async function hashDomElement(domElement: DOMElementNode): Promise<HashedDomElement> {
+export async function hashDomElement(domElement: EnhancedDOMTreeNode | DOMElementNode): Promise<HashedDomElement> {
   const parentBranchPath = _getParentBranchPath(domElement);
   const [branchPathHash, attributesHash, xpathHash] = await Promise.all([
     _parentBranchPathHash(parentBranchPath),
@@ -102,11 +103,11 @@ export async function hashDomElement(domElement: DOMElementNode): Promise<Hashed
 /**
  * Get the branch path from parent elements
  */
-export function _getParentBranchPath(domElement: DOMElementNode): string[] {
-  const parents: DOMElementNode[] = [];
-  let currentElement: DOMElementNode = domElement;
+export function _getParentBranchPath(domElement: EnhancedDOMTreeNode | DOMElementNode): string[] {
+  const parents: Array<EnhancedDOMTreeNode | DOMElementNode> = [];
+  let currentElement: EnhancedDOMTreeNode | DOMElementNode | null = domElement;
 
-  while (currentElement.parent != null) {
+  while (currentElement?.parent != null) {
     parents.push(currentElement);
     currentElement = currentElement.parent;
   }
@@ -143,8 +144,11 @@ async function _xpathHash(xpath: string): Promise<string> {
 /**
  * Create a hash from the element text
  */
-async function _textHash(domElement: DOMElementNode): Promise<string> {
-  const textString = domElement.getAllTextTillNextClickableElement();
+async function _textHash(domElement: EnhancedDOMTreeNode | DOMElementNode): Promise<string> {
+  const textString =
+    'getAllChildrenText' in domElement
+      ? domElement.getAllChildrenText()
+      : domElement.getAllTextTillNextClickableElement();
   return _createSHA256Hash(textString);
 }
 

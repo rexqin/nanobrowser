@@ -236,7 +236,7 @@ export class ActionBuilder {
         try {
           const page = await this.context.browserContext.getCurrentPage();
           const state = await page.getState();
-          const elementNode = state?.selectorMap.get(input.index);
+          const elementNode = state?.serializedDomState.selectorMap.get(input.index);
           if (elementNode) {
             const handle = await page.locateElement(elementNode);
             if (handle) {
@@ -287,7 +287,7 @@ export class ActionBuilder {
         const page = await this.context.browserContext.getCurrentPage();
         const state = await page.getState();
 
-        const elementNode = state?.selectorMap.get(input.index);
+        const elementNode = state?.serializedDomState.selectorMap.get(input.index);
         if (!elementNode) {
           throw new Error(t('act_errors_elementNotExist', [input.index.toString()]));
         }
@@ -305,7 +305,7 @@ export class ActionBuilder {
         try {
           const initialTabIds = await this.context.browserContext.getAllTabIds();
           await page.clickElementNode(elementNode);
-          let msg = t('act_click_ok', [input.index.toString(), elementNode.getAllTextTillNextClickableElement(2)]);
+          let msg = t('act_click_ok', [input.index.toString(), elementNode.getAllChildrenText(2)]);
           logger.info(msg);
 
           // TODO: could be optimized by chrome extension tab api
@@ -342,7 +342,7 @@ export class ActionBuilder {
 
         const page = await this.context.browserContext.getCurrentPage();
         const state = await page.getState();
-        const elementNode = state?.selectorMap.get(input.index);
+        const elementNode = state?.serializedDomState.selectorMap.get(input.index);
         if (!elementNode) {
           throw new Error(t('act_errors_elementNotExist', [input.index.toString()]));
         }
@@ -366,7 +366,7 @@ export class ActionBuilder {
         const state = await page.getState();
 
         let targetIndex = input.index;
-        let elementNode = state?.selectorMap.get(input.index);
+        let elementNode = state?.serializedDomState.selectorMap.get(input.index);
         if (!elementNode) {
           throw new Error(t('act_errors_elementNotExist', [input.index.toString()]));
         }
@@ -408,7 +408,7 @@ export class ActionBuilder {
           const quillCandidates: Array<[number, typeof elementNode]> = [];
           const fallbackCandidates: Array<[number, typeof elementNode]> = [];
 
-          for (const [idx, node] of state.selectorMap.entries()) {
+          for (const [idx, node] of state.serializedDomState.selectorMap.entries()) {
             const dp = (node.attributes['data-placeholder'] ?? '').toString().toLowerCase();
             const ph = (node.attributes['placeholder'] ?? '').toString().toLowerCase();
             const cls = (node.attributes['class'] ?? '').toString().toLowerCase();
@@ -433,7 +433,7 @@ export class ActionBuilder {
           }
         } else if (wantsTitle && !isTitleInput) {
           // Optional: if the model picked body editor but says "title", try to find a title input.
-          for (const [idx, node] of state.selectorMap.entries()) {
+          for (const [idx, node] of state.serializedDomState.selectorMap.entries()) {
             const dp = (node.attributes['data-placeholder'] ?? '').toString().toLowerCase();
             const ph = (node.attributes['placeholder'] ?? '').toString().toLowerCase();
             const cls = (node.attributes['class'] ?? '').toString().toLowerCase();
@@ -513,12 +513,12 @@ export class ActionBuilder {
           const page = await this.context.browserContext.getCurrentPage();
           const state = await page.getState();
           let targetIndex = input.index ?? null;
-          let targetNode = targetIndex !== null ? state?.selectorMap.get(targetIndex) : undefined;
+          let targetNode = targetIndex !== null ? state?.serializedDomState.selectorMap.get(targetIndex) : undefined;
           if (!targetNode) {
             // Fallback for model outputs where index is null/invalid:
             // choose the first likely editor element in current DOM snapshot.
             const pickCandidate = () => {
-              for (const [idx, node] of state.selectorMap.entries()) {
+              for (const [idx, node] of state.serializedDomState.selectorMap.entries()) {
                 const cls = (node.attributes['class'] ?? '').toString().toLowerCase();
                 const ceAttr = (node.attributes['contenteditable'] ?? '').toString().toLowerCase();
                 const dp = (node.attributes['data-placeholder'] ?? '').toString().toLowerCase();
@@ -656,7 +656,7 @@ export class ActionBuilder {
 
       if (input.index) {
         const state = await page.getCachedState();
-        const elementNode = state?.selectorMap.get(input.index);
+        const elementNode = state?.serializedDomState.selectorMap.get(input.index);
         if (!elementNode) {
           const errorMsg = t('act_errors_elementNotExist', [input.index.toString()]);
           this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, errorMsg);
@@ -680,7 +680,7 @@ export class ActionBuilder {
       const page = await this.context.browserContext.getCurrentPage();
       if (input.index) {
         const state = await page.getCachedState();
-        const elementNode = state?.selectorMap.get(input.index);
+        const elementNode = state?.serializedDomState.selectorMap.get(input.index);
         if (!elementNode) {
           const errorMsg = t('act_errors_elementNotExist', [input.index.toString()]);
           this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, errorMsg);
@@ -703,7 +703,7 @@ export class ActionBuilder {
       const page = await this.context.browserContext.getCurrentPage();
       if (input.index) {
         const state = await page.getCachedState();
-        const elementNode = state?.selectorMap.get(input.index);
+        const elementNode = state?.serializedDomState.selectorMap.get(input.index);
         if (!elementNode) {
           const errorMsg = t('act_errors_elementNotExist', [input.index.toString()]);
           this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, errorMsg);
@@ -727,7 +727,7 @@ export class ActionBuilder {
 
       if (input.index) {
         const state = await page.getCachedState();
-        const elementNode = state?.selectorMap.get(input.index);
+        const elementNode = state?.serializedDomState.selectorMap.get(input.index);
         if (!elementNode) {
           const errorMsg = t('act_errors_elementNotExist', [input.index.toString()]);
           this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, errorMsg);
@@ -775,7 +775,7 @@ export class ActionBuilder {
 
       if (input.index) {
         const state = await page.getCachedState();
-        const elementNode = state?.selectorMap.get(input.index);
+        const elementNode = state?.serializedDomState.selectorMap.get(input.index);
         if (!elementNode) {
           const errorMsg = t('act_errors_elementNotExist', [input.index.toString()]);
           this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, errorMsg);
@@ -859,7 +859,7 @@ export class ActionBuilder {
         const page = await this.context.browserContext.getCurrentPage();
         const state = await page.getState();
 
-        const elementNode = state?.selectorMap.get(input.index);
+        const elementNode = state?.serializedDomState.selectorMap.get(input.index);
         if (!elementNode) {
           const errorMsg = t('act_errors_elementNotExist', [input.index.toString()]);
           this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, errorMsg);
@@ -925,7 +925,7 @@ export class ActionBuilder {
         const page = await this.context.browserContext.getCurrentPage();
         const state = await page.getState();
 
-        const elementNode = state?.selectorMap.get(input.index);
+        const elementNode = state?.serializedDomState.selectorMap.get(input.index);
         if (!elementNode) {
           const errorMsg = t('act_errors_elementNotExist', [input.index.toString()]);
           this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, errorMsg);

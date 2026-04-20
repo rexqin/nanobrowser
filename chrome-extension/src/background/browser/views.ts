@@ -1,5 +1,5 @@
-import type { DOMState } from './dom/views';
 import type { DOMHistoryElement } from './dom/history/view';
+import type { EnhancedDOMState } from './dom/service';
 
 export interface BrowserContextWindowSize {
   width: number;
@@ -85,7 +85,7 @@ export const DEFAULT_BROWSER_CONTEXT_CONFIG: BrowserContextConfig = {
   homePageUrl: 'about:blank',
 };
 
-export interface PageState extends DOMState {
+export interface PageState extends EnhancedDOMState {
   tabId: number;
   url: string;
   title: string;

@@ -43,7 +43,7 @@ export class DOMTextNode extends DOMBaseNode {
   hasParentWithHighlightIndex(): boolean {
     let current = this.parent;
     while (current != null) {
-      if (current.highlightIndex !== null) {
+      if (current.isVisible !== null) {
         return true;
       }
       current = current.parent;
@@ -584,9 +584,35 @@ export function domElementNodeToDict(elementTree: DOMBaseNode): unknown {
   return nodeToDict(elementTree);
 }
 
-export async function calcBranchPathHashSet(state: DOMState): Promise<Set<string>> {
+type BranchHashLikeNode = {
+  hash?: () => Promise<{ branchPathHash: string } | number>;
+  parentBranchHash?: () => Promise<number>;
+};
+
+type BranchHashLikeState = {
+  selectorMap?: Map<number, BranchHashLikeNode>;
+  serializedDomState?: {
+    selectorMap: Map<number, BranchHashLikeNode>;
+  };
+};
+
+export async function calcBranchPathHashSet(state: BranchHashLikeState): Promise<Set<string>> {
+  const selectorMap =
+    state.serializedDomState?.selectorMap ?? state.selectorMap ?? new Map<number, BranchHashLikeNode>();
   const pathHashes = new Set(
-    await Promise.all(Array.from(state.selectorMap.values()).map(async value => (await value.hash()).branchPathHash)),
+    await Promise.all(
+      Array.from(selectorMap.values()).map(async value => {
+        if (value.parentBranchHash) {
+          return String(await value.parentBranchHash());
+        }
+        if (value.hash) {
+          const hashResult = await value.hash();
+          return typeof hashResult === 'number' ? String(hashResult) : hashResult.branchPathHash;
+        }
+        return '';
+      }),
+    ),
   );
+  pathHashes.delete('');
   return pathHashes;
 }

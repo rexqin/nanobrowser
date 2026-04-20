@@ -4,6 +4,7 @@ import { connect, ExtensionTransport } from 'puppeteer-core';
 import type {
   Page as PuppeteerPage,
   Browser,
+  CDPSession as PuppeteerCDPSession,
   ElementHandle,
   Frame,
   KeyInput,
@@ -12,12 +13,19 @@ import type {
   HTTPResponse,
 } from 'puppeteer-core';
 
-import { getClickableElements as _getClickableElements, getScrollInfo as _getScrollInfo } from './dom/service';
-import { DOMElementNode, type DOMState } from './dom/views';
+import {
+  getClickableElements as _getClickableElements,
+  getScrollInfo as _getScrollInfo,
+  type EnhancedDOMState,
+} from './dom/service';
+
 import { type BrowserContextConfig, DEFAULT_BROWSER_CONTEXT_CONFIG, type PageState, URLNotAllowedError } from './views';
 import { createLogger } from '@src/background/log';
 import { ClickableElementProcessor } from './dom/clickable/service';
 import { isUrlAllowed } from './util';
+import { EnhancedDOMTreeNode } from './dom/enhancedDOMTreeNode';
+import { NodeType } from './dom/domService';
+import { SerializedDOMState } from './dom/serializedDOMState';
 
 const logger = createLogger('Page');
 
@@ -45,15 +53,30 @@ function isCdpEvaluationBlockedUrl(urlStr: string): boolean {
 
 export function build_initial_state(tabId?: number, url?: string, title?: string): PageState {
   return {
-    elementTree: new DOMElementNode({
-      tagName: 'root',
-      isVisible: true,
-      parent: null,
-      xpath: '',
+    elementTree: new EnhancedDOMTreeNode({
+      nodeId: 0,
+      backendNodeId: 0,
+      nodeType: NodeType.ELEMENT_NODE,
+      nodeName: 'body',
+      nodeValue: null,
       attributes: {},
-      children: [],
+      isScrollable: null,
+      isVisible: true,
+      absolutePosition: null,
+      targetId: '',
+      frameId: null,
+      sessionId: null,
+      contentDocument: null,
+      shadowRootType: null,
+      shadowRoots: null,
+      parentNode: null,
+      childrenNodes: null,
+      axNode: null,
+      snapshotNode: null,
+      _compoundChildren: [],
+      uuid: '',
     }),
-    selectorMap: new Map(),
+    serializedDomState: new SerializedDOMState(null, new Map()),
     tabId: tabId || 0,
     url: url || '',
     title: title || '',
@@ -252,9 +275,13 @@ export default class Page {
     }
   }
 
-  async getClickableElements(focusElement: number): Promise<DOMState | null> {
+  async getClickableElements(focusElement: number): Promise<EnhancedDOMState | null> {
     if (!this._validWebPage) {
       return null;
+    }
+    const cdpSession = this._getMainCdpSession();
+    if (!cdpSession || !this._puppeteerPage) {
+      throw new Error('Failed to get CDP session (page missing or not connected)');
     }
     return _getClickableElements(
       this._tabId,
@@ -262,8 +289,18 @@ export default class Page {
       focusElement,
       this._config.viewportExpansion,
       import.meta.env.DEV,
-      this._puppeteerPage ?? undefined,
+      this._puppeteerPage,
+      cdpSession,
     );
+  }
+
+  /** Puppeteer Page 的主 CDP 客户端；公开类型不含 `_client`，扩展里也不能用 `createCDPSession()` */
+  private _getMainCdpSession(): PuppeteerCDPSession | null {
+    if (!this._puppeteerPage) {
+      return null;
+    }
+    const client = (this._puppeteerPage as unknown as { _client?: () => PuppeteerCDPSession })._client?.();
+    return client ?? null;
   }
 
   // Get scroll position information for the current page.
@@ -275,7 +312,7 @@ export default class Page {
   }
 
   // Get scroll position information for a specific element.
-  async getElementScrollInfo(elementNode: DOMElementNode): Promise<[number, number, number]> {
+  async getElementScrollInfo(elementNode: EnhancedDOMTreeNode): Promise<[number, number, number]> {
     if (!this._puppeteerPage) {
       throw new Error('Puppeteer is not connected');
     }
@@ -483,24 +520,13 @@ export default class Page {
         // Return last known good state if available
         return this._state;
       }
-      // log the attributes of content object
-      if ('selectorMap' in content) {
-        logger.debug('content.selectorMap:', content.selectorMap.size);
-      } else {
-        logger.debug('content.selectorMap: not found');
-      }
-      if ('elementTree' in content) {
-        logger.debug('content.elementTree:', content.elementTree?.tagName);
-      } else {
-        logger.debug('content.elementTree: not found');
-      }
 
       const screenshot: string | null = null;
       const [scrollY, visualViewportHeight, scrollHeight] = await this.getScrollInfo();
 
       // update the state
       this._state.elementTree = content.elementTree;
-      this._state.selectorMap = content.selectorMap;
+      this._state.serializedDomState = content.serializedDomState;
       this._state.url = this._puppeteerPage?.url() || '';
       this._state.title = (await this._puppeteerPage?.title()) || '';
       this._state.screenshot = screenshot;
@@ -670,7 +696,7 @@ export default class Page {
   // if yPercent is 0, scroll to the top of the page, if 100, scroll to the bottom of the page
   // if elementNode is provided, scroll to a percentage of the element
   // if elementNode is not provided, scroll to a percentage of the page
-  async scrollToPercent(yPercent: number, elementNode?: DOMElementNode): Promise<void> {
+  async scrollToPercent(yPercent: number, elementNode?: EnhancedDOMTreeNode): Promise<void> {
     if (!this._puppeteerPage) {
       throw new Error('Puppeteer is not connected');
     }
@@ -710,7 +736,7 @@ export default class Page {
     }
   }
 
-  async scrollBy(y: number, elementNode?: DOMElementNode): Promise<void> {
+  async scrollBy(y: number, elementNode?: EnhancedDOMTreeNode): Promise<void> {
     if (!this._puppeteerPage) {
       throw new Error('Puppeteer is not connected');
     }
@@ -743,7 +769,7 @@ export default class Page {
     }
   }
 
-  async scrollToPreviousPage(elementNode?: DOMElementNode): Promise<void> {
+  async scrollToPreviousPage(elementNode?: EnhancedDOMTreeNode): Promise<void> {
     if (!this._puppeteerPage) {
       throw new Error('Puppeteer is not connected');
     }
@@ -770,7 +796,7 @@ export default class Page {
     }
   }
 
-  async scrollToNextPage(elementNode?: DOMElementNode): Promise<void> {
+  async scrollToNextPage(elementNode?: EnhancedDOMTreeNode): Promise<void> {
     if (!this._puppeteerPage) {
       throw new Error('Puppeteer is not connected');
     }
@@ -1101,7 +1127,7 @@ export default class Page {
     }
   }
 
-  async locateElement(element: DOMElementNode): Promise<ElementHandle | null> {
+  async locateElement(element: EnhancedDOMTreeNode): Promise<ElementHandle | null> {
     if (!this._puppeteerPage) {
       // throw new Error('Puppeteer page is not connected');
       logger.warning('Puppeteer is not connected');
@@ -1110,7 +1136,7 @@ export default class Page {
     let currentFrame: PuppeteerPage | Frame = this._puppeteerPage;
 
     // Start with the target element and collect all parents
-    const parents: DOMElementNode[] = [];
+    const parents: EnhancedDOMTreeNode[] = [];
     let current = element;
     while (current.parent) {
       parents.push(current.parent);
@@ -1177,7 +1203,7 @@ export default class Page {
   }
 
   async inputTextElementNode(
-    elementNode: DOMElementNode,
+    elementNode: EnhancedDOMTreeNode,
     text: string,
     inputMode: 'override' | 'append' = 'override',
   ): Promise<void> {
@@ -1186,11 +1212,6 @@ export default class Page {
     }
 
     try {
-      // Highlight before typing
-      // if (elementNode.highlightIndex != null) {
-      //   await this._updateState(elementNode.highlightIndex);
-      // }
-
       const element = await this.locateElement(elementNode);
       if (!element) {
         throw new Error(`Element: ${elementNode} not found`);
@@ -1454,7 +1475,7 @@ export default class Page {
     }
   }
 
-  async clickElementNode(elementNode: DOMElementNode): Promise<void> {
+  async clickElementNode(elementNode: EnhancedDOMTreeNode): Promise<void> {
     if (!this._puppeteerPage) {
       throw new Error('Puppeteer is not connected');
     }
@@ -1506,7 +1527,7 @@ export default class Page {
     }
   }
 
-  async hoverElementNode(elementNode: DOMElementNode): Promise<void> {
+  async hoverElementNode(elementNode: EnhancedDOMTreeNode): Promise<void> {
     if (!this._puppeteerPage) {
       throw new Error('Puppeteer is not connected');
     }
@@ -1526,13 +1547,13 @@ export default class Page {
     }
   }
 
-  getSelectorMap(): Map<number, DOMElementNode> {
+  getSelectorMap(): Map<number, EnhancedDOMTreeNode> {
     // If there is no cached state, return an empty map
     if (this._cachedState === null) {
       return new Map();
     }
     // Otherwise return the cached state's selector map
-    return this._cachedState.selectorMap;
+    return this._cachedState.serializedDomState.selectorMap;
   }
 
   async getElementByIndex(index: number): Promise<ElementHandle | null> {
@@ -1542,12 +1563,12 @@ export default class Page {
     return await this.locateElement(element);
   }
 
-  getDomElementByIndex(index: number): DOMElementNode | null {
+  getDomElementByIndex(index: number): EnhancedDOMTreeNode | null {
     const selectorMap = this.getSelectorMap();
     return selectorMap.get(index) || null;
   }
 
-  isFileUploader(elementNode: DOMElementNode, maxDepth = 3, currentDepth = 0): boolean {
+  isFileUploader(elementNode: EnhancedDOMTreeNode, maxDepth = 3, currentDepth = 0): boolean {
     if (currentDepth > maxDepth) {
       return false;
     }
@@ -1567,7 +1588,7 @@ export default class Page {
       for (const child of elementNode.children) {
         if ('tagName' in child) {
           // DOMElementNode type guard
-          if (this.isFileUploader(child as DOMElementNode, maxDepth, currentDepth + 1)) {
+          if (this.isFileUploader(child as EnhancedDOMTreeNode, maxDepth, currentDepth + 1)) {
             return true;
           }
         }

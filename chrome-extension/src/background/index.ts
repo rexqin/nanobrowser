@@ -354,7 +354,7 @@ chrome.runtime.onConnect.addListener(port => {
           case 'state': {
             try {
               const browserState = await browserContext.getState();
-              const elementsText = browserState.elementTree.clickableElementsToString(
+              const elementsText = browserState.serializedDomState.llmRepresentation(
                 DEFAULT_AGENT_OPTIONS.includeAttributes,
               );
 
