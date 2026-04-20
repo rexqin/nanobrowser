@@ -668,6 +668,16 @@ const SidePanel = () => {
         return;
       }
 
+      // Plan-level fail-fast: when one task fails, stop the whole plan.
+      if (lastTaskTerminal === ExecutionState.TASK_FAIL) {
+        await planHistoryStore.finishRun(execution.runId, 'fail');
+        setPlanExecution(null);
+        releasePlanDedicatedTab();
+        setLastTaskTerminal(null);
+        await loadPlanRuns();
+        return;
+      }
+
       const hadFailure = execution.hadFailure || stepStatus === 'fail';
       const nextStepIndex = execution.currentStepIndex + 1;
 

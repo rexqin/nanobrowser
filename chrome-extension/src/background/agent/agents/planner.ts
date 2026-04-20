@@ -101,28 +101,7 @@ export class PlannerAgent extends BaseAgent<typeof plannerOutputSchema, PlannerO
       const sanitizedHistory = this.sanitizePlannerMessages(plannerHistory);
       const plannerMessages = [this.prompt.getSystemMessage(), ...sanitizedHistory];
 
-      if (import.meta.env.DEV) {
-        const serializedPlannerMessages = plannerMessages.map(msg => {
-          // LangChain message.content can be string | Array<{type,text/..}>.
-          const base: Record<string, unknown> = {
-            type: msg.getType(),
-            content: (msg as unknown as { content?: unknown }).content,
-          };
-
-          if ('tool_call_id' in msg) {
-            base.tool_call_id = (msg as unknown as { tool_call_id?: unknown }).tool_call_id;
-          }
-          if ('tool_calls' in msg) {
-            base.tool_calls = (msg as unknown as { tool_calls?: unknown }).tool_calls;
-          }
-          return base;
-        });
-
-        logger.debug('Planner input messages (DEV, full)', {
-          messageCount: serializedPlannerMessages.length,
-          messages: serializedPlannerMessages,
-        });
-      }
+      logger.debug('Planner input messages (DEV, full)', plannerMessages);
 
       const modelOutput = await this.invoke(plannerMessages);
       if (!modelOutput) {

@@ -212,6 +212,8 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
         return agentOutput;
       }
 
+      logger.info('Navigator model output', modelOutput);
+
       const actions = this.fixActions(modelOutput);
       modelOutput.action = actions;
       modelOutputString = JSON.stringify(modelOutput);
@@ -622,7 +624,7 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
     totalSteps: number,
     maxRetries = 3,
     delay = 1000,
-    skipFailures = true,
+    skipFailures = false,
   ): Promise<ActionResult[]> {
     const replayLogger = createLogger('NavigatorAgent:executeHistoryStep');
     const results: ActionResult[] = [];
