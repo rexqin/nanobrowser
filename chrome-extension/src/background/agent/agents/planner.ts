@@ -186,7 +186,7 @@ export class PlannerAgent extends BaseAgent<typeof plannerOutputSchema, PlannerO
       }
 
       logger.error(`Planning failed: ${errorMessage}`);
-      this.context.emitEvent(Actors.PLANNER, ExecutionState.STEP_FAIL, `Planning failed: ${errorMessage}`);
+      this.context.emitEvent(Actors.PLANNER, ExecutionState.STEP_FAIL, `规划失败: ${errorMessage}`);
       return {
         id: this.id,
         error: errorMessage,

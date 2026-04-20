@@ -265,7 +265,7 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
       // if the task is cancelled, remove the last state message from memory and emit event
       if (cancelled) {
         this.removeLastStateMessageFromMemory();
-        this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.STEP_CANCEL, 'Navigation cancelled');
+        this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.STEP_CANCEL, '导航取消');
       }
       if (browserStateHistory) {
         // Create a copy of actionResults to store in history
