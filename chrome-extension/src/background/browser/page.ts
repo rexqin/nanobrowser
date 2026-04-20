@@ -447,7 +447,9 @@ export default class Page {
 
     // Save the updated state as the cached state
     this._cachedState = updatedState;
-
+    if (import.meta.env.DEV) {
+      logger.debug('getState updatedState (DEV)', updatedState);
+    }
     return updatedState;
   }
 

@@ -1,5 +1,4 @@
 import { createLogger } from '@src/background/log';
-import type { BuildDomTreeArgs, RawDomTreeNode } from './raw_types';
 import { type DOMState, type DOMBaseNode, DOMElementNode, DOMTextNode } from './views';
 
 import { isNewTabPage } from '../util';

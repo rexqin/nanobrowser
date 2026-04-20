@@ -1,9 +1,6 @@
 import { HumanMessage, type SystemMessage } from '@langchain/core/messages';
 import type { AgentContext } from '@src/background/agent/types';
 import { wrapUntrustedContent } from '../messages/utils';
-import { createLogger } from '@src/background/log';
-
-const logger = createLogger('BasePrompt');
 /**
  * Abstract base class for all prompt types
  */
@@ -32,52 +29,33 @@ abstract class BasePrompt {
 
     let formattedElementsText = '';
     if (rawElementsText !== '') {
-      const scrollInfo = `[Scroll info of current page] window.scrollY: ${browserState.scrollY}, document.body.scrollHeight: ${browserState.scrollHeight}, window.visualViewport.height: ${browserState.visualViewportHeight}, visual viewport height as percentage of scrollable distance: ${Math.round((browserState.visualViewportHeight / (browserState.scrollHeight - browserState.visualViewportHeight)) * 100)}%\n`;
-      if (import.meta.env.DEV) {
-        logger.debug(scrollInfo);
-      } else {
-        logger.info(scrollInfo);
-      }
+      const scrollInfo = `[当前页面滚动信息] window.scrollY: ${browserState.scrollY}, document.body.scrollHeight: ${browserState.scrollHeight}, window.visualViewport.height: ${browserState.visualViewportHeight}, 可视视口高度占可滚动距离百分比: ${Math.round((browserState.visualViewportHeight / (browserState.scrollHeight - browserState.visualViewportHeight)) * 100)}%\n`;
+
       const elementsText = wrapUntrustedContent(rawElementsText);
-      formattedElementsText = `${scrollInfo}[Start of page]\n${elementsText}\n[End of page]\n`;
-
-      if (import.meta.env.DEV) {
-        logger.debug('Interactive elements (DEV)', {
-          rawElementsTextLen: rawElementsText.length,
-          rawElementsLines: rawElementsText.split('\n').length,
-          rawElementsPreview: rawElementsText.slice(0, 600),
-        });
-      }
+      formattedElementsText = `${scrollInfo}[页面开始]\n${elementsText}\n[页面结束]\n`;
     } else {
-      formattedElementsText = 'empty page';
-
-      if (import.meta.env.DEV) {
-        logger.debug('No interactive elements text from elementTree (DEV)', {
-          tabId: browserState.tabId,
-          url: browserState.url,
-        });
-      }
+      formattedElementsText = '空页面';
     }
 
     let stepInfoDescription = '';
     if (context.stepInfo) {
-      stepInfoDescription = `Current step: ${context.stepInfo.stepNumber + 1}/${context.stepInfo.maxSteps}`;
+      stepInfoDescription = `当前步骤：${context.stepInfo.stepNumber + 1}/${context.stepInfo.maxSteps}`;
     }
 
     const timeStr = new Date().toISOString().slice(0, 16).replace('T', ' '); // Format: YYYY-MM-DD HH:mm
-    stepInfoDescription += `Current date and time: ${timeStr}`;
+    stepInfoDescription += `当前日期与时间：${timeStr}`;
 
     let actionResultsDescription = '';
     if (context.actionResults.length > 0) {
       for (let i = 0; i < context.actionResults.length; i++) {
         const result = context.actionResults[i];
         if (result.extractedContent) {
-          actionResultsDescription += `\nAction result ${i + 1}/${context.actionResults.length}: ${result.extractedContent}`;
+          actionResultsDescription += `\n动作结果 ${i + 1}/${context.actionResults.length}: ${result.extractedContent}`;
         }
         if (result.error) {
-          // only use last line of error
+          // 仅使用错误的最后一行
           const error = result.error.split('\n').pop();
-          actionResultsDescription += `\nAction error ${i + 1}/${context.actionResults.length}: ...${error}`;
+          actionResultsDescription += `\n动作错误 ${i + 1}/${context.actionResults.length}: ...${error}`;
         }
       }
     }
@@ -87,13 +65,13 @@ abstract class BasePrompt {
       .filter(tab => tab.id !== browserState.tabId)
       .map(tab => `- {id: ${tab.id}, url: ${tab.url}, title: ${tab.title}}`);
     const stateDescription = `
-[Task history memory ends]
-[Current state starts here]
-The following is one-time information - if you need to remember it write it to memory:
-Current tab: ${currentTab}
-Other available tabs:
+[任务历史记忆结束]
+[当前状态从这里开始]
+以下是一次性信息——如果你需要记住，请写入 memory：
+当前标签页：${currentTab}
+其他可用标签页：
   ${otherTabs.join('\n')}
-Interactive elements from top layer of the current page inside the viewport:
+当前页面视口内顶层可交互元素：
 ${formattedElementsText}
 ${stepInfoDescription}
 ${actionResultsDescription}

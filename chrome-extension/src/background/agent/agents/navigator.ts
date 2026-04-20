@@ -328,6 +328,9 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
     }
 
     const state = await this.prompt.getUserMessage(this.context);
+    if (import.meta.env.DEV) {
+      logger.debug('addStateMessageToMemory state (DEV)', state);
+    }
     messageManager.addStateMessage(state);
     this.context.stateMessageAdded = true;
   }
