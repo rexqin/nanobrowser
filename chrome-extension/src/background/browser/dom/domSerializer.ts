@@ -261,7 +261,7 @@ export class DOMTreeSerializer {
                 currentValue = valueStr;
                 break;
               }
-            } else if (prop.name === 'value' && prop.value) {
+            } else if (prop.name === 'valuemin' && prop.value) {
               const valueStr = String(prop.value).trim();
               if (valueStr) {
                 currentValue = valueStr.includes('\\') ? valueStr.split('\\').pop()! : valueStr.split('/').pop()!;
@@ -1096,7 +1096,7 @@ export class DOMTreeSerializer {
               attributesToInclude.value = valueStr;
               break;
             }
-          } else if (prop.name === 'value' && prop.value) {
+          } else if (prop.name === 'valuemin' && prop.value) {
             const valueStr = String(prop.value).trim();
             if (valueStr) {
               attributesToInclude.value = valueStr;

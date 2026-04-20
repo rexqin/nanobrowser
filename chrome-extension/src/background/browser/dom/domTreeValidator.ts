@@ -1,6 +1,6 @@
 import { NodeType } from './domService.js';
 import type { EnhancedDOMTreeNode } from './domService.js';
-import { SimplifiedNode } from './domSerializer.js';
+import type { SimplifiedNode } from './domSerializer.js';
 
 /**
  * DOM 树验证结果
