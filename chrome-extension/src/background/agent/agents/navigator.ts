@@ -74,6 +74,12 @@ export class NavigatorActionRegistry {
     return this.actions[name];
   }
 
+  getPromptActionSchemas(): string {
+    return Object.values(this.actions)
+      .map(action => `- ${action.prompt()}`)
+      .join('\n');
+  }
+
   setupModelOutputSchema(): z.ZodType {
     const actionSchema = buildDynamicActionSchema(Object.values(this.actions));
     return z.object({

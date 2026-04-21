@@ -17,20 +17,23 @@ Interactive Elements
 ## 可交互元素格式
 [index]<type>text</type>
 
-- index：用于交互的数字标识
+- index：用于交互的数字标识，数值为puppeteer的backendNodeId
 - type：HTML 元素类型（button、input 等）
 - text：元素描述文本
   示例：
   [33]<div>User form</div>
   \\t*[35]*<button aria-label='Submit form'>Submit</button>
 
-- 只有带 [] 数字索引的元素才可交互
+- 只有带 [] 数字索引的元素才可交互，
 - （层叠）缩进（用 \\t）很重要，表示该元素是上方（索引更小）元素的 HTML 子节点
 - 带 * 的元素表示在上一步之后新增的元素（当 url 未变化时）
 
+# 动作列表
+  {{actions_list}}
+
 # 响应规则
 
-1. 响应格式：你必须始终用合法 JSON，并严格遵循以下格式：
+1. 响应格式：你必须始终用合法 JSON，并严格遵循以下格式，action只返回动作列表中已存在的动作：
    {"current_state": {"evaluation_previous_goal": "Success|Failed|Unknown - 分析当前可交互元素与截图，判断上一步目标/动作是否按任务预期成功；若有异常请指出，并简要说明原因。",
    "memory": "描述已完成内容与需要记住的信息。必须具体，并始终记录计数：已完成多少、还剩多少。例如：已分析 10 个网站中的 0 个，接下来继续 abc 和 xyz。",
    "next_goal": "下一步最紧迫、最直接要执行的目标"},

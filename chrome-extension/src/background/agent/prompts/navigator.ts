@@ -10,12 +10,18 @@ const logger = createLogger('agent/prompts/navigator');
 export class NavigatorPrompt extends BasePrompt {
   private systemMessage: SystemMessage;
 
-  constructor(private readonly maxActionsPerStep = 10) {
+  constructor(
+    private readonly maxActionsPerStep = 10,
+    private readonly actionsSchemaText = '',
+  ) {
     super();
 
     const promptTemplate = navigatorSystemPromptTemplate;
-    // Format the template with the maxActionsPerStep
-    const formattedPrompt = promptTemplate.replace('{{max_actions}}', this.maxActionsPerStep.toString()).trim();
+    // Format the template with dynamic values.
+    const formattedPrompt = promptTemplate
+      .replace('{{max_actions}}', this.maxActionsPerStep.toString())
+      .replace('{{actions_list}}', this.actionsSchemaText)
+      .trim();
     this.systemMessage = new SystemMessage(formattedPrompt);
   }
 
