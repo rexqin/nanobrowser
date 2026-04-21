@@ -136,6 +136,9 @@
   "nav_planBuilder_execute": {
     "message": "Executar"
   },
+  "nav_planBuilder_replay": {
+    "message": "Repetir"
+  },
 
   "welcome_instruction": {
     "message": "Para começar, por favor, configure suas chaves de API na página de configurações."

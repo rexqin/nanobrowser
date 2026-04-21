@@ -74,6 +74,9 @@ const SidePanel = () => {
   const [planRunsByPlanId, setPlanRunsByPlanId] = useState<Record<string, PlanRun[]>>({});
   const [currentPlan, setCurrentPlan] = useState<PlanSession | null>(null);
   const [planExecution, setPlanExecution] = useState<PlanExecutionState | null>(null);
+  const [lastFinishedStepStatusByStepId, setLastFinishedStepStatusByStepId] = useState<
+    Record<string, PlanStepExecUiStatus>
+  >({});
   const [lastTaskTerminal, setLastTaskTerminal] = useState<ExecutionState | null>(null);
   const [isFollowUpMode, setIsFollowUpMode] = useState(false);
   const [hasConfiguredModels, setHasConfiguredModels] = useState<boolean | null>(null); // null = loading, false = no models, true = has models
@@ -139,6 +142,7 @@ const SidePanel = () => {
 
   useEffect(() => {
     setPlanStepActivity({});
+    setLastFinishedStepStatusByStepId({});
   }, [currentPlan?.id]);
 
   const appendPlanStepActivityLine = useCallback((stepId: string, line: Omit<PlanStepActivityLine, 'id'>) => {
@@ -656,6 +660,10 @@ const SidePanel = () => {
 
       const nextStepStatuses = [...execution.stepStatuses];
       nextStepStatuses[execution.currentStepIndex] = stepStatus;
+      const snapshotStepStatusByStepId = Object.fromEntries(
+        execution.steps.map((step, i) => [step.id, nextStepStatuses[i]]),
+      ) as Record<string, PlanStepExecUiStatus>;
+      setLastFinishedStepStatusByStepId(snapshotStepStatusByStepId);
 
       await planHistoryStore.setStepRunFinished(execution.runId, currentStep.id, stepStatus);
 
@@ -738,40 +746,82 @@ const SidePanel = () => {
     [currentPlan, loadPlanMetadatas],
   );
 
-  const handleExecutePlan = async (steps: PlanStep[], title: string) => {
-    if (!currentPlan) return;
-    const cleanedSteps = steps.filter(step => step.content.trim() !== '').map((step, order) => ({ ...step, order }));
-    if (cleanedSteps.length === 0) return;
-    setPlanStepActivity({});
+  const handleExecutePlan = useCallback(
+    async (
+      steps: PlanStep[],
+      title: string,
+      options?: {
+        startIndex?: number;
+        initialStepStatuses?: PlanStepExecUiStatus[];
+        preserveActivity?: boolean;
+      },
+    ) => {
+      if (!currentPlan) return;
+      const cleanedSteps = steps.filter(step => step.content.trim() !== '').map((step, order) => ({ ...step, order }));
+      if (cleanedSteps.length === 0) return;
+      const startIndex = Math.min(Math.max(options?.startIndex ?? 0, 0), cleanedSteps.length - 1);
+      const preserveActivity = options?.preserveActivity === true;
+      if (!preserveActivity) {
+        setPlanStepActivity({});
+      }
+      if (!options?.initialStepStatuses) {
+        setLastFinishedStepStatusByStepId({});
+      }
 
-    const titleTrimmed = title.trim();
-    if (titleTrimmed && titleTrimmed !== currentPlan.title) {
-      await planHistoryStore.updatePlanTitle(currentPlan.id, titleTrimmed);
-    }
-    const savedPlan = await planHistoryStore.savePlanSteps(currentPlan.id, cleanedSteps);
-    setCurrentPlan({
-      ...savedPlan,
-      title: titleTrimmed || savedPlan.title,
-    });
-    await loadPlanMetadatas();
+      const titleTrimmed = title.trim();
+      if (titleTrimmed && titleTrimmed !== currentPlan.title) {
+        await planHistoryStore.updatePlanTitle(currentPlan.id, titleTrimmed);
+      }
+      const savedPlan = await planHistoryStore.savePlanSteps(currentPlan.id, cleanedSteps);
+      setCurrentPlan({
+        ...savedPlan,
+        title: titleTrimmed || savedPlan.title,
+      });
+      await loadPlanMetadatas();
 
-    const run = await planHistoryStore.startRun(currentPlan.id, cleanedSteps);
-    const stepStatuses: PlanStepExecUiStatus[] = cleanedSteps.map((_, i) => (i === 0 ? 'running' : 'pending'));
-    const execution: PlanExecutionState = {
-      runId: run.id,
-      planId: currentPlan.id,
-      steps: cleanedSteps,
-      currentStepIndex: 0,
-      hadFailure: false,
-      stepStatuses,
-    };
-    setPlanExecution(execution);
-    setPanelPage('plan_builder');
-    setIsFollowUpMode(false);
-    await handleSendMessage(cleanedSteps[0].content);
-    await planHistoryStore.setStepRunStarted(run.id, cleanedSteps[0].id, sessionIdRef.current ?? undefined);
-    await loadPlanRuns();
-  };
+      const run = await planHistoryStore.startRun(currentPlan.id, cleanedSteps);
+      const baseStatuses = options?.initialStepStatuses ?? cleanedSteps.map(() => 'pending' as const);
+      const stepStatuses: PlanStepExecUiStatus[] = cleanedSteps.map((_, i) =>
+        i === startIndex ? 'running' : (baseStatuses[i] ?? 'pending'),
+      );
+      const execution: PlanExecutionState = {
+        runId: run.id,
+        planId: currentPlan.id,
+        steps: cleanedSteps,
+        currentStepIndex: startIndex,
+        hadFailure: false,
+        stepStatuses,
+      };
+      setPlanExecution(execution);
+      setPanelPage('plan_builder');
+      setIsFollowUpMode(false);
+      await handleSendMessage(cleanedSteps[startIndex].content);
+      await planHistoryStore.setStepRunStarted(run.id, cleanedSteps[startIndex].id, sessionIdRef.current ?? undefined);
+      await loadPlanRuns();
+    },
+    [currentPlan, handleSendMessage, loadPlanMetadatas, loadPlanRuns],
+  );
+
+  const handleReplayFailedStep = useCallback(
+    async (step: PlanStep) => {
+      if (planExecutionRef.current || !currentPlan) return;
+      const sortedSteps = [...currentPlan.steps]
+        .filter(item => item.content.trim() !== '')
+        .sort((a, b) => a.order - b.order);
+      const startIndex = sortedSteps.findIndex(item => item.id === step.id);
+      if (startIndex === -1) return;
+      const initialStepStatuses: PlanStepExecUiStatus[] = sortedSteps.map(item => {
+        if (item.id === step.id) return 'pending';
+        return lastFinishedStepStatusByStepId[item.id] ?? 'pending';
+      });
+      await handleExecutePlan(sortedSteps, currentPlan.title, {
+        startIndex,
+        initialStepStatuses,
+        preserveActivity: true,
+      });
+    },
+    [currentPlan, handleExecutePlan, lastFinishedStepStatusByStepId],
+  );
 
   const handleLoadHistory = async () => {
     await loadPlanMetadatas();
@@ -980,12 +1030,13 @@ const SidePanel = () => {
                             ? Object.fromEntries(
                                 planExecution.steps.map((s, i) => [s.id, planExecution.stepStatuses[i]]),
                               )
-                            : undefined
+                            : lastFinishedStepStatusByStepId
                         }
                         activityByStepId={planStepActivity}
                         onCreatePlan={handleCreatePlan}
                         onSave={handleSavePlan}
                         onExecute={handleExecutePlan}
+                        onReplayFailedStep={handleReplayFailedStep}
                         onStopTask={handleStopTask}
                         taskAwaitingUserResume={taskAwaitingUserResume}
                         userPauseHint={userPauseHint}

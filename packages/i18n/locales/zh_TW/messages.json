@@ -136,6 +136,9 @@
   "nav_planBuilder_execute": {
     "message": "執行"
   },
+  "nav_planBuilder_replay": {
+    "message": "重播"
+  },
 
   "welcome_instruction": {
     "message": "開始使用前，請先完成 API 金鑰的設定。"

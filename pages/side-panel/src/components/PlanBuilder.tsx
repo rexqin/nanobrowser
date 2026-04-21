@@ -23,6 +23,7 @@ interface PlanBuilderProps {
   onCreatePlan: () => Promise<void>;
   onSave: (steps: PlanStep[], title: string) => Promise<void>;
   onExecute: (steps: PlanStep[], title: string) => Promise<void>;
+  onReplayFailedStep?: (step: PlanStep) => Promise<void>;
   onStopTask: () => void;
   taskAwaitingUserResume?: boolean;
   /** Latest TASK_PAUSE detail from backend (planner hint); fallback to generic i18n if empty. */
@@ -121,6 +122,7 @@ export default function PlanBuilder({
   onCreatePlan,
   onSave,
   onExecute,
+  onReplayFailedStep,
   onStopTask,
   taskAwaitingUserResume = false,
   userPauseHint = null,
@@ -404,6 +406,15 @@ export default function PlanBuilder({
                   className="text-xs text-red-500 hover:text-red-600 disabled:opacity-40">
                   {t('nav_planBuilder_remove')}
                 </button>
+                {stepStatusByStepId?.[step.id] === 'fail' || stepStatusByStepId?.[step.id] === 'cancel' ? (
+                  <button
+                    type="button"
+                    disabled={executing}
+                    onClick={() => void onReplayFailedStep?.(step)}
+                    className="text-xs text-amber-700 hover:text-amber-800 disabled:cursor-not-allowed disabled:opacity-40">
+                    {t('nav_planBuilder_replay')}
+                  </button>
+                ) : null}
               </div>
             </div>
             <textarea
