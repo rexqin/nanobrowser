@@ -1128,6 +1128,31 @@ export default class Page {
   }
 
   async locateElement(element: EnhancedDOMTreeNode): Promise<ElementHandle | null> {
+    // if (!this._puppeteerPage || !element.backendNodeId) {
+    //   // throw new Error('Puppeteer page is not connected');
+    //   logger.warning('Puppeteer is not connected');
+    //   return null;
+    // }
+
+    // const backendNodeId = element.backendNodeId;
+
+    // const cdp = this.getCdpSession();
+    // if (!cdp) return null;
+    // // 1) 确认 backendNodeId 还有效
+    // await cdp.send('DOM.describeNode', { backendNodeId });
+    // // 2) 通过 Puppeteer realm 收养为 ElementHandle
+    // const pageWithRealm = this._puppeteerPage as unknown as {
+    //   mainRealm?: () => { adoptBackendNode?: (id: number) => Promise<ElementHandle> };
+    //   worlds?: { MAIN_WORLD?: { adoptBackendNode?: (id: number) => Promise<ElementHandle> } };
+    // };
+    // let elementHandle: ElementHandle | null = null;
+    // const mainRealm = pageWithRealm.mainRealm?.();
+    // if (mainRealm?.adoptBackendNode) {
+    //   elementHandle = await mainRealm.adoptBackendNode(backendNodeId);
+    // } else if (pageWithRealm.worlds?.MAIN_WORLD?.adoptBackendNode) {
+    //   elementHandle = await pageWithRealm.worlds.MAIN_WORLD.adoptBackendNode(backendNodeId);
+    // }
+    // return elementHandle;
     if (!this._puppeteerPage) {
       // throw new Error('Puppeteer page is not connected');
       logger.warning('Puppeteer is not connected');

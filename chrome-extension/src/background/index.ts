@@ -209,9 +209,14 @@ chrome.runtime.onConnect.addListener(port => {
             logger.info('new_task', message.tabId, message.task, { planDedicatedTab: message.planDedicatedTab });
             try {
               if (message.planDedicatedTab) {
-                await closePlanDedicatedTabIfAny();
-                const dedicatedPage = await browserContext.openInactiveTab();
-                planDedicatedTabId = dedicatedPage.tabId;
+                // Keep plan tab lifecycle aligned with a whole plan run:
+                // attach once at plan start, detach/close when plan ends.
+                if (planDedicatedTabId === null) {
+                  const dedicatedPage = await browserContext.openInactiveTab();
+                  planDedicatedTabId = dedicatedPage.tabId;
+                } else {
+                  await browserContext.attachToTabInBackground(planDedicatedTabId);
+                }
               } else {
                 await closePlanDedicatedTabIfAny();
                 await browserContext.switchTab(message.tabId);
@@ -224,13 +229,14 @@ chrome.runtime.onConnect.addListener(port => {
               });
             }
 
-            // Each plan step should be independent; avoid reusing the previous executor/browser state.
-            // Especially when the plan execution suppresses auto-cleanup on terminal events,
-            // we explicitly cleanup here before creating a new executor.
-            try {
-              await currentExecutor?.cleanup();
-            } catch (error) {
-              logger.warning('previous executor cleanup failed during new_task', error);
+            // For normal tasks, start from a clean executor/browser state.
+            // For plan runs, executor/page lifecycle is managed by plan terminal events.
+            if (!message.planDedicatedTab) {
+              try {
+                await currentExecutor?.cleanup();
+              } catch (error) {
+                logger.warning('previous executor cleanup failed during new_task', error);
+              }
             }
 
             currentExecutor = await setupExecutor(message.taskId, message.task, browserContext);
