@@ -56,6 +56,18 @@ async function closePlanDedicatedTabIfAny(): Promise<void> {
     logger.warning('closePlanDedicatedTab failed', e);
   }
 }
+
+async function detachPlanDedicatedTabIfAny(reason: 'cancel' | 'disconnect'): Promise<void> {
+  if (planDedicatedTabId === null) return;
+  const id = planDedicatedTabId;
+  planDedicatedTabId = null;
+  try {
+    await browserContext.detachPage(id);
+  } catch (e) {
+    logger.warning(`detach plan dedicated tab failed (${reason})`, e);
+  }
+}
+
 const pendingSidePanelMessages: SidePanelPublishReceivedMessage[] = [];
 const SIDE_PANEL_URL = chrome.runtime.getURL('side-panel/index.html');
 
@@ -309,7 +321,7 @@ chrome.runtime.onConnect.addListener(port => {
           case 'cancel_task': {
             if (!currentExecutor) return port.postMessage({ type: 'error', error: t('bg_errors_noRunningTask') });
             await currentExecutor.cancel();
-            await closePlanDedicatedTabIfAny();
+            await detachPlanDedicatedTabIfAny('cancel');
             break;
           }
 
@@ -433,7 +445,7 @@ chrome.runtime.onConnect.addListener(port => {
       // this event is also triggered when the side panel is closed, so we need to cancel the task
       console.log('Side panel disconnected');
       currentPort = null;
-      void closePlanDedicatedTabIfAny();
+      void detachPlanDedicatedTabIfAny('disconnect');
       currentExecutor?.cancel();
     });
   }

@@ -1040,12 +1040,22 @@ export default class Page {
       const dataUri = `data:${inferredMime};base64,${base64}`;
       const result = (await this._callOnBackendNode(
         elementNode,
-        `function(uri) {
+        `async function(uri) {
           try {
             const element = this;
             if (!(element instanceof HTMLElement)) {
               throw new Error('Target element is not an HTMLElement');
             }
+            const getSnapshot = el => {
+              const html = el.innerHTML || '';
+              const imageCount = (html.match(/<img\\b/gi) || []).length;
+              const containsDataImage = /<img[^>]+src=["']data:image\\//i.test(html);
+              return { html, imageCount, containsDataImage };
+            };
+            const wasInserted = (before, after) =>
+              after.imageCount > before.imageCount ||
+              (after.containsDataImage && !before.containsDataImage) ||
+              before.html !== after.html;
             const commaIdx = uri.indexOf(',');
             if (commaIdx < 0) {
               throw new Error('Invalid data URI for image paste');
@@ -1064,6 +1074,7 @@ export default class Page {
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(file);
             dataTransfer.setData('text/html', '<img src="' + uri + '" alt="embedded-image" />');
+            dataTransfer.setData('text/plain', '');
             element.focus();
             let pasteEvent;
             try {
@@ -1076,7 +1087,46 @@ export default class Page {
               pasteEvent = new Event('paste', { bubbles: true, cancelable: true });
               Object.defineProperty(pasteEvent, 'clipboardData', { value: dataTransfer });
             }
-            const ok = element.dispatchEvent(pasteEvent);
+            const before = getSnapshot(element);
+            element.dispatchEvent(pasteEvent);
+            await new Promise(resolve => setTimeout(resolve, 80));
+            const afterPaste = getSnapshot(element);
+            let ok = wasInserted(before, afterPaste);
+            if (!ok) {
+              const img = document.createElement('img');
+              img.src = uri;
+              img.alt = 'embedded-image';
+
+              if (element.isContentEditable) {
+                const selection = window.getSelection();
+                if (selection && selection.rangeCount > 0) {
+                  const range = selection.getRangeAt(0);
+                  range.deleteContents();
+                  range.insertNode(img);
+                  range.setStartAfter(img);
+                  range.collapse(true);
+                  selection.removeAllRanges();
+                  selection.addRange(range);
+                } else {
+                  element.appendChild(img);
+                }
+              } else {
+                element.appendChild(img);
+              }
+
+              element.dispatchEvent(new Event('input', { bubbles: true }));
+              element.dispatchEvent(new Event('change', { bubbles: true }));
+              await new Promise(resolve => setTimeout(resolve, 80));
+              const afterFallback = getSnapshot(element);
+              ok = wasInserted(before, afterFallback);
+              if (!ok) {
+                return {
+                  ok: false,
+                  outputLength: 0,
+                  error: 'Image insertion not persisted in editor DOM after paste and fallback',
+                };
+              }
+            }
             return { ok, outputLength: uri.length };
           } catch (error) {
             const message = error instanceof Error ? error.message : String(error);
