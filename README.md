@@ -198,6 +198,13 @@ We're actively developing Nanobrowser with exciting features on the horizon, wel
 
 Check out our detailed roadmap and upcoming features in our [GitHub Discussions](https://github.com/nanobrowser/nanobrowser/discussions/85). 
 
+## 🔄 Automation Runtime Update (2026-04)
+
+- Background automation runtime has been migrated to native Chrome DevTools Protocol through `chrome.debugger`.
+- `chrome-extension` no longer depends on legacy browser-driver runtime connection or build aliasing.
+- Protocol typing for background automation now uses `devtools-protocol`.
+- Runtime selection supports connector mode configuration with `chrome-debugger` as the default path.
+
 ## 🤝 Contributing
 
 **We need your help to make Nanobrowser even better!**  Contributions of all kinds are welcome:
@@ -236,7 +243,7 @@ Join our growing community of developers and users:
 Nanobrowser builds on top of other awesome open-source projects:
 
 - [Browser Use](https://github.com/browser-use/browser-use)
-- [Puppeteer](https://github.com/EmergenceAI/Agent-E)
+- [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)
 - [Chrome Extension Boilerplate](https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite)
 - [LangChain](https://github.com/langchain-ai/langchainjs)
 

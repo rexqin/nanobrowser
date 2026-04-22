@@ -1,4 +1,4 @@
-import type { Protocol } from 'puppeteer-core';
+import type { AutomationProtocol as Protocol } from '../automation/types';
 import type { DOMRect, SnapshotNode } from './domService';
 
 // 仅用于交互性和可见性检测的基本计算样式

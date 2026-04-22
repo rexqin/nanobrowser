@@ -30,7 +30,6 @@
     "@langchain/xai": "^0.1.0",
     "jsonrepair": "^3.13.1",
     "posthog-js": "^1.271.0",
-    "puppeteer-core": "^24.31.0",
     "webextension-polyfill": "^0.12.0",
     "zod": "^3.25.76",
     "zod-to-json-schema": "^3.24.6"
@@ -48,6 +47,7 @@
     "@types/ws": "^8.5.13",
     "cross-env": "^7.0.3",
     "deepmerge": "^4.3.1",
+    "devtools-protocol": "^0.0.1618660",
     "magic-string": "^0.30.10",
     "ts-loader": "^9.5.1",
     "vitest": "2.1.9"

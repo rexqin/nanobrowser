@@ -220,7 +220,7 @@ En su lugar, por favor crea un [GitHub Security Advisory](https://github.com/nan
 Nanobrowser se construye sobre otros increíbles proyectos de código abierto:
 
 - [Browser Use](https://github.com/browser-use/browser-use)
-- [Puppeteer](https://github.com/EmergenceAI/Agent-E)
+- [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)
 - [Chrome Extension Boilerplate](https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite)
 - [LangChain](https://github.com/langchain-ai/langchainjs)
 

@@ -1,7 +1,7 @@
 import { createLogger } from '@src/background/log';
 import { DomService, EnhancedDOMTreeNode, NodeType } from './domService';
 import { SerializedDOMState } from './serializedDOMState';
-import type { Page as PuppeteerPage, CDPSession as PuppeteerCDPSession } from 'puppeteer-core';
+import type { AutomationCDPSession } from '../automation/types';
 const logger = createLogger('DOMService');
 
 export interface ReadabilityResult {
@@ -46,8 +46,7 @@ export async function getClickableElements(
   focusElement = -1,
   viewportExpansion = 0,
   debugMode = false,
-  page?: PuppeteerPage,
-  cdpSession?: PuppeteerCDPSession,
+  cdpSession?: AutomationCDPSession,
 ): Promise<EnhancedDOMState> {
   if (!cdpSession) {
     throw new Error('Failed to get CDP session (page missing or not connected)');
@@ -60,7 +59,6 @@ export async function getClickableElements(
     viewportExpansion,
     debugMode,
     cdpSession,
-    page,
   );
 
   logger.debug('getClickableElements done', {
@@ -81,14 +79,13 @@ async function _buildDomTree(
   focusElement = -1,
   viewportExpansion = 0,
   debugMode = false,
-  cdpSession?: PuppeteerCDPSession,
-  page?: PuppeteerPage,
+  cdpSession?: AutomationCDPSession,
 ): Promise<[EnhancedDOMTreeNode, SerializedDOMState]> {
   void focusElement;
   void viewportExpansion;
 
-  if (!cdpSession || !page) {
-    throw new Error('Failed to create CDP session or page');
+  if (!cdpSession) {
+    throw new Error('Failed to create CDP session');
   }
 
   // Only return an empty DOM state for invalid URL values.
@@ -118,7 +115,6 @@ async function _buildDomTree(
 
   const domService = new DomService();
   const [serializedDomState, enhancedDomTree, timingInfo] = await domService.getSerializedDomTree(
-    page,
     cdpSession,
     tabId.toString(),
   );

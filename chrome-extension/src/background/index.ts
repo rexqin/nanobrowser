@@ -16,6 +16,7 @@ import {
   type SidePanelPublishReceivedMessage,
 } from '@extension/shared';
 import BrowserContext from './browser/context';
+import type { AutomationConnectorMode, AutomationEngine } from './browser/automation/adapter';
 import { Executor } from './agent/executor';
 import { createLogger } from './log';
 import { createChatModel } from './agent/helper';
@@ -40,7 +41,33 @@ function isHzgmTechSenderUrl(urlStr: string | undefined): boolean {
   }
 }
 
-const browserContext = new BrowserContext({});
+const resolveAutomationEngine = (): AutomationEngine => {
+  const fromStorage = (globalThis as { NANOBROWSER_AUTOMATION_ENGINE?: string }).NANOBROWSER_AUTOMATION_ENGINE;
+  if (fromStorage === 'cdp' || fromStorage === 'hybrid') {
+    return fromStorage;
+  }
+  return 'hybrid';
+};
+
+const resolveAutomationConnectorMode = (): AutomationConnectorMode => {
+  const fromStorage = (globalThis as { NANOBROWSER_AUTOMATION_CONNECTOR_MODE?: string })
+    .NANOBROWSER_AUTOMATION_CONNECTOR_MODE;
+  if (fromStorage === 'auto' || fromStorage === 'chrome-debugger') {
+    return fromStorage;
+  }
+  return 'chrome-debugger';
+};
+
+const automationEngine = resolveAutomationEngine();
+const automationConnectorMode = resolveAutomationConnectorMode();
+const browserContext = new BrowserContext({
+  automationEngine,
+  automationConnectorMode,
+});
+logger.info('automation runtime initialized', {
+  engine: automationEngine,
+  connectorMode: automationConnectorMode,
+});
 let currentExecutor: Executor | null = null;
 let currentPort: chrome.runtime.Port | null = null;
 /** Background tab used for multi-step plan execution; closed when the plan ends or a normal task uses the active tab. */

@@ -102,7 +102,6 @@ Agent logic is under `chrome-extension/src/background/agent/`.
 - **React 18** with TypeScript
 - **Tailwind CSS** for styling
 - **Vite** for bundling
-- **Puppeteer** for browser automation
 - **Chrome APIs** for browser automation
 - **LangChain.js** for LLM integration
 

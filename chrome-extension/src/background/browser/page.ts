@@ -1,15 +1,6 @@
 import 'webextension-polyfill';
-import { connect, ExtensionTransport } from 'puppeteer-core';
 
-import type {
-  Page as PuppeteerPage,
-  Browser,
-  CDPSession as PuppeteerCDPSession,
-  KeyInput,
-  ProtocolType,
-  HTTPRequest,
-  HTTPResponse,
-} from 'puppeteer-core';
+import type { AutomationCDPSession, AutomationPageHandle } from './automation/types';
 
 import {
   getClickableElements as _getClickableElements,
@@ -24,6 +15,15 @@ import { isUrlAllowed } from './util';
 import { EnhancedDOMTreeNode } from './dom/enhancedDOMTreeNode';
 import { NodeType } from './dom/domService';
 import { SerializedDOMState } from './dom/serializedDOMState';
+import { CdpNetworkWaiter } from './cdp/networkWaiter';
+import { createPageAutomationAdapter, type PageAutomationAdapter } from './automation/adapter';
+import { callFunctionOnBackendNode } from './cdp/nodeInvoker';
+import { runtimeEvaluate, waitForPageLoadState as waitForPageLoadStateWithCdp } from './cdp/runtime';
+import { navigateHistory, navigateToUrl, reloadPage } from './cdp/navigation';
+import { waitForStableNetworkWithCdp } from './cdp/networkIdle';
+import { sendKeyCombination } from './cdp/keyboard';
+import { scrollPageBy, scrollPageByViewport, scrollPageToPercent } from './cdp/scroll';
+import { getPageHtml, scrollToVisibleText } from './cdp/content';
 
 const logger = createLogger('Page');
 
@@ -100,17 +100,20 @@ export class CachedStateClickableElementsHashes {
 
 export default class Page {
   private _tabId: number;
-  private _browser: Browser | null = null;
-  private _puppeteerPage: PuppeteerPage | null = null;
+  private _attachedPageHandle: AutomationPageHandle | null = null;
+  private _automationAdapter: PageAutomationAdapter;
   private _config: BrowserContextConfig;
   private _state: PageState;
   private _cachedState: PageState | null = null;
   private _cachedStateClickableElementsHashes: CachedStateClickableElementsHashes | null = null;
-  private _evaluateWrapped = false;
 
   constructor(tabId: number, url: string, title: string, config: Partial<BrowserContextConfig> = {}) {
     this._tabId = tabId;
     this._config = { ...DEFAULT_BROWSER_CONTEXT_CONFIG, ...config };
+    this._automationAdapter = createPageAutomationAdapter(
+      this._config.automationEngine,
+      this._config.automationConnectorMode,
+    );
     this._state = build_initial_state(tabId, url, title);
   }
 
@@ -119,26 +122,24 @@ export default class Page {
   }
 
   get attached(): boolean {
-    return this._puppeteerPage !== null;
+    return this._attachedPageHandle !== null;
   }
 
-  async attachPuppeteer(): Promise<boolean> {
-    if (this._puppeteerPage) {
+  private _setAttachedPageHandle(page: AutomationPageHandle | null): void {
+    this._attachedPageHandle = page;
+  }
+
+  async attachAutomation(): Promise<boolean> {
+    if (this._attachedPageHandle) {
       return true;
     }
 
-    logger.info('attaching puppeteer', this._tabId);
-    const browser = await connect({
-      transport: await ExtensionTransport.connectTab(this._tabId),
-      defaultViewport: null,
-      protocol: 'cdp' as ProtocolType,
+    logger.info('attaching automation adapter', {
+      tabId: this._tabId,
+      engine: this._automationAdapter.engine,
     });
-    this._browser = browser;
-
-    const [page] = await browser.pages();
-    this._puppeteerPage = page;
-
-    this._wrapEvaluateForDebug();
+    const page = await this._automationAdapter.attach(this._tabId);
+    this._setAttachedPageHandle(page);
 
     // Add anti-detection scripts
     await this._addAntiDetectionScripts();
@@ -147,11 +148,14 @@ export default class Page {
   }
 
   private async _addAntiDetectionScripts(): Promise<void> {
-    if (!this._puppeteerPage) {
+    const cdp = this.getCDPSession();
+    if (!cdp) {
       return;
     }
 
-    await this._puppeteerPage.evaluateOnNewDocument(`
+    await cdp.send('Page.enable').catch(() => undefined);
+    await cdp.send('Page.addScriptToEvaluateOnNewDocument', {
+      source: `
       // Webdriver property
       Object.defineProperty(navigator, 'webdriver', {
         get: () => undefined
@@ -185,71 +189,39 @@ export default class Page {
           return originalAttachShadow.call(this, { ...options, mode: "open" });
         };
       })();
-    `);
+    `,
+    });
   }
 
-  private _serializeEvaluateFunction(fnOrScript: unknown): string {
-    if (typeof fnOrScript === 'string') {
-      return fnOrScript;
-    }
-    if (typeof fnOrScript === 'function') {
-      return fnOrScript.toString();
-    }
-    try {
-      return JSON.stringify(fnOrScript);
-    } catch {
-      return String(fnOrScript);
-    }
-  }
+  async detachAutomation(): Promise<void> {
+    if (this._automationAdapter.isAttached() || this._attachedPageHandle) {
+      await this._automationAdapter.detach();
+      this._setAttachedPageHandle(null);
 
-  private _wrapEvaluateForDebug(): void {
-    if (!import.meta.env.DEV || !this._puppeteerPage || this._evaluateWrapped) {
-      return;
-    }
-    const page = this._puppeteerPage as PuppeteerPage;
-    const originalEvaluate = (page.evaluate as (...args: unknown[]) => Promise<unknown>).bind(page);
-    (page as unknown as { evaluate: (...args: unknown[]) => Promise<unknown> }).evaluate = async (
-      ...args: unknown[]
-    ) => {
-      const [fnOrScript, ...restArgs] = args;
-      logger.debug('[puppeteer.evaluate] script/function:', this._serializeEvaluateFunction(fnOrScript));
-      if (restArgs.length > 0) {
-        logger.debug('[puppeteer.evaluate] args:', restArgs);
-      }
-      return originalEvaluate(...args);
-    };
-    this._evaluateWrapped = true;
-  }
-
-  async detachPuppeteer(): Promise<void> {
-    if (this._browser) {
-      await this._browser.disconnect();
-      this._browser = null;
-      this._puppeteerPage = null;
-
-      logger.debug('detachPuppeteer:done', { tabId: this._tabId });
+      logger.debug('detachAutomation:done', { tabId: this._tabId });
       // reset the state
       this._state = build_initial_state(this._tabId);
     }
   }
 
-  private async _ensurePuppeteerPage(): Promise<PuppeteerPage> {
-    if (this._puppeteerPage) {
-      return this._puppeteerPage;
+  private async _ensureAttachedPage(): Promise<AutomationPageHandle> {
+    if (this._attachedPageHandle) {
+      return this._attachedPageHandle;
     }
 
-    logger.warning('Puppeteer page missing, attempting auto reconnect', { tabId: this._tabId });
-    const attached = await this.attachPuppeteer();
-    if (!attached || !this._puppeteerPage) {
-      throw new Error('Puppeteer is not connected');
+    logger.warning('Attached automation page missing, attempting auto reconnect', { tabId: this._tabId });
+    const page = await this._automationAdapter.ensureAttached(this._tabId);
+    this._setAttachedPageHandle(page);
+    if (!this._attachedPageHandle) {
+      throw new Error('Automation page is not connected');
     }
 
-    logger.info('Puppeteer auto reconnect succeeded', { tabId: this._tabId });
-    return this._puppeteerPage;
+    logger.info('Automation page auto reconnect succeeded', { tabId: this._tabId });
+    return this._attachedPageHandle;
   }
 
   async getClickableElements(focusElement: number): Promise<EnhancedDOMState | null> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
     const cdpSession = this.getCDPSession();
     if (!cdpSession) {
       throw new Error('Failed to get CDP session (page missing or not connected)');
@@ -260,18 +232,21 @@ export default class Page {
       focusElement,
       this._config.viewportExpansion,
       import.meta.env.DEV,
-      puppeteerPage,
       cdpSession,
     );
   }
 
-  /** Puppeteer Page 的主 CDP 客户端；公开类型不含 `_client`，扩展里也不能用 `createCDPSession()` */
-  private getCDPSession(): PuppeteerCDPSession | null {
-    if (!this._puppeteerPage) {
-      return null;
+  /** Attached automation page 的主 CDP 客户端；公开类型不含 `_client`，扩展里也不能用 `createCDPSession()` */
+  private getCDPSession(): AutomationCDPSession | null {
+    return this._automationAdapter.getCDPSession();
+  }
+
+  private _getRequiredCDPSession(): AutomationCDPSession {
+    const cdp = this.getCDPSession();
+    if (!cdp) {
+      throw new Error('CDP session unavailable');
     }
-    const client = (this._puppeteerPage as unknown as { _client?: () => PuppeteerCDPSession })._client?.();
-    return client ?? null;
+    return cdp;
   }
 
   // Get scroll position information for the current page.
@@ -281,7 +256,7 @@ export default class Page {
 
   // Get scroll position information for a specific element.
   async getElementScrollInfo(elementNode: EnhancedDOMTreeNode): Promise<[number, number, number]> {
-    await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     const scrollInfo = (await this._callOnBackendNode(
       elementNode,
@@ -316,8 +291,12 @@ export default class Page {
   }
 
   async getContent(): Promise<string> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
-    return await puppeteerPage.content();
+    await this._ensureAttachedPage();
+    const cdp = this.getCDPSession();
+    if (!cdp) {
+      throw new Error('CDP session unavailable');
+    }
+    return await getPageHtml(cdp);
   }
 
   getCachedState(): PageState | null {
@@ -362,22 +341,15 @@ export default class Page {
   async _updateState(focusElement = -1): Promise<PageState> {
     try {
       // Test if page is still accessible
-      // @ts-expect-error - puppeteerPage is not null, already checked before calling this function
-      await this._puppeteerPage.evaluate('1');
+      await runtimeEvaluate(this._getRequiredCDPSession(), '1');
     } catch (error) {
       logger.warning('Current page is no longer accessible:', error);
-      if (this._browser) {
-        const pages = await this._browser.pages();
-        if (pages.length > 0) {
-          this._puppeteerPage = pages[0];
-        } else {
-          throw new Error('Browser closed: no valid pages available');
-        }
-      }
+      await this.detachAutomation();
+      await this._ensureAttachedPage();
     }
 
     try {
-      const currentUrl = this._puppeteerPage?.url() ?? '';
+      const currentUrl = (await runtimeEvaluate<string>(this._getRequiredCDPSession(), 'location.href')) ?? '';
       if (isCdpEvaluationBlockedUrl(currentUrl)) {
         logger.info(`Skip state update on blocked URL: ${currentUrl}`);
         return this._state;
@@ -396,8 +368,8 @@ export default class Page {
       // update the state
       this._state.elementTree = content.elementTree;
       this._state.serializedDomState = content.serializedDomState;
-      this._state.url = this._puppeteerPage?.url() || '';
-      this._state.title = (await this._puppeteerPage?.title()) || '';
+      this._state.url = currentUrl;
+      this._state.title = (await runtimeEvaluate<string>(this._getRequiredCDPSession(), 'document.title')) ?? '';
       this._state.screenshot = screenshot;
       this._state.scrollY = scrollY;
       this._state.visualViewportHeight = visualViewportHeight;
@@ -411,42 +383,75 @@ export default class Page {
   }
 
   async takeScreenshot(fullPage = false): Promise<string | null> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
+    const cdp = this.getCDPSession();
+    if (!cdp) {
+      throw new Error('CDP session unavailable');
+    }
 
     try {
       // First disable animations/transitions
-      await puppeteerPage.evaluate(() => {
-        const styleId = 'puppeteer-disable-animations';
-        if (!document.getElementById(styleId)) {
-          const style = document.createElement('style');
-          style.id = styleId;
-          style.textContent = `
-            *, *::before, *::after {
-              animation: none !important;
-              transition: none !important;
-            }
-          `;
-          document.head.appendChild(style);
-        }
-      });
+      await runtimeEvaluate(
+        this._getRequiredCDPSession(),
+        `
+        (() => {
+          const styleId = 'automation-disable-animations';
+          if (!document.getElementById(styleId)) {
+            const style = document.createElement('style');
+            style.id = styleId;
+            style.textContent = \`
+              *, *::before, *::after {
+                animation: none !important;
+                transition: none !important;
+              }
+            \`;
+            document.head.appendChild(style);
+          }
+          return true;
+        })()
+      `,
+      );
 
-      // Take the screenshot using JPEG format with 80% quality
-      const screenshot = await puppeteerPage.screenshot({
-        fullPage: fullPage,
-        encoding: 'base64',
-        type: 'jpeg',
-        quality: 80, // Good balance between quality and file size
-      });
+      let screenshot: string;
+      if (fullPage) {
+        const metrics = await cdp.send('Page.getLayoutMetrics');
+        const contentSize = metrics.contentSize;
+        const capture = await cdp.send('Page.captureScreenshot', {
+          format: 'jpeg',
+          quality: 80,
+          clip: {
+            x: 0,
+            y: 0,
+            width: Math.max(1, Math.floor(contentSize.width)),
+            height: Math.max(1, Math.floor(contentSize.height)),
+            scale: 1,
+          },
+          captureBeyondViewport: true,
+        });
+        screenshot = capture.data;
+      } else {
+        const capture = await cdp.send('Page.captureScreenshot', {
+          format: 'jpeg',
+          quality: 80,
+        });
+        screenshot = capture.data;
+      }
 
       // Clean up the style element
-      await puppeteerPage.evaluate(() => {
-        const style = document.getElementById('puppeteer-disable-animations');
-        if (style) {
-          style.remove();
-        }
-      });
+      await runtimeEvaluate(
+        this._getRequiredCDPSession(),
+        `
+        (() => {
+          const style = document.getElementById('automation-disable-animations');
+          if (style) {
+            style.remove();
+          }
+          return true;
+        })()
+      `,
+      );
 
-      return screenshot as string;
+      return screenshot;
     } catch (error) {
       logger.error('Failed to take screenshot:', error);
       throw error;
@@ -454,21 +459,24 @@ export default class Page {
   }
 
   url(): string {
-    if (this._puppeteerPage) {
-      return this._puppeteerPage.url();
-    }
     return this._state.url;
   }
 
   async title(): Promise<string> {
-    if (this._puppeteerPage) {
-      return await this._puppeteerPage.title();
+    try {
+      const title = await runtimeEvaluate<string>(this._getRequiredCDPSession(), 'document.title');
+      if (typeof title === 'string') {
+        this._state.title = title;
+        return title;
+      }
+    } catch {
+      // noop - fallback to cached state
     }
     return this._state.title;
   }
 
   async navigateTo(url: string): Promise<void> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
     logger.info('navigateTo', url);
 
     // Check if URL is allowed
@@ -477,7 +485,12 @@ export default class Page {
     }
 
     try {
-      await Promise.all([this.waitForPageAndFramesLoad(), puppeteerPage.goto(url)]);
+      const cdp = this.getCDPSession();
+      if (!cdp) {
+        throw new Error('CDP session unavailable');
+      }
+      await navigateToUrl(cdp, url);
+      await this.waitForPageAndFramesLoad();
       logger.info('navigateTo complete');
     } catch (error) {
       if (error instanceof URLNotAllowedError) {
@@ -495,10 +508,15 @@ export default class Page {
   }
 
   async refreshPage(): Promise<void> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     try {
-      await Promise.all([this.waitForPageAndFramesLoad(), puppeteerPage.reload()]);
+      const cdp = this.getCDPSession();
+      if (!cdp) {
+        throw new Error('CDP session unavailable');
+      }
+      await reloadPage(cdp);
+      await this.waitForPageAndFramesLoad();
       logger.info('Page refresh complete');
     } catch (error) {
       if (error instanceof URLNotAllowedError) {
@@ -516,10 +534,18 @@ export default class Page {
   }
 
   async goBack(): Promise<void> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     try {
-      await Promise.all([this.waitForPageAndFramesLoad(), puppeteerPage.goBack()]);
+      const cdp = this.getCDPSession();
+      if (!cdp) {
+        throw new Error('CDP session unavailable');
+      }
+      const navigated = await navigateHistory(cdp, -1);
+      if (!navigated) {
+        return;
+      }
+      await this.waitForPageAndFramesLoad();
       logger.info('Navigation back completed');
     } catch (error) {
       if (error instanceof URLNotAllowedError) {
@@ -537,10 +563,18 @@ export default class Page {
   }
 
   async goForward(): Promise<void> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     try {
-      await Promise.all([this.waitForPageAndFramesLoad(), puppeteerPage.goForward()]);
+      const cdp = this.getCDPSession();
+      if (!cdp) {
+        throw new Error('CDP session unavailable');
+      }
+      const navigated = await navigateHistory(cdp, 1);
+      if (!navigated) {
+        return;
+      }
+      await this.waitForPageAndFramesLoad();
       logger.info('Navigation forward completed');
     } catch (error) {
       if (error instanceof URLNotAllowedError) {
@@ -562,18 +596,13 @@ export default class Page {
   // if elementNode is provided, scroll to a percentage of the element
   // if elementNode is not provided, scroll to a percentage of the page
   async scrollToPercent(yPercent: number, elementNode?: EnhancedDOMTreeNode): Promise<void> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
     if (!elementNode) {
-      await puppeteerPage.evaluate(yPercent => {
-        const scrollHeight = document.documentElement.scrollHeight;
-        const viewportHeight = window.visualViewport?.height || window.innerHeight;
-        const scrollTop = (scrollHeight - viewportHeight) * (yPercent / 100);
-        window.scrollTo({
-          top: scrollTop,
-          left: window.scrollX,
-          behavior: 'smooth',
-        });
-      }, yPercent);
+      const cdp = this.getCDPSession();
+      if (!cdp) {
+        throw new Error('CDP session unavailable');
+      }
+      await scrollPageToPercent(cdp, yPercent);
     } else {
       await this._callOnBackendNode(
         elementNode,
@@ -599,15 +628,13 @@ export default class Page {
   }
 
   async scrollBy(y: number, elementNode?: EnhancedDOMTreeNode): Promise<void> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
     if (!elementNode) {
-      await puppeteerPage.evaluate(y => {
-        window.scrollBy({
-          top: y,
-          left: 0,
-          behavior: 'smooth',
-        });
-      }, y);
+      const cdp = this.getCDPSession();
+      if (!cdp) {
+        throw new Error('CDP session unavailable');
+      }
+      await scrollPageBy(cdp, y);
     } else {
       await this._callOnBackendNode(
         elementNode,
@@ -630,11 +657,15 @@ export default class Page {
   }
 
   async scrollToPreviousPage(elementNode?: EnhancedDOMTreeNode): Promise<void> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     if (!elementNode) {
       // Scroll the whole page up by viewport height
-      await puppeteerPage.evaluate('window.scrollBy(0, -(window.visualViewport?.height || window.innerHeight));');
+      const cdp = this.getCDPSession();
+      if (!cdp) {
+        throw new Error('CDP session unavailable');
+      }
+      await scrollPageByViewport(cdp, 'prev');
     } else {
       await this._callOnBackendNode(
         elementNode,
@@ -656,11 +687,15 @@ export default class Page {
   }
 
   async scrollToNextPage(elementNode?: EnhancedDOMTreeNode): Promise<void> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     if (!elementNode) {
       // Scroll the whole page down by viewport height
-      await puppeteerPage.evaluate('window.scrollBy(0, (window.visualViewport?.height || window.innerHeight));');
+      const cdp = this.getCDPSession();
+      if (!cdp) {
+        throw new Error('CDP session unavailable');
+      }
+      await scrollPageByViewport(cdp, 'next');
     } else {
       await this._callOnBackendNode(
         elementNode,
@@ -682,149 +717,30 @@ export default class Page {
   }
 
   async sendKeys(keys: string): Promise<void> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
-
-    // Split combination keys (e.g., "Control+A" or "Shift+ArrowLeft")
-    const keyParts = keys.split('+');
-    const modifiers = keyParts.slice(0, -1);
-    const mainKey = keyParts[keyParts.length - 1];
-
-    // Press modifiers and main key, ensure modifiers are released even if an error occurs.
+    await this._ensureAttachedPage();
+    const cdp = this.getCDPSession();
+    if (!cdp) {
+      throw new Error('CDP session unavailable');
+    }
     try {
-      // Press all modifier keys (e.g., Control, Shift, etc.)
-      for (const modifier of modifiers) {
-        await puppeteerPage.keyboard.down(this._convertKey(modifier));
-      }
-      // Press the main key
-      // also wait for stable state
-      await Promise.all([puppeteerPage.keyboard.press(this._convertKey(mainKey)), this.waitForPageAndFramesLoad()]);
+      await sendKeyCombination(cdp, keys);
+      await this.waitForPageAndFramesLoad();
       logger.info('sendKeys complete', keys);
     } catch (error) {
       logger.error('Failed to send keys:', error);
       throw new Error(`Failed to send keys: ${error instanceof Error ? error.message : String(error)}`);
-    } finally {
-      // Release all modifier keys in reverse order regardless of any errors in key press.
-      for (const modifier of [...modifiers].reverse()) {
-        try {
-          await puppeteerPage.keyboard.up(this._convertKey(modifier));
-        } catch (releaseError) {
-          logger.error('Failed to release modifier:', modifier, releaseError);
-        }
-      }
     }
-  }
-
-  private _convertKey(key: string): KeyInput {
-    const lowerKey = key.trim().toLowerCase();
-    const isMac = navigator.userAgent.toLowerCase().includes('mac os x');
-
-    if (isMac) {
-      if (lowerKey === 'control' || lowerKey === 'ctrl') {
-        return 'Meta' as KeyInput; // Use Command key on Mac
-      }
-      if (lowerKey === 'command' || lowerKey === 'cmd') {
-        return 'Meta' as KeyInput; // Map Command/Cmd to Meta on Mac
-      }
-      if (lowerKey === 'option' || lowerKey === 'opt') {
-        return 'Alt' as KeyInput; // Map Option/Opt to Alt on Mac
-      }
-    }
-
-    const keyMap: { [key: string]: string } = {
-      // Letters
-      a: 'KeyA',
-      b: 'KeyB',
-      c: 'KeyC',
-      d: 'KeyD',
-      e: 'KeyE',
-      f: 'KeyF',
-      g: 'KeyG',
-      h: 'KeyH',
-      i: 'KeyI',
-      j: 'KeyJ',
-      k: 'KeyK',
-      l: 'KeyL',
-      m: 'KeyM',
-      n: 'KeyN',
-      o: 'KeyO',
-      p: 'KeyP',
-      q: 'KeyQ',
-      r: 'KeyR',
-      s: 'KeyS',
-      t: 'KeyT',
-      u: 'KeyU',
-      v: 'KeyV',
-      w: 'KeyW',
-      x: 'KeyX',
-      y: 'KeyY',
-      z: 'KeyZ',
-
-      // Numbers
-      '0': 'Digit0',
-      '1': 'Digit1',
-      '2': 'Digit2',
-      '3': 'Digit3',
-      '4': 'Digit4',
-      '5': 'Digit5',
-      '6': 'Digit6',
-      '7': 'Digit7',
-      '8': 'Digit8',
-      '9': 'Digit9',
-
-      // Special keys
-      control: 'Control',
-      shift: 'Shift',
-      alt: 'Alt',
-      meta: 'Meta',
-      enter: 'Enter',
-      backspace: 'Backspace',
-      delete: 'Delete',
-      arrowleft: 'ArrowLeft',
-      arrowright: 'ArrowRight',
-      arrowup: 'ArrowUp',
-      arrowdown: 'ArrowDown',
-      escape: 'Escape',
-      tab: 'Tab',
-      space: 'Space',
-    };
-
-    const convertedKey = keyMap[lowerKey] || key;
-    logger.info('convertedKey', convertedKey);
-    return convertedKey as KeyInput;
   }
 
   async scrollToText(text: string, nth: number = 1): Promise<boolean> {
-    const puppeteerPage = await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
+    const cdp = this.getCDPSession();
+    if (!cdp) {
+      throw new Error('CDP session unavailable');
+    }
 
     try {
-      const found = await puppeteerPage.evaluate(
-        ({ targetText, targetNth }) => {
-          const lowerCaseText = targetText.toLowerCase();
-          const nodes = Array.from(document.querySelectorAll<HTMLElement>('body *'));
-          const candidates = nodes.filter(node => {
-            const txt = (node.textContent || '').toLowerCase();
-            if (!txt.includes(lowerCaseText)) {
-              return false;
-            }
-            const style = window.getComputedStyle(node);
-            const rect = node.getBoundingClientRect();
-            return (
-              style.display !== 'none' &&
-              style.visibility !== 'hidden' &&
-              style.opacity !== '0' &&
-              rect.width > 0 &&
-              rect.height > 0
-            );
-          });
-          if (candidates.length < targetNth || targetNth <= 0) {
-            return false;
-          }
-          const target = candidates[targetNth - 1];
-          target.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
-          return true;
-        },
-        { targetText: text, targetNth: nth },
-      );
+      const found = await scrollToVisibleText(cdp, text, nth);
       if (found) {
         await new Promise(resolve => setTimeout(resolve, 500));
       }
@@ -841,7 +757,7 @@ export default class Page {
     if (!element) {
       throw new Error('Element not found');
     }
-    await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     try {
       const options = (await this._callOnBackendNode(
@@ -876,7 +792,7 @@ export default class Page {
     if (!element) {
       throw new Error('Element not found');
     }
-    await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     logger.debug(`Attempting to select '${text}' from dropdown`);
     logger.debug(`Element attributes: ${JSON.stringify(element.attributes)}`);
@@ -940,23 +856,6 @@ export default class Page {
     }
   }
 
-  private async _resolveBackendObjectId(elementNode: EnhancedDOMTreeNode): Promise<string> {
-    const backendNodeId = elementNode.backendNodeId;
-    if (!backendNodeId) {
-      throw new Error('Missing backendNodeId');
-    }
-    const cdp = this.getCDPSession();
-    if (!cdp) {
-      throw new Error('CDP session unavailable');
-    }
-    const resolved = await cdp.send('DOM.resolveNode', { backendNodeId });
-    const objectId = resolved.object?.objectId;
-    if (!objectId) {
-      throw new Error(`Failed to resolve backendNodeId: ${backendNodeId}`);
-    }
-    return objectId;
-  }
-
   private async _callOnBackendNode(
     elementNode: EnhancedDOMTreeNode,
     functionDeclaration: string,
@@ -967,23 +866,11 @@ export default class Page {
     if (!cdp) {
       throw new Error('CDP session unavailable');
     }
-    const objectId = await this._resolveBackendObjectId(elementNode);
-    try {
-      const result = await cdp.send('Runtime.callFunctionOn', {
-        objectId,
-        functionDeclaration,
-        arguments: args.map(value => ({ value })),
-        returnByValue,
-        awaitPromise: true,
-      });
-      return result.result?.value;
-    } finally {
-      await cdp.send('Runtime.releaseObject', { objectId }).catch(() => undefined);
-    }
+    return await callFunctionOnBackendNode(cdp, elementNode.backendNodeId, functionDeclaration, args, returnByValue);
   }
 
   async isElementVisibleByBackendNode(elementNode: EnhancedDOMTreeNode): Promise<boolean> {
-    await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
     const visible = await this._callOnBackendNode(
       elementNode,
       `function() {
@@ -1015,73 +902,14 @@ export default class Page {
     networkCompleted: boolean;
     error?: string;
   }> {
-    await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
     const cdp = this.getCDPSession();
     const waitForNetworkAfterPasteMs = 3000;
-    let networkTrackingStarted = false;
-    let networkDetected = false;
-    let networkCompletedCount = 0;
-    const seenRequestIds = new Set<string>();
-
-    const onRequestWillBeSent = (event: { requestId?: string; request?: { url?: string } }) => {
-      if (!networkTrackingStarted) return;
-      const requestId = event.requestId;
-      const url = event.request?.url ?? '';
-      if (!requestId || !url || url.startsWith('data:')) return;
-      networkDetected = true;
-      seenRequestIds.add(requestId);
-      logger.info('pasteImage network request detected', {
-        tabId: this._tabId,
-        requestId,
-        url,
-      });
-    };
-
-    const onLoadingFinished = (event: { requestId?: string }) => {
-      if (!networkTrackingStarted) return;
-      const requestId = event.requestId;
-      if (!requestId) return;
-      if (seenRequestIds.has(requestId)) {
-        networkCompletedCount += 1;
-        logger.info('pasteImage network request finished', {
-          tabId: this._tabId,
-          requestId,
-          networkCompletedCount,
-        });
-      }
-    };
-
-    const onLoadingFailed = (event: { requestId?: string }) => {
-      if (!networkTrackingStarted) return;
-      const requestId = event.requestId;
-      if (!requestId) return;
-      if (seenRequestIds.has(requestId)) {
-        networkCompletedCount += 1;
-        logger.warning('pasteImage network request failed', {
-          tabId: this._tabId,
-          requestId,
-          networkCompletedCount,
-        });
-      }
-    };
-
-    const waitForNetworkCompletion = async (): Promise<boolean> => {
-      const deadline = Date.now() + waitForNetworkAfterPasteMs;
-      while (Date.now() < deadline) {
-        if (networkDetected && networkCompletedCount > 0) {
-          return true;
-        }
-        await new Promise(resolve => setTimeout(resolve, 100));
-      }
-      return networkDetected && networkCompletedCount > 0;
-    };
+    const networkWaiter = new CdpNetworkWaiter();
 
     try {
       if (cdp) {
-        await cdp.send('Network.enable').catch(() => undefined);
-        cdp.on('Network.requestWillBeSent', onRequestWillBeSent);
-        cdp.on('Network.loadingFinished', onLoadingFinished);
-        cdp.on('Network.loadingFailed', onLoadingFailed);
+        await networkWaiter.start(cdp);
       }
 
       const response = await fetch(imageUrl);
@@ -1091,7 +919,7 @@ export default class Page {
           outputLength: 0,
           dispatch: false,
           final: false,
-          networkDetected,
+          networkDetected: networkWaiter.snapshot().networkDetected,
           networkCompleted: false,
           error: `Failed to download image in extension context: ${response.status} ${response.statusText}`,
         };
@@ -1118,7 +946,7 @@ export default class Page {
         base64 = btoa(binary);
       }
       const dataUri = `data:${inferredMime};base64,${base64}`;
-      networkTrackingStarted = true;
+      networkWaiter.beginTracking();
       const result = (await this._callOnBackendNode(
         elementNode,
         `async function(uri) {
@@ -1228,13 +1056,14 @@ export default class Page {
           outputLength,
           dispatch: false,
           final: false,
-          networkDetected,
+          networkDetected: networkWaiter.snapshot().networkDetected,
           networkCompleted: false,
           error: 'Image paste CDP function returned invalid result',
         };
       }
 
-      const networkCompleted = await waitForNetworkCompletion();
+      const networkCompleted = await networkWaiter.waitForCompletion(waitForNetworkAfterPasteMs);
+      const networkSnapshot = networkWaiter.snapshot();
       const finalDomOk = Boolean(
         await this._callOnBackendNode(
           elementNode,
@@ -1260,8 +1089,8 @@ export default class Page {
 
       logger.info('pasteImageDataToElementNode network/dom check', {
         tabId: this._tabId,
-        networkDetected,
-        networkCompletedCount,
+        networkDetected: networkSnapshot.networkDetected,
+        networkCompletedCount: networkSnapshot.networkCompletedCount,
         networkCompleted,
         cdpDispatch: result.dispatch,
         cdpFinal: result.final,
@@ -1276,32 +1105,30 @@ export default class Page {
         outputLength,
         dispatch: result.dispatch,
         final,
-        networkDetected,
+        networkDetected: networkSnapshot.networkDetected,
         networkCompleted,
         error: success
           ? undefined
           : (result.error ??
-            (networkDetected
+            (networkSnapshot.networkDetected
               ? 'Paste dispatched but no tracked network request completed before timeout'
               : 'No DOM insertion and no tracked network request after paste')),
       };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
+      const networkSnapshot = networkWaiter.snapshot();
       return {
         success: false,
         outputLength: 0,
         dispatch: false,
         final: false,
-        networkDetected,
+        networkDetected: networkSnapshot.networkDetected,
         networkCompleted: false,
         error: `Image paste failed: ${message}`,
       };
     } finally {
-      networkTrackingStarted = false;
       if (cdp) {
-        cdp.off('Network.requestWillBeSent', onRequestWillBeSent);
-        cdp.off('Network.loadingFinished', onLoadingFinished);
-        cdp.off('Network.loadingFailed', onLoadingFailed);
+        networkWaiter.stop(cdp);
       }
     }
   }
@@ -1311,7 +1138,7 @@ export default class Page {
     text: string,
     inputMode: 'override' | 'append' = 'override',
   ): Promise<void> {
-    await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     try {
       await this._callOnBackendNode(
@@ -1357,7 +1184,7 @@ export default class Page {
   }
 
   async clickElementNode(elementNode: EnhancedDOMTreeNode): Promise<void> {
-    await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     try {
       await this._callOnBackendNode(
@@ -1385,7 +1212,7 @@ export default class Page {
   }
 
   async hoverElementNode(elementNode: EnhancedDOMTreeNode): Promise<void> {
-    await this._ensurePuppeteerPage();
+    await this._ensureAttachedPage();
 
     try {
       await this._callOnBackendNode(
@@ -1455,172 +1282,24 @@ export default class Page {
 
   async waitForPageLoadState(timeout?: number) {
     const timeoutValue = timeout || 8000;
-    await this._puppeteerPage?.waitForNavigation({ timeout: timeoutValue });
+    await this._ensureAttachedPage();
+    const cdp = this.getCDPSession();
+    if (!cdp) {
+      throw new Error('CDP session unavailable');
+    }
+    await waitForPageLoadStateWithCdp(cdp, timeoutValue);
   }
 
   private async _waitForStableNetwork() {
-    const puppeteerPage = await this._ensurePuppeteerPage();
-
-    const RELEVANT_RESOURCE_TYPES = new Set(['document', 'stylesheet', 'image', 'font', 'script', 'iframe']);
-
-    const RELEVANT_CONTENT_TYPES = new Set([
-      'text/html',
-      'text/css',
-      'application/javascript',
-      'image/',
-      'font/',
-      'application/json',
-    ]);
-
-    const IGNORED_URL_PATTERNS = new Set([
-      // Analytics and tracking
-      'analytics',
-      'tracking',
-      'telemetry',
-      'beacon',
-      'metrics',
-      // Ad-related
-      'doubleclick',
-      'adsystem',
-      'adserver',
-      'advertising',
-      // Social media widgets
-      'facebook.com/plugins',
-      'platform.twitter',
-      'linkedin.com/embed',
-      // Live chat and support
-      'livechat',
-      'zendesk',
-      'intercom',
-      'crisp.chat',
-      'hotjar',
-      // Push notifications
-      'push-notifications',
-      'onesignal',
-      'pushwoosh',
-      // Background sync/heartbeat
-      'heartbeat',
-      'ping',
-      'alive',
-      // WebRTC and streaming
-      'webrtc',
-      'rtmp://',
-      'wss://',
-      // Common CDNs
-      'cloudfront.net',
-      'fastly.net',
-    ]);
-
-    const pendingRequests = new Set();
-    let lastActivity = Date.now();
-
-    const onRequest = (request: HTTPRequest) => {
-      // Filter by resource type
-      const resourceType = request.resourceType();
-      if (!RELEVANT_RESOURCE_TYPES.has(resourceType)) {
-        return;
-      }
-
-      // Filter out streaming, websocket, and other real-time requests
-      if (['websocket', 'media', 'eventsource', 'manifest', 'other'].includes(resourceType)) {
-        return;
-      }
-
-      // Filter out by URL patterns
-      const url = request.url().toLowerCase();
-      if (Array.from(IGNORED_URL_PATTERNS).some(pattern => url.includes(pattern))) {
-        return;
-      }
-
-      // Filter out data URLs and blob URLs
-      if (url.startsWith('data:') || url.startsWith('blob:')) {
-        return;
-      }
-
-      // Filter out requests with certain headers
-      const headers = request.headers();
-      if (
-        // biome-ignore lint/complexity/useLiteralKeys: <explanation>
-        headers['purpose'] === 'prefetch' ||
-        headers['sec-fetch-dest'] === 'video' ||
-        headers['sec-fetch-dest'] === 'audio'
-      ) {
-        return;
-      }
-
-      pendingRequests.add(request);
-      lastActivity = Date.now();
-    };
-
-    const onResponse = (response: HTTPResponse) => {
-      const request = response.request();
-      if (!pendingRequests.has(request)) {
-        return;
-      }
-
-      // Filter by content type
-      const contentType = response.headers()['content-type']?.toLowerCase() || '';
-
-      // Skip streaming content
-      if (
-        ['streaming', 'video', 'audio', 'webm', 'mp4', 'event-stream', 'websocket', 'protobuf'].some(t =>
-          contentType.includes(t),
-        )
-      ) {
-        pendingRequests.delete(request);
-        return;
-      }
-
-      // Only process relevant content types
-      if (!Array.from(RELEVANT_CONTENT_TYPES).some(ct => contentType.includes(ct))) {
-        pendingRequests.delete(request);
-        return;
-      }
-
-      // Skip large responses
-      const contentLength = response.headers()['content-length'];
-      if (contentLength && Number.parseInt(contentLength) > 5 * 1024 * 1024) {
-        // 5MB
-        pendingRequests.delete(request);
-        return;
-      }
-
-      pendingRequests.delete(request);
-      lastActivity = Date.now();
-    };
-
-    // Add event listeners
-    puppeteerPage.on('request', onRequest);
-    puppeteerPage.on('response', onResponse);
-
-    try {
-      const startTime = Date.now();
-
-      // eslint-disable-next-line no-constant-condition
-      while (true) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-
-        const now = Date.now();
-        const timeSinceLastActivity = (now - lastActivity) / 1000; // Convert to seconds
-
-        if (pendingRequests.size === 0 && timeSinceLastActivity >= this._config.waitForNetworkIdlePageLoadTime) {
-          break;
-        }
-
-        const elapsedTime = (now - startTime) / 1000; // Convert to seconds
-        if (elapsedTime > this._config.maximumWaitPageLoadTime) {
-          console.debug(
-            `Network timeout after ${this._config.maximumWaitPageLoadTime}s with ${pendingRequests.size} pending requests:`,
-            Array.from(pendingRequests).map(r => (r as HTTPRequest).url()),
-          );
-          break;
-        }
-      }
-    } finally {
-      // Clean up event listeners
-      puppeteerPage.off('request', onRequest);
-      puppeteerPage.off('response', onResponse);
+    await this._ensureAttachedPage();
+    const cdp = this.getCDPSession();
+    if (!cdp) {
+      return;
     }
+    await waitForStableNetworkWithCdp(cdp, {
+      waitForNetworkIdleSeconds: this._config.waitForNetworkIdlePageLoadTime,
+      maxWaitSeconds: this._config.maximumWaitPageLoadTime,
+    });
     console.debug(`Network stabilized for ${this._config.waitForNetworkIdlePageLoadTime} seconds`);
   }
 

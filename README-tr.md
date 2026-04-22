@@ -247,7 +247,7 @@ Giderek büyüyen geliştirici ve kullanıcı topluluğumuza katılın:
 Nanobrowser, şu harika açık kaynak projeler üzerine inşa edilmiştir:
 
 * [Browser Use](https://github.com/browser-use/browser-use)
-* [Puppeteer](https://github.com/EmergenceAI/Agent-E)
+* [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)
 * [Chrome Extension Boilerplate](https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite)
 * [LangChain](https://github.com/langchain-ai/langchainjs)
 

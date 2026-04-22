@@ -233,7 +233,7 @@ Nanobrowser 允許您為每個代理設定不同的 LLM 模型，以平衡效能
 Nanobrowser 的開發建立在許多優秀的開放原始碼專案之上：
 
 - [Browser Use](https://github.com/browser-use/browser-use)
-- [Puppeteer](https://github.com/EmergenceAI/Agent-E)
+- [Chrome DevTools Protocol](https://chromedevtools.github.io/devtools-protocol/)
 - [Chrome Extension Boilerplate](https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite)
 - [LangChain](https://github.com/langchain-ai/langchainjs)
 

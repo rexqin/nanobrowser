@@ -1,5 +1,6 @@
 import type { DOMHistoryElement } from './dom/history/view';
 import type { EnhancedDOMState } from './dom/service';
+import type { AutomationConnectorMode, AutomationEngine } from './automation/adapter';
 
 export interface BrowserContextWindowSize {
   width: number;
@@ -70,6 +71,18 @@ export interface BrowserContextConfig {
    * @default 'https://www.google.com'
    */
   homePageUrl: string;
+
+  /**
+   * Runtime automation engine routing strategy.
+   * @default 'hybrid'
+   */
+  automationEngine: AutomationEngine;
+
+  /**
+   * Runtime connector selection strategy.
+   * @default 'chrome-debugger'
+   */
+  automationConnectorMode: AutomationConnectorMode;
 }
 
 export const DEFAULT_BROWSER_CONTEXT_CONFIG: BrowserContextConfig = {
@@ -83,6 +96,8 @@ export const DEFAULT_BROWSER_CONTEXT_CONFIG: BrowserContextConfig = {
   deniedUrls: [],
   includeDynamicAttributes: true,
   homePageUrl: 'about:blank',
+  automationEngine: 'hybrid',
+  automationConnectorMode: 'chrome-debugger',
 };
 
 export interface PageState extends EnhancedDOMState {

@@ -17,7 +17,7 @@ Interactive Elements
 ## 可交互元素格式
 [index]<type>text</type>
 
-- index：用于交互的数字标识，数值为puppeteer的backendNodeId
+- index：用于交互的数字标识，数值为CDP协议的 backendNodeId
 - type：HTML 元素类型（button、input 等）
 - text：元素描述文本
   示例：

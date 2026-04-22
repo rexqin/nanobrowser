@@ -52,7 +52,7 @@ export default class BrowserContext {
         return existingPage;
       }
       // detach the page and remove it from the attached pages if forceUpdate is true
-      await existingPage.detachPuppeteer();
+      await existingPage.detachAutomation();
       this._attachedPages.delete(tab.id);
     }
     logger.info('getOrCreatePage', tab.id, 'creating new page');
@@ -62,7 +62,7 @@ export default class BrowserContext {
   public async cleanup(): Promise<void> {
     // detach all pages
     for (const page of this._attachedPages.values()) {
-      await page.detachPuppeteer();
+      await page.detachAutomation();
     }
     this._attachedPages.clear();
     this._currentTabId = null;
@@ -77,8 +77,8 @@ export default class BrowserContext {
     }
 
     try {
-      const attached = await page.attachPuppeteer();
-      logger.debug('attachPage:attachPuppeteer-result', {
+      const attached = await page.attachAutomation();
+      logger.debug('attachPage:attachAutomation-result', {
         tabId: page.tabId,
         attached,
       });
@@ -127,9 +127,9 @@ export default class BrowserContext {
     }
 
     try {
-      await page.detachPuppeteer();
+      await page.detachAutomation();
 
-      logger.debug('detachPage:detachPuppeteer-done', { tabId });
+      logger.debug('detachPage:detachAutomation-done', { tabId });
     } catch (error) {
       logger.error('detachPage:error', { tabId, error });
       throw error;
@@ -374,7 +374,7 @@ export default class BrowserContext {
       await this.openTab(url);
       return;
     }
-    // if page is attached, use puppeteer to navigate to the url
+    // If page is attached, use automation adapter/CDP to navigate.
     if (page.attached) {
       await page.navigateTo(url);
       return;
@@ -415,7 +415,7 @@ export default class BrowserContext {
   }
 
   /**
-   * Open a tab in the background (does not activate) and attach Puppeteer.
+   * Open a tab in the background (does not activate) and attach automation.
    * Used for plan runs so the user's current tab stays focused.
    */
   public async openInactiveTab(url?: string): Promise<Page> {
@@ -460,7 +460,7 @@ export default class BrowserContext {
   }
 
   /**
-   * Remove a tab from the attached pages map. This will not run detachPuppeteer.
+   * Remove a tab from the attached pages map. This will not run detachAutomation.
    * @param tabId - The ID of the tab to remove.
    */
   public removeAttachedPage(tabId: number): void {

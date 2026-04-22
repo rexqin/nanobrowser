@@ -1,4 +1,5 @@
-import type { Page, CDPSession, Protocol } from 'puppeteer-core';
+import type { AutomationCDPSession, AutomationProtocol as Protocol } from '../automation/types';
+type CDPSession = AutomationCDPSession;
 
 import { EnhancedDOMTreeNode } from './enhancedDOMTreeNode';
 import { buildSnapshotLookup, REQUIRED_COMPUTED_STYLES } from './enhancedSnapshot';
@@ -157,7 +158,7 @@ export class DomService {
   /**
    * 获取视口比例（设备像素比）
    */
-  private async getViewportRatio(page: Page, cdpSession: CDPSession): Promise<number> {
+  private async getViewportRatio(cdpSession: CDPSession): Promise<number> {
     try {
       const metrics = await cdpSession.send('Page.getLayoutMetrics');
       const visualViewport = metrics.visualViewport || {};
@@ -265,10 +266,7 @@ export class DomService {
   /**
    * 获取所有框架的可访问性树
    */
-  private async getAXTreeForAllFrames(
-    page: Page,
-    cdpSession: CDPSession,
-  ): Promise<Protocol.Accessibility.GetFullAXTreeResponse> {
+  private async getAXTreeForAllFrames(cdpSession: CDPSession): Promise<Protocol.Accessibility.GetFullAXTreeResponse> {
     const frameTree: Protocol.Page.GetFrameTreeResponse = await cdpSession.send('Page.getFrameTree');
 
     const collectAllFrameIds = (frameTreeNode: Protocol.Page.FrameTree): string[] => {
@@ -302,7 +300,7 @@ export class DomService {
   /**
    * 获取所有树（快照、DOM、AX、视口比例）
    */
-  private async getAllTrees(page: Page, cdpSession: CDPSession): Promise<TargetAllTrees> {
+  private async getAllTrees(cdpSession: CDPSession): Promise<TargetAllTrees> {
     const startIframeScroll = Date.now();
 
     // 获取 iframe 滚动位置（用于调试）
@@ -358,8 +356,8 @@ export class DomService {
         depth: -1,
         pierce: true,
       }),
-      this.getAXTreeForAllFrames(page, cdpSession),
-      this.getViewportRatio(page, cdpSession),
+      this.getAXTreeForAllFrames(cdpSession),
+      this.getViewportRatio(cdpSession),
     ]);
 
     const cdpCallsMs = Date.now() - startCdpCalls;
@@ -394,7 +392,6 @@ export class DomService {
    * 获取 DOM 树
    */
   async getDomTree(
-    page: Page,
     cdpSession: CDPSession,
     targetId: string,
     initialHtmlFrames: EnhancedDOMTreeNode[] | null = null,
@@ -406,7 +403,7 @@ export class DomService {
     const timingStartTotal = Date.now();
 
     const startGetTrees = Date.now();
-    const trees = await this.getAllTrees(page, cdpSession);
+    const trees = await this.getAllTrees(cdpSession);
     const getTreesMs = Date.now() - startGetTrees;
 
     timingInfo.getAllTreesTotalMs = getTreesMs;
@@ -484,7 +481,7 @@ export class DomService {
         };
       }
 
-      const sessionId = cdpSession.id();
+      const sessionId = cdpSession.id?.() ?? null;
 
       const domTreeNode = new EnhancedDOMTreeNode({
         nodeId: node.nodeId,
@@ -613,7 +610,6 @@ export class DomService {
 
   /**
    * 获取序列化的 DOM 树表示（用于 LLM 消费）
-   * @param page Puppeteer Page 对象
    * @param cdpSession CDP 会话
    * @param targetId 目标 ID
    * @param previousCachedState 之前缓存的序列化状态（可选）
@@ -621,7 +617,6 @@ export class DomService {
    * @returns 返回序列化的 DOM 状态、增强的 DOM 树根节点和计时信息
    */
   async getSerializedDomTree(
-    page: Page,
     cdpSession: CDPSession,
     targetId: string,
     previousCachedState: SerializedDOMState | null = null,
@@ -633,7 +628,6 @@ export class DomService {
     // 构建 DOM 树（包括 CDP 调用以获取快照、DOM、AX 树）
     // 注意：all_frames 在 get_dom_tree 内部延迟获取，仅在需要跨域 iframe 时获取
     const [enhancedDomTree, domTreeTiming] = await this.getDomTree(
-      page,
       cdpSession,
       targetId,
       null, // initialHtmlFrames
