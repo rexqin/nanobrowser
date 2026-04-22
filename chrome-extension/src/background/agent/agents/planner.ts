@@ -93,6 +93,7 @@ export class PlannerAgent extends BaseAgent<typeof plannerOutputSchema, PlannerO
       this.context.emitEvent(Actors.PLANNER, ExecutionState.STEP_START, '规划中...');
 
       // get all messages from the message manager, state message should be the last one
+
       const messages = this.context.messageManager.getMessages();
       // Use a sliding history window to reduce planner latency and token usage.
       const historyMessages = messages.slice(1);

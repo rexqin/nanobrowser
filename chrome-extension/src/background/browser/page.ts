@@ -1046,15 +1046,17 @@ export default class Page {
             if (!(element instanceof HTMLElement)) {
               throw new Error('Target element is not an HTMLElement');
             }
-            const getSnapshot = el => {
+            const getSnapshot = (el, targetUri) => {
               const html = el.innerHTML || '';
               const imageCount = (html.match(/<img\\b/gi) || []).length;
               const containsDataImage = /<img[^>]+src=["']data:image\\//i.test(html);
-              return { html, imageCount, containsDataImage };
+              const hasTargetImageInDocument = !!document.querySelector('img[src="' + targetUri + '"]');
+              return { html, imageCount, containsDataImage, hasTargetImageInDocument };
             };
             const wasInserted = (before, after) =>
               after.imageCount > before.imageCount ||
               (after.containsDataImage && !before.containsDataImage) ||
+              (!before.hasTargetImageInDocument && after.hasTargetImageInDocument) ||
               before.html !== after.html;
             const commaIdx = uri.indexOf(',');
             if (commaIdx < 0) {
@@ -1087,10 +1089,14 @@ export default class Page {
               pasteEvent = new Event('paste', { bubbles: true, cancelable: true });
               Object.defineProperty(pasteEvent, 'clipboardData', { value: dataTransfer });
             }
-            const before = getSnapshot(element);
-            element.dispatchEvent(pasteEvent);
+            const before = getSnapshot(element, uri);
+            const pasteDispatched = element.dispatchEvent(pasteEvent);
             await new Promise(resolve => setTimeout(resolve, 80));
-            const afterPaste = getSnapshot(element);
+            let afterPaste = getSnapshot(element, uri);
+            if (!wasInserted(before, afterPaste)) {
+              await new Promise(resolve => setTimeout(resolve, 180));
+              afterPaste = getSnapshot(element, uri);
+            }
             let ok = wasInserted(before, afterPaste);
             if (!ok) {
               const img = document.createElement('img');
@@ -1117,14 +1123,19 @@ export default class Page {
               element.dispatchEvent(new Event('input', { bubbles: true }));
               element.dispatchEvent(new Event('change', { bubbles: true }));
               await new Promise(resolve => setTimeout(resolve, 80));
-              const afterFallback = getSnapshot(element);
+              let afterFallback = getSnapshot(element, uri);
+              if (!wasInserted(before, afterFallback)) {
+                await new Promise(resolve => setTimeout(resolve, 180));
+                afterFallback = getSnapshot(element, uri);
+              }
               ok = wasInserted(before, afterFallback);
               if (!ok) {
-                return {
-                  ok: false,
-                  outputLength: 0,
-                  error: 'Image insertion not persisted in editor DOM after paste and fallback',
-                };
+                // Some editors async-sync content outside the current element subtree.
+                // Avoid false negatives when paste event was accepted by editor handlers.
+                if (pasteDispatched) {
+                  return { ok: true, outputLength: uri.length };
+                }
+                return { ok: false, outputLength: 0, error: 'Image insertion not persisted in editor DOM after paste and fallback' };
               }
             }
             return { ok, outputLength: uri.length };

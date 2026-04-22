@@ -251,6 +251,8 @@ export default class MessageManager {
   }
 
   public getMessages(): BaseMessage[] {
+    this.cutMessages();
+
     const messages = this.history.messages
       .filter(m => {
         if (!m.message) {

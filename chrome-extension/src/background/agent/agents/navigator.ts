@@ -514,10 +514,10 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
         if (this.context.paused || this.context.stopped) {
           return results;
         }
-        const postActionDelayMs = this.getPostActionDelayMs(actionName, result, urlChanged);
-        if (postActionDelayMs > 0) {
-          await new Promise(resolve => setTimeout(resolve, postActionDelayMs));
-        }
+        // const postActionDelayMs = this.getPostActionDelayMs(actionName, result, urlChanged);
+        // if (postActionDelayMs > 0) {
+        //   await new Promise(resolve => setTimeout(resolve, postActionDelayMs));
+        // }
       } catch (error) {
         if (error instanceof URLNotAllowedError) {
           throw error;
