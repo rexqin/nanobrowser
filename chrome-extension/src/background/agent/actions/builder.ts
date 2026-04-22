@@ -573,14 +573,6 @@ export class ActionBuilder {
           const output = didTruncate ? finalOutput.slice(0, maxChars) : finalOutput;
 
           const pasteResult = await page.pasteImageDataToElementNode(targetNode, output);
-          logger.info('downloadImageToBase64 paste diagnostics', {
-            targetIndex,
-            outputLength: output.length,
-            didTruncate,
-            inferredMime,
-            pasteOk: pasteResult.ok,
-          });
-
           if (!pasteResult.ok) {
             const errorMsg = `Image paste dispatchEvent was cancelled or failed (index=${targetIndex})`;
             this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_FAIL, errorMsg);

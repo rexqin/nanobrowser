@@ -48,7 +48,6 @@ export default class BrowserContext {
   private _config: BrowserContextConfig;
   private _currentTabId: number | null = null;
   private _attachedPages: Map<number, Page> = new Map();
-  private _tabLifecycleTraces: Map<number, TabLifecycleTrace> = new Map();
 
   constructor(config: Partial<BrowserContextConfig>) {
     this._config = { ...DEFAULT_BROWSER_CONTEXT_CONFIG, ...config };
@@ -65,54 +64,6 @@ export default class BrowserContext {
   public updateCurrentTabId(tabId: number): void {
     // only update tab id, but don't attach it.
     this._currentTabId = tabId;
-  }
-
-  private _touchLifecycle(tabId: number, patch: Partial<TabLifecycleTrace>): TabLifecycleTrace {
-    const prev = this._tabLifecycleTraces.get(tabId) ?? {
-      tabId,
-      attachAttempts: 0,
-      attachSuccesses: 0,
-      detachAttempts: 0,
-      detachSuccesses: 0,
-      lastAttachAt: null,
-      lastDetachAt: null,
-      lastAccessAt: null,
-      lastUrl: null,
-      lastTitle: null,
-      lastError: null,
-      lastDetachReason: null,
-    };
-    const next = { ...prev, ...patch };
-    this._tabLifecycleTraces.set(tabId, next);
-    return next;
-  }
-
-  private _tracePanel(event: string, tabId?: number): void {
-    if (!import.meta.env.DEV) {
-      return;
-    }
-
-    const now = Date.now();
-    const panel = Array.from(this._tabLifecycleTraces.values())
-      .sort((a, b) => (b.lastAccessAt ?? 0) - (a.lastAccessAt ?? 0))
-      .slice(0, 8)
-      .map(trace => ({
-        tabId: trace.tabId,
-        attached: this._attachedPages.has(trace.tabId),
-        attach: `${trace.attachSuccesses}/${trace.attachAttempts}`,
-        detach: `${trace.detachSuccesses}/${trace.detachAttempts}`,
-        lastAccessAgoMs: trace.lastAccessAt ? now - trace.lastAccessAt : null,
-        lastDetachReason: trace.lastDetachReason,
-        lastError: trace.lastError,
-      }));
-
-    logger.debug('tabLifecyclePanel', {
-      event,
-      tabId,
-      currentTabId: this._currentTabId,
-      attachedCount: this._attachedPages.size,
-      panel,
-    });
   }
 
   private async _getOrCreatePage(tab: chrome.tabs.Tab, forceUpdate = false): Promise<Page> {
@@ -144,29 +95,10 @@ export default class BrowserContext {
   }
 
   public async attachPage(page: Page): Promise<boolean> {
-    const now = Date.now();
-    this._touchLifecycle(page.tabId, {
-      attachAttempts: (this._tabLifecycleTraces.get(page.tabId)?.attachAttempts ?? 0) + 1,
-      lastAccessAt: now,
-    });
-    logger.debug('attachPage:start', {
-      tabId: page.tabId,
-      currentAttachedCount: this._attachedPages.size,
-      hasExistingEntry: this._attachedPages.has(page.tabId),
-    });
-
     // check if page is already attached
     if (this._attachedPages.has(page.tabId)) {
       logger.info('attachPage', page.tabId, 'already attached');
-      this._touchLifecycle(page.tabId, {
-        lastAccessAt: Date.now(),
-        lastError: null,
-      });
-      this._tracePanel('attachPage:already-attached', page.tabId);
-      logger.debug('attachPage:skip-already-attached', {
-        tabId: page.tabId,
-        currentAttachedCount: this._attachedPages.size,
-      });
+
       return true;
     }
 
@@ -180,13 +112,7 @@ export default class BrowserContext {
         logger.info('attachPage', page.tabId, 'attached');
         // add page to managed pages
         this._attachedPages.set(page.tabId, page);
-        this._touchLifecycle(page.tabId, {
-          attachSuccesses: (this._tabLifecycleTraces.get(page.tabId)?.attachSuccesses ?? 0) + 1,
-          lastAttachAt: Date.now(),
-          lastAccessAt: Date.now(),
-          lastError: null,
-        });
-        this._tracePanel('attachPage:done', page.tabId);
+
         logger.debug('attachPage:done', {
           tabId: page.tabId,
           currentAttachedCount: this._attachedPages.size,
@@ -197,19 +123,9 @@ export default class BrowserContext {
         tabId: page.tabId,
         currentAttachedCount: this._attachedPages.size,
       });
-      this._touchLifecycle(page.tabId, {
-        lastAccessAt: Date.now(),
-        lastError: 'attachPuppeteer returned false',
-      });
-      this._tracePanel('attachPage:failed', page.tabId);
+
       return false;
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : String(error);
-      this._touchLifecycle(page.tabId, {
-        lastAccessAt: Date.now(),
-        lastError: errorMsg,
-      });
-      this._tracePanel('attachPage:error', page.tabId);
       logger.error('attachPage:error', {
         tabId: page.tabId,
         currentAttachedCount: this._attachedPages.size,
@@ -220,11 +136,6 @@ export default class BrowserContext {
   }
 
   public async detachPage(tabId: number, reason: string = 'manual'): Promise<void> {
-    this._touchLifecycle(tabId, {
-      detachAttempts: (this._tabLifecycleTraces.get(tabId)?.detachAttempts ?? 0) + 1,
-      lastAccessAt: Date.now(),
-      lastDetachReason: reason,
-    });
     logger.debug('detachPage:start', {
       tabId,
       currentAttachedCount: this._attachedPages.size,
@@ -234,10 +145,6 @@ export default class BrowserContext {
     // detach page
     const page = this._attachedPages.get(tabId);
     if (!page) {
-      this._touchLifecycle(tabId, {
-        lastAccessAt: Date.now(),
-      });
-      this._tracePanel('detachPage:skip-not-found', tabId);
       logger.debug('detachPage:skip-not-found', {
         tabId,
         currentAttachedCount: this._attachedPages.size,
@@ -247,26 +154,15 @@ export default class BrowserContext {
 
     try {
       await page.detachPuppeteer();
-      this._touchLifecycle(tabId, {
-        detachSuccesses: (this._tabLifecycleTraces.get(tabId)?.detachSuccesses ?? 0) + 1,
-        lastDetachAt: Date.now(),
-        lastAccessAt: Date.now(),
-        lastError: null,
-      });
+
       logger.debug('detachPage:detachPuppeteer-done', { tabId });
     } catch (error) {
-      const errorMsg = error instanceof Error ? error.message : String(error);
-      this._touchLifecycle(tabId, {
-        lastAccessAt: Date.now(),
-        lastError: errorMsg,
-      });
-      this._tracePanel('detachPage:error', tabId);
       logger.error('detachPage:error', { tabId, error });
       throw error;
     } finally {
       // remove page from managed pages
       this._attachedPages.delete(tabId);
-      this._tracePanel('detachPage:done', tabId);
+
       logger.debug('detachPage:done', {
         tabId,
         currentAttachedCount: this._attachedPages.size,
@@ -298,23 +194,10 @@ export default class BrowserContext {
    * 为指定 tab 创建/复用 Page、执行 attach，并写入当前 tab id。
    */
   private async _bindPageToCurrentTab(tab: chrome.tabs.Tab): Promise<Page> {
-    if (tab.id) {
-      this._touchLifecycle(tab.id, {
-        lastAccessAt: Date.now(),
-        lastUrl: tab.url ?? null,
-        lastTitle: tab.title ?? null,
-      });
-      this._tracePanel('_bindPageToCurrentTab:start', tab.id);
-    }
     const page = await this._getOrCreatePage(tab);
     await this.attachPage(page);
     this._currentTabId = tab.id ?? null;
-    if (tab.id) {
-      this._touchLifecycle(tab.id, {
-        lastAccessAt: Date.now(),
-      });
-      this._tracePanel('_bindPageToCurrentTab:done', tab.id);
-    }
+
     return page;
   }
 
@@ -328,11 +211,6 @@ export default class BrowserContext {
     if (tabId !== null) {
       const cached = this._attachedPages.get(tabId);
       if (cached) {
-        this._touchLifecycle(tabId, {
-          lastAccessAt: Date.now(),
-          lastError: null,
-        });
-        this._tracePanel('getCurrentPage:cache-hit', tabId);
         return cached;
       }
 

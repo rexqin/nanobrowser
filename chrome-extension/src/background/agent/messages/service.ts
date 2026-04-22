@@ -261,20 +261,8 @@ export default class MessageManager {
       })
       .map(m => m.message);
 
-    let totalInputTokens = 0;
     logger.debug(`Messages in history: ${this.history.messages.length}:`);
 
-    for (const m of this.history.messages) {
-      totalInputTokens += m.metadata.tokens;
-      if (m.message) {
-        logger.debug(`${m.message.constructor.name} - Token count: ${m.metadata.tokens}`);
-      } else {
-        console.error(`[MessageManager] Found message with undefined message property:`, m);
-        logger.debug(`Message with undefined message property - Token count: ${m.metadata.tokens}`);
-      }
-    }
-
-    logger.debug(`Total input tokens: ${totalInputTokens}`);
     return messages;
   }
 
