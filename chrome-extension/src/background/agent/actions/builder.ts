@@ -536,7 +536,7 @@ export class ActionBuilder {
           }
 
           const pasteResult = await page.pasteImageDataToElementNode(targetNode, input.url);
-          if (!pasteResult.ok) {
+          if (!pasteResult.success) {
             const errorMsg = pasteResult.error
               ? `Image paste failed (index=${targetIndex}): ${pasteResult.error}`
               : `Image paste dispatchEvent was cancelled or failed (index=${targetIndex})`;
@@ -544,7 +544,7 @@ export class ActionBuilder {
             return new ActionResult({ error: errorMsg, includeInMemory: true });
           }
 
-          const msg = `Downloaded image and pasted to editor index ${targetIndex} (chars=${pasteResult.outputLength})`;
+          const msg = `Downloaded image and pasted to editor index ${targetIndex} (bytes=${pasteResult.outputLength}, dispatch=${pasteResult.dispatch}, final=${pasteResult.final}, networkDetected=${pasteResult.networkDetected}, networkCompleted=${pasteResult.networkCompleted})`;
           this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_OK, msg);
 
           return new ActionResult({ extractedContent: msg, includeInMemory: true });

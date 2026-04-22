@@ -1006,19 +1006,99 @@ export default class Page {
   async pasteImageDataToElementNode(
     elementNode: EnhancedDOMTreeNode,
     imageUrl: string,
-  ): Promise<{ ok: boolean; outputLength: number; error?: string }> {
+  ): Promise<{
+    success: boolean;
+    outputLength: number;
+    dispatch: boolean;
+    final: boolean;
+    networkDetected: boolean;
+    networkCompleted: boolean;
+    error?: string;
+  }> {
     await this._ensurePuppeteerPage();
+    const cdp = this.getCDPSession();
+    const waitForNetworkAfterPasteMs = 3000;
+    let networkTrackingStarted = false;
+    let networkDetected = false;
+    let networkCompletedCount = 0;
+    const seenRequestIds = new Set<string>();
+
+    const onRequestWillBeSent = (event: { requestId?: string; request?: { url?: string } }) => {
+      if (!networkTrackingStarted) return;
+      const requestId = event.requestId;
+      const url = event.request?.url ?? '';
+      if (!requestId || !url || url.startsWith('data:')) return;
+      networkDetected = true;
+      seenRequestIds.add(requestId);
+      logger.info('pasteImage network request detected', {
+        tabId: this._tabId,
+        requestId,
+        url,
+      });
+    };
+
+    const onLoadingFinished = (event: { requestId?: string }) => {
+      if (!networkTrackingStarted) return;
+      const requestId = event.requestId;
+      if (!requestId) return;
+      if (seenRequestIds.has(requestId)) {
+        networkCompletedCount += 1;
+        logger.info('pasteImage network request finished', {
+          tabId: this._tabId,
+          requestId,
+          networkCompletedCount,
+        });
+      }
+    };
+
+    const onLoadingFailed = (event: { requestId?: string }) => {
+      if (!networkTrackingStarted) return;
+      const requestId = event.requestId;
+      if (!requestId) return;
+      if (seenRequestIds.has(requestId)) {
+        networkCompletedCount += 1;
+        logger.warning('pasteImage network request failed', {
+          tabId: this._tabId,
+          requestId,
+          networkCompletedCount,
+        });
+      }
+    };
+
+    const waitForNetworkCompletion = async (): Promise<boolean> => {
+      const deadline = Date.now() + waitForNetworkAfterPasteMs;
+      while (Date.now() < deadline) {
+        if (networkDetected && networkCompletedCount > 0) {
+          return true;
+        }
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+      return networkDetected && networkCompletedCount > 0;
+    };
+
     try {
+      if (cdp) {
+        await cdp.send('Network.enable').catch(() => undefined);
+        cdp.on('Network.requestWillBeSent', onRequestWillBeSent);
+        cdp.on('Network.loadingFinished', onLoadingFinished);
+        cdp.on('Network.loadingFailed', onLoadingFailed);
+      }
+
       const response = await fetch(imageUrl);
       if (!response.ok) {
         return {
-          ok: false,
+          success: false,
           outputLength: 0,
+          dispatch: false,
+          final: false,
+          networkDetected,
+          networkCompleted: false,
           error: `Failed to download image in extension context: ${response.status} ${response.statusText}`,
         };
       }
       const buffer = await response.arrayBuffer();
       const bytes = new Uint8Array(buffer);
+      const outputLength = bytes.length;
       const inferredMime = (response.headers.get('content-type') || '').split(';')[0].trim() || 'image/png';
       let base64: string;
       const globalAny = globalThis as unknown as {
@@ -1038,6 +1118,7 @@ export default class Page {
         base64 = btoa(binary);
       }
       const dataUri = `data:${inferredMime};base64,${base64}`;
+      networkTrackingStarted = true;
       const result = (await this._callOnBackendNode(
         elementNode,
         `async function(uri) {
@@ -1092,12 +1173,8 @@ export default class Page {
               Object.defineProperty(pasteEvent, 'clipboardData', { value: dataTransfer });
             }
             const pasteDispatched = element.dispatchEvent(pasteEvent);
-            await new Promise(resolve => setTimeout(resolve, 80));
+            await new Promise(resolve => setTimeout(resolve, 3000));
             let ok = hasTargetImgInInnerHtml(element, uri);
-            if (!ok) {
-              await new Promise(resolve => setTimeout(resolve, 180));
-              ok = hasTargetImgInInnerHtml(element, uri);
-            }
             if (!ok) {
               const img = document.createElement('img');
               img.src = uri;
@@ -1122,36 +1199,110 @@ export default class Page {
 
               element.dispatchEvent(new Event('input', { bubbles: true }));
               element.dispatchEvent(new Event('change', { bubbles: true }));
-              await new Promise(resolve => setTimeout(resolve, 80));
+              await new Promise(resolve => setTimeout(resolve, 3000));
               ok = hasTargetImgInInnerHtml(element, uri);
-              if (!ok) {
-                await new Promise(resolve => setTimeout(resolve, 180));
-                ok = hasTargetImgInInnerHtml(element, uri);
-              }
               if (!ok) {
                 // Some editors async-sync content outside the current element subtree.
                 // Avoid false negatives when paste event was accepted by editor handlers.
                 if (pasteDispatched) {
-                  return { ok: true, outputLength: uri.length };
+                  return { dispatch: pasteDispatched, final: false };
                 }
-                return { ok: false, outputLength: 0, error: 'Image insertion not persisted in editor DOM after paste and fallback' };
+                return {
+                  dispatch: pasteDispatched,
+                  final: false,
+                  error: 'Image insertion not persisted in editor DOM after paste and fallback',
+                };
               }
             }
-            return { ok, outputLength: uri.length };
+            return { dispatch: pasteDispatched, final: ok };
           } catch (error) {
             const message = error instanceof Error ? error.message : String(error);
-            return { ok: false, outputLength: 0, error: message };
+            return { dispatch: false, final: false, error: message };
           }
         }`,
         [dataUri],
-      )) as { ok: boolean; outputLength: number; error?: string } | undefined;
-      if (!result || typeof result.ok !== 'boolean' || typeof result.outputLength !== 'number') {
-        return { ok: false, outputLength: 0, error: 'Image paste CDP function returned invalid result' };
+      )) as { dispatch: boolean; final: boolean; error?: string } | undefined;
+      if (!result || typeof result.dispatch !== 'boolean' || typeof result.final !== 'boolean') {
+        return {
+          success: false,
+          outputLength,
+          dispatch: false,
+          final: false,
+          networkDetected,
+          networkCompleted: false,
+          error: 'Image paste CDP function returned invalid result',
+        };
       }
-      return result;
+
+      const networkCompleted = await waitForNetworkCompletion();
+      const finalDomOk = Boolean(
+        await this._callOnBackendNode(
+          elementNode,
+          `function(uri) {
+            const element = this;
+            if (!(element instanceof HTMLElement)) return false;
+            const html = element.innerHTML || '';
+            if (!html) return false;
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = html;
+            const imgs = wrapper.querySelectorAll('img');
+            for (const img of imgs) {
+              const src = img.getAttribute('src');
+              if (src === uri) {
+                return true;
+              }
+            }
+            return false;
+          }`,
+          [dataUri],
+        ),
+      );
+
+      logger.info('pasteImageDataToElementNode network/dom check', {
+        tabId: this._tabId,
+        networkDetected,
+        networkCompletedCount,
+        networkCompleted,
+        cdpDispatch: result.dispatch,
+        cdpFinal: result.final,
+        finalDomOk,
+      });
+
+      const final = result.final || finalDomOk;
+      const success = final || networkCompleted;
+
+      return {
+        success,
+        outputLength,
+        dispatch: result.dispatch,
+        final,
+        networkDetected,
+        networkCompleted,
+        error: success
+          ? undefined
+          : (result.error ??
+            (networkDetected
+              ? 'Paste dispatched but no tracked network request completed before timeout'
+              : 'No DOM insertion and no tracked network request after paste')),
+      };
     } catch (error) {
       const message = error instanceof Error ? error.message : String(error);
-      return { ok: false, outputLength: 0, error: `Image paste failed: ${message}` };
+      return {
+        success: false,
+        outputLength: 0,
+        dispatch: false,
+        final: false,
+        networkDetected,
+        networkCompleted: false,
+        error: `Image paste failed: ${message}`,
+      };
+    } finally {
+      networkTrackingStarted = false;
+      if (cdp) {
+        cdp.off('Network.requestWillBeSent', onRequestWillBeSent);
+        cdp.off('Network.loadingFinished', onLoadingFinished);
+        cdp.off('Network.loadingFailed', onLoadingFailed);
+      }
     }
   }
 
