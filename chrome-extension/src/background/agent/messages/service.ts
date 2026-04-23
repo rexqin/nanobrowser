@@ -14,7 +14,6 @@ export class MessageManagerSettings {
   maxInputTokens = 128000;
   estimatedCharactersPerToken = 3;
   imageTokens = 800;
-  includeAttributes: string[] = [];
   messageContext?: string;
   sensitiveData?: Record<string, string>;
   availableFilePaths?: string[];
@@ -24,7 +23,6 @@ export class MessageManagerSettings {
       maxInputTokens?: number;
       estimatedCharactersPerToken?: number;
       imageTokens?: number;
-      includeAttributes?: string[];
       messageContext?: string;
       sensitiveData?: Record<string, string>;
       availableFilePaths?: string[];
@@ -34,7 +32,6 @@ export class MessageManagerSettings {
     if (options.estimatedCharactersPerToken !== undefined)
       this.estimatedCharactersPerToken = options.estimatedCharactersPerToken;
     if (options.imageTokens !== undefined) this.imageTokens = options.imageTokens;
-    if (options.includeAttributes !== undefined) this.includeAttributes = options.includeAttributes;
     if (options.messageContext !== undefined) this.messageContext = options.messageContext;
     if (options.sensitiveData !== undefined) this.sensitiveData = options.sensitiveData;
     if (options.availableFilePaths !== undefined) this.availableFilePaths = options.availableFilePaths;

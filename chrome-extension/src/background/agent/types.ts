@@ -1,6 +1,6 @@
 import { z } from 'zod';
 import type BrowserContext from '../browser/context';
-import { DEFAULT_INCLUDE_ATTRIBUTES } from '../browser/dom/views';
+
 import type { DOMHistoryElement } from '../browser/dom/history/view';
 import type MessageManager from './messages/service';
 import type { EventManager } from './event/manager';
@@ -14,7 +14,6 @@ export interface AgentOptions {
   retryDelay: number;
   maxInputTokens: number;
   maxErrorLength: number;
-  includeAttributes: string[];
   planningInterval: number;
   plannerHistoryWindow: number;
 }
@@ -26,7 +25,7 @@ export const DEFAULT_AGENT_OPTIONS: AgentOptions = {
   retryDelay: 10,
   maxInputTokens: 128000,
   maxErrorLength: 400,
-  includeAttributes: DEFAULT_INCLUDE_ATTRIBUTES,
+
   planningInterval: 5,
   plannerHistoryWindow: 20,
 };

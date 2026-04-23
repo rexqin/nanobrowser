@@ -224,10 +224,11 @@ export const selectDropdownOptionActionSchema: ActionSchema = {
 
 export const waitActionSchema: ActionSchema = {
   name: 'wait',
-  description: '等待指定秒数，默认 3 秒；除非用户明确要求等待，否则不要使用',
+  description:
+    '等待页面完成加载（loadEventFired + network idle），并至少等待指定秒数（默认 3 秒）；在导航类或下载类动作后可使用',
   schema: z.object({
     intent: z.string().default('').describe('此动作的目的'),
-    seconds: z.number().int().default(3).describe('等待秒数'),
+    seconds: z.number().int().default(3).describe('最小等待秒数（同时作为最大加载等待超时的基准）'),
   }),
 };
 

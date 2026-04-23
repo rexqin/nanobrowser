@@ -25,7 +25,7 @@ abstract class BasePrompt {
    */
   async buildBrowserStateUserMessage(context: AgentContext): Promise<HumanMessage> {
     const browserState = await context.browserContext.getState();
-    const rawElementsText = browserState.serializedDomState.llmRepresentation(context.options.includeAttributes);
+    const rawElementsText = browserState.serializedDomState.llmRepresentation();
 
     let formattedElementsText = '';
     if (rawElementsText !== '') {

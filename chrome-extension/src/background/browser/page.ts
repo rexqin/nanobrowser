@@ -1151,20 +1151,58 @@ export default class Page {
           el.scrollIntoView({ behavior: 'auto', block: 'center', inline: 'center' });
           el.focus();
           const shouldAppend = mode === 'append';
-          const currentValue =
-            el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement
-              ? el.value
-              : el.isContentEditable
-                ? (el.textContent || '')
-                : (el.textContent || '');
-          const nextValue = shouldAppend ? (currentValue + value) : value;
           if (el instanceof HTMLInputElement || el instanceof HTMLTextAreaElement) {
+            const currentValue = el.value || '';
+            const nextValue = shouldAppend ? (currentValue + value) : value;
             el.value = nextValue;
             const len = el.value.length;
             if (typeof el.setSelectionRange === 'function') {
               el.setSelectionRange(len, len);
             }
+          } else if (el.isContentEditable || el.getAttribute('contenteditable') === 'true') {
+            const selection = window.getSelection();
+            if (!selection) {
+              throw new Error('Selection API unavailable');
+            }
+
+            const ensureRangeInsideEl = () => {
+              if (selection.rangeCount === 0) {
+                return false;
+              }
+              const range = selection.getRangeAt(0);
+              const container = range.commonAncestorContainer;
+              return container === el || el.contains(container);
+            };
+
+            if (!ensureRangeInsideEl() || shouldAppend) {
+              const range = document.createRange();
+              range.selectNodeContents(el);
+              range.collapse(false);
+              selection.removeAllRanges();
+              selection.addRange(range);
+            }
+
+            if (!shouldAppend) {
+              // override only clears text-like content while preserving structure where possible.
+              el.textContent = '';
+              const resetRange = document.createRange();
+              resetRange.selectNodeContents(el);
+              resetRange.collapse(false);
+              selection.removeAllRanges();
+              selection.addRange(resetRange);
+            }
+
+            const activeRange = selection.getRangeAt(0);
+            activeRange.deleteContents();
+            const textNode = document.createTextNode(value);
+            activeRange.insertNode(textNode);
+            activeRange.setStartAfter(textNode);
+            activeRange.setEndAfter(textNode);
+            selection.removeAllRanges();
+            selection.addRange(activeRange);
           } else {
+            const currentValue = el.textContent || '';
+            const nextValue = shouldAppend ? (currentValue + value) : value;
             el.textContent = nextValue;
           }
           el.dispatchEvent(new Event('input', { bubbles: true }));

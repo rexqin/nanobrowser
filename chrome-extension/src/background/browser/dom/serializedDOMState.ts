@@ -1,3 +1,4 @@
+import { createLogger } from '@src/background/log';
 import type { SimplifiedNode, DOMSelectorMap } from './domSerializer';
 import { DOMTreeSerializer } from './domSerializer';
 
@@ -60,6 +61,8 @@ export const DEFAULT_INCLUDE_ATTRIBUTES = [
   'ax_name',
 ];
 
+const logger = createLogger('SerializedDOMState');
+
 /**
  * 序列化后的 DOM 状态类
  */
@@ -77,13 +80,16 @@ export class SerializedDOMState {
    * @param includeAttributes 要包含的属性列表，如果为 null 则使用默认属性列表
    * @returns DOM 树的字符串表示
    */
-  llmRepresentation(includeAttributes: string[] | null = null): string {
+  llmRepresentation(includeAttributes?: string[]): string {
     if (!this._root) {
       return 'Empty DOM tree (you might have to wait for the page to load)';
     }
 
     const attributes = includeAttributes || DEFAULT_INCLUDE_ATTRIBUTES;
-    return DOMTreeSerializer.serializeTree(this._root, attributes);
+    const domString = DOMTreeSerializer.serializeTree(this._root, attributes);
+
+    logger.debug('domString', domString);
+    return domString;
   }
 
   /**

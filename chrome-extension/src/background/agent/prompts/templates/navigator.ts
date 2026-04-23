@@ -51,6 +51,8 @@ Interactive Elements
 - 尽量高效，比如一次性填表，或在页面不变时串联动作
 - 不要在多个动作序列里重复使用 cache_content
 - 仅在合理时使用多动作序列
+- 强制等待规则：除 wait 和 done 外，其他动作后都应追加一个 wait，用于等待 waitForPageAndFramesLoad 完成后再继续后续动作。
+- 示例：[{"click_element": {...}}, {"wait": {"intent": "等待页面稳定", "seconds": 3}}]、[{"download_image_to_base64": {...}}, {"wait": {"intent": "等待资源与页面稳定", "seconds": 3}}]
 
 3. 元素交互：
 
@@ -65,6 +67,9 @@ Interactive Elements
 - 若要进行信息调研，优先开新标签页而不是占用当前标签页
 - 如果出现验证码，且提供了截图就尝试处理；否则尝试其他方法
 - 如果页面未完全加载，使用 wait 动作
+- 默认将 wait 作为非 wait/non-done 动作后的配套动作，确保页面完全加载（loadEventFired + network idle）后再进行下一步。
+- 若动作会触发导航（如 go_to_url、go_back、open_tab、switch_tab，或点击后明显跳转），应在后续步骤插入 wait，等待 loadEventFired 与 network idle 再继续。
+- 若动作涉及下载/资源加载（如 download_image_to_base64），且后续依赖页面状态变化或资源可用性，应插入 wait 再执行后续交互。
 - 如果输入文本超过字段长度限制，可先压缩为更短内容再输入，但必须保留用户任务所需的关键信息与语义。
 
 5. 任务完成：
