@@ -31,21 +31,6 @@ import { type DOMHistoryElement } from '@src/background/browser/dom/history/view
 
 const logger = createLogger('NavigatorAgent');
 
-const ACTIONS_NEED_PAGE_SETTLE = new Set([
-  'search_google',
-  'go_back',
-  'click_element',
-  'input_text',
-  'switch_tab',
-  'open_tab',
-  'close_tab',
-  'send_keys',
-  'select_dropdown_option',
-]);
-
-const ACTIONS_WITH_INTERNAL_WAIT = new Set(['wait', 'go_to_url']);
-const ACTIONS_NEED_LONGER_SETTLE = new Set(['search_google', 'open_tab', 'switch_tab', 'close_tab']);
-
 interface ParsedModelOutput {
   current_state?: {
     next_goal?: string;
@@ -395,29 +380,6 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
     return actions;
   }
 
-  private getPostActionDelayMs(actionName: string, result: ActionResult, urlChanged: boolean): number {
-    if (ACTIONS_WITH_INTERNAL_WAIT.has(actionName)) {
-      return 0;
-    }
-    if (result.isDone) {
-      return 0;
-    }
-    if (result.error) {
-      return 650;
-    }
-    // Popup/dialog interactions usually happen without URL changes and need a bit more settle time.
-    if (actionName === 'click_element' && !urlChanged) {
-      return result.includeInMemory ? 520 : 420;
-    }
-    if (ACTIONS_NEED_LONGER_SETTLE.has(actionName)) {
-      return urlChanged ? 520 : 420;
-    }
-    if (ACTIONS_NEED_PAGE_SETTLE.has(actionName)) {
-      return result.includeInMemory ? 300 : 220;
-    }
-    return 0;
-  }
-
   private async doMultiAction(actions: Record<string, unknown>[]): Promise<ActionResult[]> {
     const results: ActionResult[] = [];
     logger.info('Actions', actions);
@@ -476,28 +438,6 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
           throw new Error(typeof result.error === 'string' ? result.error : String(result.error));
         }
 
-        const afterUrl = page.url();
-        const urlChanged = beforeUrl !== afterUrl;
-
-        if (import.meta.env.DEV) {
-          const delayMs = this.getPostActionDelayMs(actionName, result, urlChanged);
-          logger.debug('Navigator action executed (DEV)', {
-            step: i + 1,
-            actionName,
-            urlChanged,
-            beforeUrl,
-            afterUrl,
-            result: {
-              success: result.success,
-              isDone: result.isDone,
-              includeInMemory: result.includeInMemory,
-              extractedContentLen: result.extractedContent?.length ?? 0,
-              error: result.error ?? undefined,
-            },
-            postActionDelayMs: delayMs,
-          });
-        }
-
         // if the action has an index argument, record the interacted element to the result
         if (indexArg !== null) {
           const domElement = browserState.serializedDomState.selectorMap.get(indexArg);
@@ -514,10 +454,6 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
         if (this.context.paused || this.context.stopped) {
           return results;
         }
-        // const postActionDelayMs = this.getPostActionDelayMs(actionName, result, urlChanged);
-        // if (postActionDelayMs > 0) {
-        //   await new Promise(resolve => setTimeout(resolve, postActionDelayMs));
-        // }
       } catch (error) {
         if (error instanceof URLNotAllowedError) {
           throw error;

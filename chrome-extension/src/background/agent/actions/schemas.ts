@@ -76,16 +76,6 @@ export const inputTextActionSchema: ActionSchema = {
   }),
 };
 
-// 标签页管理动作
-export const switchTabActionSchema: ActionSchema = {
-  name: 'switch_tab',
-  description: '通过 tab id 切换标签页',
-  schema: z.object({
-    intent: z.string().default('').describe('此动作的目的'),
-    tab_id: z.number().int().describe('要切换到的标签页 id'),
-  }),
-};
-
 export const openTabActionSchema: ActionSchema = {
   name: 'open_tab',
   description: '在新标签页打开 URL',

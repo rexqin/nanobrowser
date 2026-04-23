@@ -987,7 +987,7 @@ export default class Page {
             const dataTransfer = new DataTransfer();
             dataTransfer.items.add(file);
             dataTransfer.setData('text/html', '<img src="' + uri + '" alt="embedded-image" />');
-            dataTransfer.setData('text/plain', '');
+      
             element.focus();
             let pasteEvent;
             try {

@@ -21,7 +21,7 @@ import { Executor } from './agent/executor';
 import { createLogger } from './log';
 import { createChatModel } from './agent/helper';
 import type { BaseChatModel } from '@langchain/core/language_models/chat_models';
-import { DEFAULT_AGENT_OPTIONS } from './agent/types';
+
 import { shouldCleanupExecutorOnTerminalEvent } from './executor-lifecycle';
 import { SpeechToTextService } from './services/speechToText';
 
@@ -375,9 +375,7 @@ chrome.runtime.onConnect.addListener(port => {
           case 'state': {
             try {
               const browserState = await browserContext.getState();
-              const elementsText = browserState.serializedDomState.llmRepresentation(
-                DEFAULT_AGENT_OPTIONS.includeAttributes,
-              );
+              const elementsText = browserState.serializedDomState.llmRepresentation();
 
               logger.info('state', browserState);
               logger.info('interactive elements', elementsText);

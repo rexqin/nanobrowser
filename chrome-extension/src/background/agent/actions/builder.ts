@@ -9,7 +9,6 @@ import {
   inputTextActionSchema,
   openTabActionSchema,
   searchGoogleActionSchema,
-  switchTabActionSchema,
   type ActionSchema,
   sendKeysActionSchema,
   scrollToTextActionSchema,
@@ -545,20 +544,6 @@ export class ActionBuilder {
     actions.push(inputText);
 
     // Tab Management Actions
-    const switchTab = new Action(async (input: z.infer<typeof switchTabActionSchema.schema>) => {
-      logger.debug('[switch_tab] action.input', { input: previewForLog(input) });
-      const intent = input.intent || t('act_switchTab_start', [input.tab_id.toString()]);
-      this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_START, intent);
-      await this.context.browserContext.switchTab(input.tab_id);
-      logger.debug('[switch_tab] key.switchTab.done', { tabId: input.tab_id });
-      const msg = t('act_switchTab_ok', [input.tab_id.toString()]);
-      this.context.emitEvent(Actors.NAVIGATOR, ExecutionState.ACT_OK, msg);
-      const result = new ActionResult({ extractedContent: msg, includeInMemory: true });
-      logger.debug('[switch_tab] action.output', { result: summarizeActionResult(result) });
-      return result;
-    }, switchTabActionSchema);
-    actions.push(switchTab);
-
     const openTab = new Action(async (input: z.infer<typeof openTabActionSchema.schema>) => {
       logger.debug('[open_tab] action.input', { input: previewForLog(input) });
       const intent = input.intent || t('act_openTab_start', [input.url]);

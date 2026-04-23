@@ -18,6 +18,11 @@ function isNoTabError(error: unknown): boolean {
   return message.includes('No tab with id');
 }
 
+function isDebuggerAlreadyAttachedError(error: unknown): boolean {
+  const message = error instanceof Error ? error.message : String(error);
+  return message.includes('Another debugger is already attached to the tab');
+}
+
 export default class BrowserContext {
   private _config: BrowserContextConfig;
   private _currentTabId: number | null = null;
@@ -45,16 +50,40 @@ export default class BrowserContext {
       throw new Error('Tab ID is not available');
     }
 
-    const existingPage = this._attachedPages.get(tab.id);
+    if (!tab.id) {
+      throw new Error('Tab ID is not available after replacement');
+    }
+
+    const tabId = tab.id;
+
+    const existingPage = this._attachedPages.get(tabId);
     if (existingPage) {
-      logger.info('getOrCreatePage', tab.id, 'already attached');
+      logger.info('getOrCreatePage', tabId, 'already attached');
       if (!forceUpdate) {
         return existingPage;
       }
       // detach the page and remove it from the attached pages if forceUpdate is true
       await existingPage.detachAutomation();
-      this._attachedPages.delete(tab.id);
+      this._attachedPages.delete(tabId);
     }
+
+    if (tab.url && !isUrlAllowed(tab.url, this._config.allowedUrls, this._config.deniedUrls)) {
+      logger.info('getOrCreatePage', tab.id, 'url not allowed, creating replacement tab', tab.url);
+      const targetUrl = this._config.homePageUrl;
+      if (!isUrlAllowed(targetUrl, this._config.allowedUrls, this._config.deniedUrls)) {
+        throw new URLNotAllowedError(`Replacement tab URL is not allowed: ${targetUrl}`);
+      }
+      const replacementTab = await chrome.tabs.create({ url: targetUrl, active: tab.active ?? true });
+      if (!replacementTab.id) {
+        throw new Error('Replacement tab ID is not available');
+      }
+      tab = replacementTab;
+
+      if (!tab.id) {
+        throw new Error('Tab ID is not available after replacement');
+      }
+    }
+
     logger.info('getOrCreatePage', tab.id, 'creating new page');
     return new Page(tab.id, tab.url || '', tab.title || '', this._config);
   }
@@ -100,6 +129,37 @@ export default class BrowserContext {
 
       return false;
     } catch (error) {
+      if (isDebuggerAlreadyAttachedError(error)) {
+        logger.warning('attachPage:debugger-already-attached, force-detach-and-retry', {
+          tabId: page.tabId,
+          error: error instanceof Error ? error.message : String(error),
+        });
+        try {
+          await new Promise<void>((resolve, reject) => {
+            chrome.debugger.detach({ tabId: page.tabId }, () => {
+              if (chrome.runtime.lastError) {
+                reject(new Error(chrome.runtime.lastError.message));
+                return;
+              }
+              resolve();
+            });
+          });
+          const attached = await page.attachAutomation();
+          if (attached) {
+            this._attachedPages.set(page.tabId, page);
+            logger.info('attachPage', page.tabId, 'attached after force-detach');
+            return true;
+          }
+          logger.warning('attachPage:retry-attach-failed', { tabId: page.tabId });
+          return false;
+        } catch (retryError) {
+          logger.error('attachPage:retry-after-force-detach-error', {
+            tabId: page.tabId,
+            error: retryError instanceof Error ? retryError.message : String(retryError),
+          });
+          throw retryError;
+        }
+      }
       logger.error('attachPage:error', {
         tabId: page.tabId,
         currentAttachedCount: this._attachedPages.size,
@@ -349,6 +409,11 @@ export default class BrowserContext {
       throw error;
     }
     if (!currentTab.url) {
+      return false;
+    }
+
+    if (isUrlAllowed(currentTab.url, this._config.allowedUrls, this._config.deniedUrls)) {
+      // Current tab is navigable; caller should continue with in-place navigation.
       return false;
     }
 
