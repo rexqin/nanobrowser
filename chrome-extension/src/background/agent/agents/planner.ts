@@ -88,6 +88,18 @@ export class PlannerAgent extends BaseAgent<typeof plannerOutputSchema, PlannerO
     return sanitized;
   }
 
+  public async addStateMessageToMemory() {
+    if (this.context.stateMessageAdded) {
+      return;
+    }
+
+    const messageManager = this.context.messageManager;
+
+    const state = await this.prompt.getUserMessage(this.context);
+    messageManager.addStateMessage(state);
+    this.context.stateMessageAdded = true;
+  }
+
   async execute(): Promise<AgentOutput<PlannerOutput>> {
     try {
       this.context.emitEvent(Actors.PLANNER, ExecutionState.STEP_START, '规划中...');
@@ -101,6 +113,8 @@ export class PlannerAgent extends BaseAgent<typeof plannerOutputSchema, PlannerO
       const plannerHistory = windowSize > 0 ? historyMessages.slice(-windowSize) : historyMessages;
       const sanitizedHistory = this.sanitizePlannerMessages(plannerHistory);
       const plannerMessages = [this.prompt.getSystemMessage(), ...sanitizedHistory];
+
+      await this.addStateMessageToMemory();
 
       logger.debug('Planner input messages (DEV, full)', plannerMessages);
 

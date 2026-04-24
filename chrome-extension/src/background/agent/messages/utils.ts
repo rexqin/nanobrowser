@@ -72,7 +72,7 @@ export function extractJsonFromModelOutput(content: string): Record<string, unkn
       if (toolCall.parameters) {
         // The parameters field contains an escaped JSON string
         const parametersJson = JSON.parse(toolCall.parameters);
-        return parametersJson;
+        return normalizeModelOutputPayload(parametersJson);
       }
 
       throw new Error('Tool call structure does not contain parameters');
@@ -102,14 +102,14 @@ export function extractJsonFromModelOutput(content: string): Record<string, unkn
         if (typeof pythonCall.parameters.output === 'string') {
           try {
             const outputJson = JSON.parse(pythonCall.parameters.output);
-            return outputJson;
+            return normalizeModelOutputPayload(outputJson);
           } catch (e) {
             // If it's not valid JSON, return as is
             return { output: pythonCall.parameters.output };
           }
         }
 
-        return pythonCall.parameters;
+        return normalizeModelOutputPayload(pythonCall.parameters);
       }
 
       throw new Error('Python tag structure does not contain valid parameters');
@@ -128,10 +128,63 @@ export function extractJsonFromModelOutput(content: string): Record<string, unkn
     }
 
     // Parse the cleaned content
-    return JSON.parse(processedContent);
+    return normalizeModelOutputPayload(JSON.parse(processedContent));
   } catch (e) {
     throw new ResponseParseError(`Could not manually extract JSON from model output`);
   }
+}
+
+function normalizeModelOutputPayload(payload: unknown): Record<string, unknown> {
+  const parseJsonStringIfNeeded = (value: unknown): unknown => {
+    if (typeof value !== 'string') return value;
+    const trimmed = value.trim();
+    if (!(trimmed.startsWith('{') || trimmed.startsWith('['))) return value;
+    try {
+      return JSON.parse(trimmed);
+    } catch {
+      return value;
+    }
+  };
+
+  const unwrapEnvelope = (value: unknown): unknown => {
+    const parsedValue = parseJsonStringIfNeeded(value);
+
+    if (Array.isArray(parsedValue)) {
+      if (parsedValue.length === 1) {
+        return unwrapEnvelope(parsedValue[0]);
+      }
+      const first = parsedValue[0];
+      if (first && typeof first === 'object') {
+        const firstRecord = first as Record<string, unknown>;
+        if ('args' in firstRecord || 'parameters' in firstRecord) {
+          return unwrapEnvelope(first);
+        }
+      }
+      return parsedValue;
+    }
+
+    if (!parsedValue || typeof parsedValue !== 'object') {
+      return parsedValue;
+    }
+
+    const record = parsedValue as Record<string, unknown>;
+    const args = parseJsonStringIfNeeded(record.args);
+    if (args && typeof args === 'object') {
+      return unwrapEnvelope(args);
+    }
+    const parameters = parseJsonStringIfNeeded(record.parameters);
+    if (parameters && typeof parameters === 'object') {
+      return unwrapEnvelope(parameters);
+    }
+
+    return record;
+  };
+
+  const normalized = unwrapEnvelope(payload);
+  if (!normalized || typeof normalized !== 'object' || Array.isArray(normalized)) {
+    throw new ResponseParseError('Model output JSON is not an object payload');
+  }
+  return normalized as Record<string, unknown>;
 }
 
 /**

@@ -185,10 +185,11 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
     let content: unknown = rawContent;
 
     if (typeof content === 'string') {
+      const rawText = content;
       try {
-        content = JSON.parse(content);
+        content = JSON.parse(rawText);
       } catch {
-        const parsed = this.manuallyParseResponse(content);
+        const parsed = this.manuallyParseResponse(rawText);
         if (parsed) {
           return parsed;
         }
@@ -384,9 +385,6 @@ export class NavigatorAgent extends BaseAgent<z.ZodType, NavigatorResult> {
     }
 
     const state = await this.prompt.getUserMessage(this.context);
-    if (import.meta.env.DEV) {
-      logger.debug('addStateMessageToMemory state (DEV)', state);
-    }
     messageManager.addStateMessage(state);
     this.context.stateMessageAdded = true;
   }

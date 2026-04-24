@@ -186,6 +186,14 @@ export class Executor {
           latestPlanOutput = await this.runPlanner();
 
           if (latestPlanOutput?.result?.awaiting_user === true) {
+            // Reconfirm once with latest state before pausing, to reduce false-positive pauses.
+            const reconfirmedPlanOutput = await this.runPlanner();
+            if (reconfirmedPlanOutput?.result) {
+              latestPlanOutput = reconfirmedPlanOutput;
+            }
+          }
+
+          if (latestPlanOutput?.result?.awaiting_user === true) {
             if (this.awaitingUserRecheckBudget > 0) {
               this.awaitingUserRecheckBudget--;
               this.skipPlannerAfterUserResume = true;
