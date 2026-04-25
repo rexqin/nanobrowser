@@ -1,0 +1,162 @@
+# Chrome Web Store 全自动发布（版本号 + Infisical prod + CRX + 上传并 publish）
+#
+# 触发方式
+#   1) 推送语义化 tag：v1.2.3
+#   2) workflow_dispatch：手动输入版本号（不含 v 前缀），如 1.2.3
+#
+# GitHub 仓库需配置
+#   Secrets（Infisical OIDC Machine Identity，用于拉取密钥，勿与下方商店 OAuth 混淆）
+#     INFISICAL_OIDC_IDENTITY_ID   Infisical 中为 GitHub 配置的 Machine Identity ID（UUID）
+#   Variables
+#     INFISICAL_PROJECT_SLUG   Infisical 项目 slug（必填）
+#   可选 Variables
+#     INFISICAL_DOMAIN         自建 Infisical 根 URL，例如 https://infisical.example.com；留空则用云端默认
+#   若 INFISICAL_OIDC_IDENTITY_ID 放在 GitHub Environment 的 Secrets 里，请在本 job 增加
+#     environment: <与 Environment 名称一致>，否则该 secret 对 job 不可见。
+#
+# Infisical：环境 prod，路径 /ibb8WebAgent（recursive）建议包含
+#   CLIENT_ID / CLIENT_SECRET / REFRESH_TOKEN   Chrome Web Store API OAuth（见 chrome-webstore-upload-keys）
+#   CRX_PRIVATE_KEY                             RSA PEM 多行私钥，用于 crx pack（也可用 CRX_PRIVATE_KEY_B64）
+#   可选 EXTENSION_ID                           不设则使用下方 workflow 中的默认扩展 ID
+#
+name: Chrome Web Store publish
+
+on:
+  push:
+    tags:
+      - 'v[0-9]+.[0-9]+.[0-9]+'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Semver，不含 v，例如 1.2.3'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  id-token: write # Infisical OIDC
+
+concurrency:
+  group: chrome-web-store-publish
+  cancel-in-progress: false
+
+env:
+  HUSKY: '0'
+  # 固定扩展 ID（可被 Infisical 注入的 EXTENSION_ID 覆盖）
+  CHROME_EXTENSION_ID_DEFAULT: pjeagelncpafljcnbknmnifikkmancon
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve semver
+        id: ver
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            V="${{ inputs.version }}"
+            V="${V#v}"
+          else
+            V="${GITHUB_REF#refs/tags/v}"
+          fi
+          if ! [[ "$V" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Invalid semver (expected x.y.z): $V"
+            exit 1
+          fi
+          echo "version=$V" >> "$GITHUB_OUTPUT"
+
+      - name: Load secrets from Infisical (prod, /ibb8WebAgent)
+        uses: Infisical/secrets-action@v1.0.15
+        with:
+          method: oidc
+          identity-id: ${{ secrets.INFISICAL_OIDC_IDENTITY_ID }}
+          env-slug: prod
+          project-slug: ${{ vars.INFISICAL_PROJECT_SLUG }}
+          secret-path: /ibb8WebAgent
+          export-type: env
+          recursive: true
+          domain: ${{ vars.INFISICAL_DOMAIN != '' && vars.INFISICAL_DOMAIN || 'https://app.infisical.com' }}
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Bump package versions
+        run: bash update_version.sh "${{ steps.ver.outputs.version }}"
+
+      - name: Build extension (dist/)
+        run: pnpm build
+
+      - name: Prepare CRX signing key
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -n "${CRX_PRIVATE_KEY_B64:-}" ]; then
+            echo "$CRX_PRIVATE_KEY_B64" | base64 -d > crx-signing.pem
+          elif [ -n "${CRX_PRIVATE_KEY:-}" ]; then
+            printf '%s\n' "$CRX_PRIVATE_KEY" > crx-signing.pem
+          else
+            echo "::error::Set CRX_PRIVATE_KEY or CRX_PRIVATE_KEY_B64 in Infisical (/ibb8WebAgent, prod)"
+            exit 1
+          fi
+          chmod 600 crx-signing.pem
+
+      # crx@5 已标记 deprecated，但仍可生成 CRX3；后续可换维护中的打包工具
+      - name: Pack CRX from dist/
+        run: npx --yes crx@5 pack dist -p crx-signing.pem -o ibb8-web-agent.crx
+
+      - name: Remove signing key from disk
+        if: always()
+        run: rm -f crx-signing.pem
+
+      - name: Build ZIP package for Web Store upload
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f ibb8-web-agent.zip
+          (cd dist && zip -r ../ibb8-web-agent.zip .)
+
+      - name: Resolve Web Store upload inputs
+        shell: bash
+        run: |
+          set -euo pipefail
+          for v in CLIENT_ID CLIENT_SECRET REFRESH_TOKEN; do
+            if [ -z "${!v:-}" ]; then
+              echo "::error::Missing $v in Infisical (prod, /ibb8WebAgent)"
+              exit 1
+            fi
+          done
+          {
+            echo "client_id=${CLIENT_ID}"
+            echo "client_secret=${CLIENT_SECRET}"
+            echo "refresh_token=${REFRESH_TOKEN}"
+            echo "extension_id=${EXTENSION_ID:-$CHROME_EXTENSION_ID_DEFAULT}"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Upload and publish to Chrome Web Store
+        uses: mnao305/chrome-extension-upload@v6.0.0
+        with:
+          file-path: ibb8-web-agent.zip
+          extension-id: ${{ steps.resolve_web_store_upload_inputs.outputs.extension_id }}
+          client-id: ${{ steps.resolve_web_store_upload_inputs.outputs.client_id }}
+          client-secret: ${{ steps.resolve_web_store_upload_inputs.outputs.client_secret }}
+          refresh-token: ${{ steps.resolve_web_store_upload_inputs.outputs.refresh_token }}
+
+      - name: Upload CRX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ibb8-web-agent-${{ steps.ver.outputs.version }}.crx
+          path: ibb8-web-agent.crx
+          if-no-files-found: error
