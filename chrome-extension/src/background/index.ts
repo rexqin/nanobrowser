@@ -238,7 +238,7 @@ async function getLogtoStatus() {
   return { config, session, isAuthenticated };
 }
 
-async function signInWithLogto() {
+async function signInWithLogto(interactive = true) {
   const config = await logtoConfigStore.getConfig();
   if (!config.endpoint || !config.appId) {
     throw new Error('请先在设置页填写 Logto Endpoint 和 App ID');
@@ -261,7 +261,7 @@ async function signInWithLogto() {
   }
 
   const callbackUrl = await chrome.identity.launchWebAuthFlow({
-    interactive: true,
+    interactive,
     url: authUrl.toString(),
   });
 
@@ -339,6 +339,27 @@ async function signOutFromLogto() {
   };
 }
 
+async function syncLogtoSessionWithIdp() {
+  const status = await getLogtoStatus();
+  if (!status.isAuthenticated) {
+    return status;
+  }
+
+  try {
+    // Use non-interactive flow to verify IdP session still exists.
+    return await signInWithLogto(false);
+  } catch {
+    await logtoSessionStore.clearSession();
+    const config = await logtoConfigStore.getConfig();
+    return {
+      isAuthenticated: false,
+      session: null,
+      config,
+      syncedBySilentCheck: true,
+    };
+  }
+}
+
 chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
   if (message?.type === 'logto_get_status') {
     void getLogtoStatus()
@@ -360,6 +381,20 @@ chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
 
   if (message?.type === 'logto_sign_in') {
     void signInWithLogto()
+      .then(status => sendResponse({ ok: true, ...status }))
+      .catch(error => sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) }));
+    return true;
+  }
+
+  if (message?.type === 'logto_sign_in_silent') {
+    void signInWithLogto(false)
+      .then(status => sendResponse({ ok: true, ...status }))
+      .catch(() => sendResponse({ ok: true, silentFailed: true }));
+    return true;
+  }
+
+  if (message?.type === 'logto_sync_session') {
+    void syncLogtoSessionWithIdp()
       .then(status => sendResponse({ ok: true, ...status }))
       .catch(error => sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) }));
     return true;

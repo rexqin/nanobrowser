@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 type LogtoStatusResponse = {
   ok: boolean;
@@ -24,6 +24,7 @@ export const LogtoAuthSettings = () => {
   const [authLoading, setAuthLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<LogtoStatusResponse | null>(null);
+  const silentAttemptedRef = useRef(false);
 
   const displayName = useMemo(() => {
     return (
@@ -47,9 +48,41 @@ export const LogtoAuthSettings = () => {
     }
   }, []);
 
+  const syncStatusWithIdp = useCallback(async () => {
+    try {
+      const nextStatus = await sendLogtoMessage({ type: 'logto_sync_session' });
+      if (nextStatus.ok) {
+        setStatus(nextStatus);
+      }
+    } catch {
+      // Ignore sync failures and keep current local state.
+    }
+  }, []);
+
   useEffect(() => {
     void loadStatus();
   }, [loadStatus]);
+
+  const trySilentSignIn = useCallback(async () => {
+    if (silentAttemptedRef.current || status?.isAuthenticated) {
+      return;
+    }
+    silentAttemptedRef.current = true;
+    try {
+      const nextStatus = await sendLogtoMessage({ type: 'logto_sign_in_silent' });
+      if (nextStatus.ok && nextStatus.isAuthenticated) {
+        setStatus(nextStatus);
+      }
+    } catch {
+      // silent 登录失败时保持未登录状态
+    }
+  }, [status?.isAuthenticated]);
+
+  useEffect(() => {
+    if (!loading) {
+      void trySilentSignIn();
+    }
+  }, [loading, trySilentSignIn]);
 
   useEffect(() => {
     const handleStorageChanged = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
@@ -59,11 +92,15 @@ export const LogtoAuthSettings = () => {
     };
     const handleVisibilityChange = () => {
       if (!document.hidden) {
+        silentAttemptedRef.current = false;
         void loadStatus();
+        void syncStatusWithIdp();
       }
     };
     const handleFocus = () => {
+      silentAttemptedRef.current = false;
       void loadStatus();
+      void syncStatusWithIdp();
     };
 
     chrome.storage.onChanged.addListener(handleStorageChanged);
@@ -75,7 +112,7 @@ export const LogtoAuthSettings = () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
     };
-  }, [loadStatus]);
+  }, [loadStatus, syncStatusWithIdp]);
 
   const signIn = async () => {
     setAuthLoading(true);

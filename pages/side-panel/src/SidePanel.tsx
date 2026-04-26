@@ -97,6 +97,7 @@ const SidePanel = () => {
   const [userPauseHint, setUserPauseHint] = useState<string | null>(null);
   const [logtoStatus, setLogtoStatus] = useState<LogtoStatusResponse | null>(null);
   const [logtoLoading, setLogtoLoading] = useState(false);
+  const silentAttemptedRef = useRef(false);
   const sessionIdRef = useRef<string | null>(null);
   const planExecutionRef = useRef<PlanExecutionState | null>(null);
   const portRef = useRef<chrome.runtime.Port | null>(null);
@@ -134,9 +135,39 @@ const SidePanel = () => {
     }
   }, []);
 
+  const syncLogtoStatusWithIdp = useCallback(async () => {
+    try {
+      const status = (await chrome.runtime.sendMessage({ type: 'logto_sync_session' })) as LogtoStatusResponse;
+      if (status.ok) {
+        setLogtoStatus(status);
+      }
+    } catch {
+      // Ignore sync failures and keep local state.
+    }
+  }, []);
+
   useEffect(() => {
     void loadLogtoStatus();
   }, [loadLogtoStatus]);
+
+  const trySilentSignIn = useCallback(async () => {
+    if (silentAttemptedRef.current || logtoStatus?.isAuthenticated) {
+      return;
+    }
+    silentAttemptedRef.current = true;
+    try {
+      const status = (await chrome.runtime.sendMessage({ type: 'logto_sign_in_silent' })) as LogtoStatusResponse;
+      if (status.ok && status.isAuthenticated) {
+        setLogtoStatus(status);
+      }
+    } catch {
+      // silent 登录失败时保持当前状态
+    }
+  }, [logtoStatus?.isAuthenticated]);
+
+  useEffect(() => {
+    void trySilentSignIn();
+  }, [trySilentSignIn]);
 
   useEffect(() => {
     const handleStorageChanged = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
@@ -155,14 +186,20 @@ const SidePanel = () => {
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
+        silentAttemptedRef.current = false;
         checkModelConfiguration();
         void loadLogtoStatus();
+        void syncLogtoStatusWithIdp();
+        void trySilentSignIn();
       }
     };
 
     const handleFocus = () => {
+      silentAttemptedRef.current = false;
       checkModelConfiguration();
       void loadLogtoStatus();
+      void syncLogtoStatusWithIdp();
+      void trySilentSignIn();
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -172,7 +209,7 @@ const SidePanel = () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
     };
-  }, [checkModelConfiguration, loadLogtoStatus]);
+  }, [checkModelConfiguration, loadLogtoStatus, syncLogtoStatusWithIdp, trySilentSignIn]);
 
   useEffect(() => {
     planExecutionRef.current = planExecution;
