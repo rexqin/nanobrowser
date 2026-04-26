@@ -2,6 +2,13 @@ import fs from 'node:fs';
 import deepmerge from 'deepmerge';
 
 const packageJson = JSON.parse(fs.readFileSync('../package.json', 'utf8'));
+const EXTENSION_PUBLIC_KEY = `MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAog67VgsXWI8tSWRfJfeK
+1/3rOM7CB7ypLFCQgkhurydtPSr/kZlB5A9WvQhRzhxBmVdv25OC76idKfIzKEvk
+1kZ8c/HEm59bsrrGSrYhW4ul9zDg6iCOvPYGQLar9xZvPttg+OrtljuutOyCP5j/
+G93g/uNMDKkaa0ouJecm/MqIoGFCPMgxBYUDXzlxVLTTBhRj9fRr1cjF4HDEKI2U
++n8Vo/cxsVlU8x1YS4XbVC+g8v/Z3gNi6ciBz5rXAbfwez8yXMpks3tluRY5eICQ
+hyhmkz4uHSVKtWEGk4ZXUG0PXQcPQ6vM4PtQ4VD1t0vkT0Ik8B2JAIWQGNeCr5Zz
+aQIDAQAB`.replace(/\s+/g, '');
 
 const isFirefox = process.env.__FIREFOX__ === 'true';
 const isOpera = process.env.__OPERA__ === 'true';
@@ -73,8 +80,18 @@ const manifest = withExternallyConnectableHzgm(
       name: '__MSG_app_metadata_name__',
       version: packageJson.version,
       description: '__MSG_app_metadata_description__',
+      key: EXTENSION_PUBLIC_KEY,
       host_permissions: ['<all_urls>'],
-      permissions: ['storage', 'scripting', 'tabs', 'activeTab', 'debugger', 'unlimitedStorage', 'webNavigation'],
+      permissions: [
+        'storage',
+        'scripting',
+        'tabs',
+        'activeTab',
+        'debugger',
+        'unlimitedStorage',
+        'webNavigation',
+        'identity',
+      ],
       options_page: 'options/index.html',
       background: {
         service_worker: 'background.iife.js',

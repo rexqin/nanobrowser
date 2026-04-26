@@ -6,6 +6,9 @@ import {
   generalSettingsStore,
   llmProviderStore,
   analyticsSettingsStore,
+  logtoConfigStore,
+  logtoSessionStore,
+  type LogtoSession,
 } from '@extension/storage';
 import { t } from '@extension/i18n';
 import {
@@ -147,10 +150,229 @@ analyticsSettingsStore.subscribe(() => {
 });
 
 // Listen for simple messages (e.g., from options page)
-chrome.runtime.onMessage.addListener(() => {
-  // Handle other message types if needed in the future
-  // Return false if response is not sent asynchronously
-  // return false;
+function toBase64Url(data: ArrayBuffer): string {
+  const bytes = new Uint8Array(data);
+  let binary = '';
+  for (const byte of bytes) {
+    binary += String.fromCharCode(byte);
+  }
+  return btoa(binary).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/g, '');
+}
+
+function randomUrlSafeString(bytes = 32): string {
+  const arr = new Uint8Array(bytes);
+  crypto.getRandomValues(arr);
+  return toBase64Url(arr.buffer);
+}
+
+async function sha256Base64Url(value: string): Promise<string> {
+  const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(value));
+  return toBase64Url(digest);
+}
+
+function normalizeEndpoint(endpoint: string): string {
+  return endpoint.replace(/\/+$/, '');
+}
+
+async function exchangeCodeForToken(params: {
+  endpoint: string;
+  appId: string;
+  code: string;
+  redirectUri: string;
+  codeVerifier: string;
+}): Promise<{
+  access_token: string;
+  id_token: string;
+  refresh_token?: string;
+  expires_in?: number;
+  token_type?: string;
+  scope?: string;
+}> {
+  const body = new URLSearchParams({
+    grant_type: 'authorization_code',
+    code: params.code,
+    redirect_uri: params.redirectUri,
+    client_id: params.appId,
+    code_verifier: params.codeVerifier,
+  });
+
+  const response = await fetch(`${normalizeEndpoint(params.endpoint)}/oidc/token`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: body.toString(),
+  });
+
+  if (!response.ok) {
+    const details = await response.text().catch(() => '');
+    throw new Error(`Logto token exchange failed: ${response.status} ${details}`);
+  }
+
+  return (await response.json()) as {
+    access_token: string;
+    id_token: string;
+    refresh_token?: string;
+    expires_in?: number;
+    token_type?: string;
+    scope?: string;
+  };
+}
+
+async function fetchLogtoUserInfo(endpoint: string, accessToken: string): Promise<LogtoSession['userInfo']> {
+  const response = await fetch(`${normalizeEndpoint(endpoint)}/oidc/me`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  if (!response.ok) {
+    return undefined;
+  }
+  return (await response.json()) as LogtoSession['userInfo'];
+}
+
+async function getLogtoStatus() {
+  const config = await logtoConfigStore.getConfig();
+  const session = await logtoSessionStore.getSession();
+  const isAuthenticated = await logtoSessionStore.isAuthenticated();
+  return { config, session, isAuthenticated };
+}
+
+async function signInWithLogto() {
+  const config = await logtoConfigStore.getConfig();
+  if (!config.endpoint || !config.appId) {
+    throw new Error('请先在设置页填写 Logto Endpoint 和 App ID');
+  }
+
+  const state = randomUrlSafeString(24);
+  const codeVerifier = randomUrlSafeString(64);
+  const codeChallenge = await sha256Base64Url(codeVerifier);
+  const redirectUri = chrome.identity.getRedirectURL('logto');
+  const authUrl = new URL(`${normalizeEndpoint(config.endpoint)}/oidc/auth`);
+  authUrl.searchParams.set('client_id', config.appId);
+  authUrl.searchParams.set('redirect_uri', redirectUri);
+  authUrl.searchParams.set('response_type', 'code');
+  authUrl.searchParams.set('scope', config.scope || 'openid profile email offline_access');
+  authUrl.searchParams.set('code_challenge', codeChallenge);
+  authUrl.searchParams.set('code_challenge_method', 'S256');
+  authUrl.searchParams.set('state', state);
+  if (config.resource.trim()) {
+    authUrl.searchParams.set('resource', config.resource.trim());
+  }
+
+  const callbackUrl = await chrome.identity.launchWebAuthFlow({
+    interactive: true,
+    url: authUrl.toString(),
+  });
+
+  if (!callbackUrl) {
+    throw new Error('登录失败：未收到回调地址');
+  }
+
+  const callback = new URL(callbackUrl);
+  const error = callback.searchParams.get('error');
+  if (error) {
+    const errorDescription = callback.searchParams.get('error_description') || error;
+    throw new Error(`登录失败：${errorDescription}`);
+  }
+
+  const returnedState = callback.searchParams.get('state');
+  if (!returnedState || returnedState !== state) {
+    throw new Error('登录失败：state 校验不通过');
+  }
+
+  const code = callback.searchParams.get('code');
+  if (!code) {
+    throw new Error('登录失败：缺少授权码');
+  }
+
+  const tokenResponse = await exchangeCodeForToken({
+    endpoint: config.endpoint,
+    appId: config.appId,
+    code,
+    redirectUri,
+    codeVerifier,
+  });
+
+  const userInfo = await fetchLogtoUserInfo(config.endpoint, tokenResponse.access_token);
+  const session: LogtoSession = {
+    accessToken: tokenResponse.access_token,
+    idToken: tokenResponse.id_token,
+    refreshToken: tokenResponse.refresh_token,
+    expiresAt: Date.now() + (tokenResponse.expires_in ?? 3600) * 1000,
+    tokenType: tokenResponse.token_type ?? 'Bearer',
+    scope: tokenResponse.scope ?? config.scope,
+    userInfo,
+  };
+  await logtoSessionStore.setSession(session);
+
+  return {
+    isAuthenticated: true,
+    config,
+    session,
+  };
+}
+
+async function signOutFromLogto() {
+  const session = await logtoSessionStore.getSession();
+  const config = await logtoConfigStore.getConfig();
+  await logtoSessionStore.clearSession();
+
+  if (session?.idToken && config.endpoint) {
+    const logoutUrl = new URL(`${normalizeEndpoint(config.endpoint)}/oidc/session/end`);
+    logoutUrl.searchParams.set('post_logout_redirect_uri', chrome.identity.getRedirectURL('logto-logout'));
+    logoutUrl.searchParams.set('id_token_hint', session.idToken);
+    try {
+      await chrome.identity.launchWebAuthFlow({
+        interactive: false,
+        url: logoutUrl.toString(),
+      });
+    } catch (error) {
+      logger.warning('Logto logout flow failed, local session is cleared', error);
+    }
+  }
+
+  return {
+    isAuthenticated: false,
+    session: null,
+    config,
+  };
+}
+
+chrome.runtime.onMessage.addListener((message, _sender, sendResponse) => {
+  if (message?.type === 'logto_get_status') {
+    void getLogtoStatus()
+      .then(status => sendResponse({ ok: true, ...status }))
+      .catch(error => sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) }));
+    return true;
+  }
+
+  if (message?.type === 'logto_update_config') {
+    void logtoConfigStore
+      .updateConfig(message?.config ?? {})
+      .then(async () => {
+        const status = await getLogtoStatus();
+        sendResponse({ ok: true, ...status });
+      })
+      .catch(error => sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) }));
+    return true;
+  }
+
+  if (message?.type === 'logto_sign_in') {
+    void signInWithLogto()
+      .then(status => sendResponse({ ok: true, ...status }))
+      .catch(error => sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) }));
+    return true;
+  }
+
+  if (message?.type === 'logto_sign_out') {
+    void signOutFromLogto()
+      .then(status => sendResponse({ ok: true, ...status }))
+      .catch(error => sendResponse({ ok: false, error: error instanceof Error ? error.message : String(error) }));
+    return true;
+  }
+
+  return false;
 });
 
 // Web pages under https://*.hzgm.tech (see manifest externally_connectable)

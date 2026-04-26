@@ -28,6 +28,19 @@ declare global {
   }
 }
 
+type LogtoStatusResponse = {
+  ok: boolean;
+  error?: string;
+  isAuthenticated?: boolean;
+  session?: {
+    userInfo?: {
+      name?: string;
+      username?: string;
+      email?: string;
+    };
+  } | null;
+};
+
 function isTerminalExecutionState(state: ExecutionState): boolean {
   return (
     state === ExecutionState.ACT_OK ||
@@ -82,6 +95,8 @@ const SidePanel = () => {
   const [hasConfiguredModels, setHasConfiguredModels] = useState<boolean | null>(null); // null = loading, false = no models, true = has models
   const [taskAwaitingUserResume, setTaskAwaitingUserResume] = useState(false);
   const [userPauseHint, setUserPauseHint] = useState<string | null>(null);
+  const [logtoStatus, setLogtoStatus] = useState<LogtoStatusResponse | null>(null);
+  const [logtoLoading, setLogtoLoading] = useState(false);
   const sessionIdRef = useRef<string | null>(null);
   const planExecutionRef = useRef<PlanExecutionState | null>(null);
   const portRef = useRef<chrome.runtime.Port | null>(null);
@@ -107,6 +122,21 @@ const SidePanel = () => {
   useEffect(() => {
     checkModelConfiguration();
   }, [checkModelConfiguration]);
+
+  const loadLogtoStatus = useCallback(async () => {
+    try {
+      const status = (await chrome.runtime.sendMessage({ type: 'logto_get_status' })) as LogtoStatusResponse;
+      if (status.ok) {
+        setLogtoStatus(status);
+      }
+    } catch (error) {
+      console.error('Failed to load logto status:', error);
+    }
+  }, []);
+
+  useEffect(() => {
+    void loadLogtoStatus();
+  }, [loadLogtoStatus]);
 
   // Re-check model configuration when the side panel becomes visible again
   useEffect(() => {
@@ -504,7 +534,7 @@ const SidePanel = () => {
       setPanelNotice(t('errors_conn_serviceWorker'));
       portRef.current = null;
     }
-  }, [handleTaskState, stopConnection, loadPlanMetadatas]);
+  }, [appendPlanStepActivityLine, handleTaskState, stopConnection, loadPlanMetadatas]);
 
   // Add safety check for message sending
   const sendMessage = useCallback(
@@ -677,6 +707,24 @@ const SidePanel = () => {
       }
     }
   };
+
+  const handleLogtoAction = useCallback(async () => {
+    setLogtoLoading(true);
+    try {
+      const status = (await chrome.runtime.sendMessage({
+        type: logtoStatus?.isAuthenticated ? 'logto_sign_out' : 'logto_sign_in',
+      })) as LogtoStatusResponse;
+      if (status.ok) {
+        setLogtoStatus(status);
+      } else {
+        setPanelNotice(status.error || '登录状态更新失败');
+      }
+    } catch (error) {
+      setPanelNotice(error instanceof Error ? error.message : String(error));
+    } finally {
+      setLogtoLoading(false);
+    }
+  }, [logtoStatus?.isAuthenticated]);
 
   useEffect(() => {
     const run = async () => {
@@ -939,6 +987,19 @@ const SidePanel = () => {
             )}
           </div>
           <div className="header-icons">
+            <button
+              type="button"
+              onClick={() => {
+                void handleLogtoAction();
+              }}
+              className="rounded px-2 py-1 text-xs font-medium text-[#8a490d] hover:bg-[#fdb56f]/25"
+              aria-label={logtoStatus?.isAuthenticated ? 'Sign out' : 'Sign in'}>
+              {logtoLoading
+                ? '处理中...'
+                : logtoStatus?.isAuthenticated
+                  ? `${logtoStatus.session?.userInfo?.name || logtoStatus.session?.userInfo?.email || '已登录'} / 退出`
+                  : 'Logto 登录'}
+            </button>
             {panelPage === 'plan_list' && (
               <>
                 <button
