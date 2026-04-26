@@ -17,7 +17,7 @@ const TABS: { id: TabTypes; icon: React.ComponentType<{ className?: string }>; l
   { id: 'models', icon: FiCpu, label: t('options_tabs_models') },
   { id: 'firewall', icon: FiShield, label: t('options_tabs_firewall') },
   { id: 'analytics', icon: FiTrendingUp, label: t('options_tabs_analytics') },
-  { id: 'auth', icon: FiUserCheck, label: '登录' },
+  { id: 'auth', icon: FiUserCheck, label: '账号' },
 ];
 
 const Options = () => {

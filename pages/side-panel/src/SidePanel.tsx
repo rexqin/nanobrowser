@@ -138,16 +138,31 @@ const SidePanel = () => {
     void loadLogtoStatus();
   }, [loadLogtoStatus]);
 
+  useEffect(() => {
+    const handleStorageChanged = (changes: { [key: string]: chrome.storage.StorageChange }, areaName: string) => {
+      if (areaName === 'local' && changes['logto-auth-session']) {
+        void loadLogtoStatus();
+      }
+    };
+
+    chrome.storage.onChanged.addListener(handleStorageChanged);
+    return () => {
+      chrome.storage.onChanged.removeListener(handleStorageChanged);
+    };
+  }, [loadLogtoStatus]);
+
   // Re-check model configuration when the side panel becomes visible again
   useEffect(() => {
     const handleVisibilityChange = () => {
       if (!document.hidden) {
         checkModelConfiguration();
+        void loadLogtoStatus();
       }
     };
 
     const handleFocus = () => {
       checkModelConfiguration();
+      void loadLogtoStatus();
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -157,7 +172,7 @@ const SidePanel = () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
     };
-  }, [checkModelConfiguration]);
+  }, [checkModelConfiguration, loadLogtoStatus]);
 
   useEffect(() => {
     planExecutionRef.current = planExecution;
@@ -709,11 +724,12 @@ const SidePanel = () => {
   };
 
   const handleLogtoAction = useCallback(async () => {
+    if (logtoStatus?.isAuthenticated) {
+      return;
+    }
     setLogtoLoading(true);
     try {
-      const status = (await chrome.runtime.sendMessage({
-        type: logtoStatus?.isAuthenticated ? 'logto_sign_out' : 'logto_sign_in',
-      })) as LogtoStatusResponse;
+      const status = (await chrome.runtime.sendMessage({ type: 'logto_sign_in' })) as LogtoStatusResponse;
       if (status.ok) {
         setLogtoStatus(status);
       } else {
@@ -992,13 +1008,14 @@ const SidePanel = () => {
               onClick={() => {
                 void handleLogtoAction();
               }}
+              disabled={logtoLoading || Boolean(logtoStatus?.isAuthenticated)}
               className="rounded px-2 py-1 text-xs font-medium text-[#8a490d] hover:bg-[#fdb56f]/25"
-              aria-label={logtoStatus?.isAuthenticated ? 'Sign out' : 'Sign in'}>
+              aria-label={logtoStatus?.isAuthenticated ? 'Signed in' : 'Quick sign in'}>
               {logtoLoading
                 ? '处理中...'
                 : logtoStatus?.isAuthenticated
-                  ? `${logtoStatus.session?.userInfo?.name || logtoStatus.session?.userInfo?.email || '已登录'} / 退出`
-                  : 'Logto 登录'}
+                  ? `${logtoStatus.session?.userInfo?.name || logtoStatus.session?.userInfo?.email || '已登录'}`
+                  : '快速登录'}
             </button>
             {panelPage === 'plan_list' && (
               <>
