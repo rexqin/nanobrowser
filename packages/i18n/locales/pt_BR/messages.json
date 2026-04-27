@@ -1,11 +1,11 @@
 {
   "app_metadata_description": {
     "description": "Descrição da extensão",
-    "message": "Automatize tarefas da web com IA! iBB8 é uma extensão de código aberto para o navegador que permite extrair dados, preencher formulários e muito mais."
+    "message": "Automatize tarefas da web com IA! Gamtech é uma extensão de código aberto para o navegador que permite extrair dados, preencher formulários e muito mais."
   },
   "app_metadata_name": {
     "description": "Nome da extensão",
-    "message": "iBB8: Agente Web de IA e Automação"
+    "message": "Gamtech: Agente Web de IA e Automação"
   },
   "errors_unknown": {
     "message": "Ocorreu um erro desconhecido"
@@ -265,7 +265,7 @@
     "message": "Ativar Entrada de Voz"
   },
   "permissions_microphone_description": {
-    "message": "O iBB8 precisa de acesso ao microfone para converter sua fala em texto."
+    "message": "O Gamtech precisa de acesso ao microfone para converter sua fala em texto."
   },
   "permissions_microphone_grantButton": {
     "message": "Conceder Permissão ao Microfone"
@@ -317,7 +317,7 @@
     "message": "Falha ao carregar as configurações de análise."
   },
   "options_analytics_helpImprove": {
-    "message": "Ajude a melhorar o iBB8"
+    "message": "Ajude a melhorar o Gamtech"
   },
   "options_analytics_toggle_a11y": {
     "message": "Ativar ou desativar análises"
@@ -359,7 +359,7 @@
     "message": "Quaisquer dados sensíveis ou privados"
   },
   "options_analytics_disabled_notice": {
-    "message": "Análises desativadas. Você pode reativá-las a qualquer momento para ajudar a melhorar o iBB8."
+    "message": "Análises desativadas. Você pode reativá-las a qualquer momento para ajudar a melhorar o Gamtech."
   },
 
   "options_general_header": {

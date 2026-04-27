@@ -1005,7 +1005,7 @@ const SidePanel = () => {
             {hasConfiguredModels === false && (
               <div className={`flex flex-1 items-center justify-center p-8 ${helperTextClassName}`}>
                 <div className="max-w-md text-center">
-                  <img src="/landscape.png" alt="iBB8 Logo" className="mx-auto mb-4 h-16" />
+                  <img src="/landscape.png" alt="Gamtech Logo" className="mx-auto mb-4 h-16" />
 
                   <p className="mb-4">{t('welcome_instruction')}</p>
                   <button

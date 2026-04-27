@@ -1,11 +1,11 @@
 {
   "app_metadata_description": {
     "description": "Extension description",
-    "message": "Automate web tasks with AI! iBB8 is an open-source browser extension that lets you extract data, fill forms, and more."
+    "message": "Automate web tasks with AI! Gamtech is an open-source browser extension that lets you extract data, fill forms, and more."
   },
   "app_metadata_name": {
     "description": "Extension name",
-    "message": "iBB8: AI Web Agent & Automation"
+    "message": "Gamtech: AI Web Agent & Automation"
   },
   "errors_unknown": {
     "message": "Unknown error occurred"
@@ -264,7 +264,7 @@
     "message": "Enable Voice Input"
   },
   "permissions_microphone_description": {
-    "message": "iBB8 needs microphone access to convert your speech to text."
+    "message": "Gamtech needs microphone access to convert your speech to text."
   },
   "permissions_microphone_grantButton": {
     "message": "Grant Microphone Permission"
@@ -316,7 +316,7 @@
     "message": "Failed to load analytics settings."
   },
   "options_analytics_helpImprove": {
-    "message": "Help improve iBB8"
+    "message": "Help improve Gamtech"
   },
   "options_analytics_toggle_a11y": {
     "message": "Toggle analytics"
@@ -358,7 +358,7 @@
     "message": "Any sensitive or private data"
   },
   "options_analytics_disabled_notice": {
-    "message": "Analytics disabled. You can re-enable it anytime to help improve iBB8."
+    "message": "Analytics disabled. You can re-enable it anytime to help improve Gamtech."
   },
 
   "options_general_header": {

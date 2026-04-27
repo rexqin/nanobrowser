@@ -14,7 +14,7 @@
 #   若 INFISICAL_OIDC_IDENTITY_ID 放在 GitHub Environment 的 Secrets 里，请在本 job 增加
 #     environment: <与 Environment 名称一致>，否则该 secret 对 job 不可见。
 #
-# Infisical：环境 prod，路径 /ibb8WebAgent（recursive）建议包含
+# Infisical：环境 prod，路径 /gramtechWebAgent（recursive）建议包含
 #   CLIENT_ID / CLIENT_SECRET / REFRESH_TOKEN   Chrome Web Store API OAuth（见 chrome-webstore-upload-keys）
 #   CRX_PRIVATE_KEY                             RSA PEM 多行私钥，用于 crx pack（也可用 CRX_PRIVATE_KEY_B64）
 #   可选 EXTENSION_ID                           不设则使用下方 workflow 中的默认扩展 ID
@@ -69,14 +69,14 @@ jobs:
           fi
           echo "version=$V" >> "$GITHUB_OUTPUT"
 
-      - name: Load secrets from Infisical (prod, /ibb8WebAgent)
+      - name: Load secrets from Infisical (prod, /gramtechWebAgent)
         uses: Infisical/secrets-action@v1.0.15
         with:
           method: oidc
           identity-id: ${{ secrets.INFISICAL_OIDC_IDENTITY_ID }}
           env-slug: prod
           project-slug: ${{ vars.INFISICAL_PROJECT_SLUG }}
-          secret-path: /ibb8WebAgent
+          secret-path: /gramtechWebAgent
           export-type: env
           recursive: true
           domain: ${{ vars.INFISICAL_DOMAIN != '' && vars.INFISICAL_DOMAIN || 'https://app.infisical.com' }}
@@ -108,14 +108,14 @@ jobs:
           elif [ -n "${CRX_PRIVATE_KEY:-}" ]; then
             printf '%s\n' "$CRX_PRIVATE_KEY" > crx-signing.pem
           else
-            echo "::error::Set CRX_PRIVATE_KEY or CRX_PRIVATE_KEY_B64 in Infisical (/ibb8WebAgent, prod)"
+            echo "::error::Set CRX_PRIVATE_KEY or CRX_PRIVATE_KEY_B64 in Infisical (/gramtechWebAgent, prod)"
             exit 1
           fi
           chmod 600 crx-signing.pem
 
       # crx@5 已标记 deprecated，但仍可生成 CRX3；后续可换维护中的打包工具
       - name: Pack CRX from dist/
-        run: npx --yes crx@5 pack dist -p crx-signing.pem -o ibb8-web-agent.crx
+        run: npx --yes crx@5 pack dist -p crx-signing.pem -o gramtech-web-agent.crx
 
       - name: Remove signing key from disk
         if: always()
@@ -125,8 +125,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          rm -f ibb8-web-agent.zip
-          (cd dist && zip -r ../ibb8-web-agent.zip .)
+          rm -f gramtech-web-agent.zip
+          (cd dist && zip -r ../gramtech-web-agent.zip .)
 
       - name: Resolve Web Store upload inputs
         shell: bash
@@ -134,7 +134,7 @@ jobs:
           set -euo pipefail
           for v in CLIENT_ID CLIENT_SECRET REFRESH_TOKEN; do
             if [ -z "${!v:-}" ]; then
-              echo "::error::Missing $v in Infisical (prod, /ibb8WebAgent)"
+              echo "::error::Missing $v in Infisical (prod, /gramtechWebAgent)"
               exit 1
             fi
           done
@@ -148,7 +148,7 @@ jobs:
       - name: Upload and publish to Chrome Web Store
         uses: mnao305/chrome-extension-upload@v6.0.0
         with:
-          file-path: ibb8-web-agent.zip
+          file-path: gramtech-web-agent.zip
           extension-id: ${{ steps.resolve_web_store_upload_inputs.outputs.extension_id }}
           client-id: ${{ steps.resolve_web_store_upload_inputs.outputs.client_id }}
           client-secret: ${{ steps.resolve_web_store_upload_inputs.outputs.client_secret }}
@@ -157,6 +157,6 @@ jobs:
       - name: Upload CRX artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ibb8-web-agent-${{ steps.ver.outputs.version }}.crx
-          path: ibb8-web-agent.crx
+          name: gramtech-web-agent-${{ steps.ver.outputs.version }}.crx
+          path: gramtech-web-agent.crx
           if-no-files-found: error

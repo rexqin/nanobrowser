@@ -1,11 +1,11 @@
-# iBB8 Web Agent 隐私政策（Privacy Policy）
+# Gamtech Web Agent 隐私政策（Privacy Policy）
 
 生效日期：2026-04-13  
-适用产品：iBB8 Web Agent Chrome Extension（Manifest V3）
+适用产品：Gamtech Web Agent Chrome Extension（Manifest V3）
 
 ## 1. 我们是谁
 
-iBB8 Web Agent 是一个AI 网页自动化浏览器扩展，用于帮助用户按计划在网页中执行自动化任务。
+Gamtech Web Agent 是一个AI 网页自动化浏览器扩展，用于帮助用户按计划在网页中执行自动化任务。
 
 ## 2. 本政策涵盖的数据范围
 

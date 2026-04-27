@@ -360,8 +360,8 @@ export function createChatModel(providerConfig: ProviderConfig, modelConfig: Mod
       console.log('[createChatModel] Calling createOpenAIChatModel for OpenRouter');
       return createOpenAIChatModel(providerConfig, modelConfig, {
         headers: {
-          'HTTP-Referer': 'https://ibb8.store',
-          'X-Title': 'iBB8',
+          'HTTP-Referer': 'https://gramtech.store',
+          'X-Title': 'Gamtech',
         },
       });
     }

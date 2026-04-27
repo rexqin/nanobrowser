@@ -1,11 +1,11 @@
 {
   "app_metadata_description": {
     "description": "Extension description",
-    "message": "使用 AI 自動化網頁任務！iBB8 是一款開放原始碼的瀏覽器擴充功能，能協助您擷取資料、填寫表單等。"
+    "message": "使用 AI 自動化網頁任務！Gamtech 是一款開放原始碼的瀏覽器擴充功能，能協助您擷取資料、填寫表單等。"
   },
   "app_metadata_name": {
     "description": "Extension name",
-    "message": "iBB8：AI 網頁代理程式與自動化"
+    "message": "Gamtech：AI 網頁代理程式與自動化"
   },
   "errors_unknown": {
     "message": "發生未知錯誤"
@@ -265,7 +265,7 @@
     "message": "啟用語音輸入"
   },
   "permissions_microphone_description": {
-    "message": "iBB8 需要麥克風存取權限，才能將語音轉換為文字。"
+    "message": "Gamtech 需要麥克風存取權限，才能將語音轉換為文字。"
   },
   "permissions_microphone_grantButton": {
     "message": "授予麥克風權限"
@@ -317,7 +317,7 @@
     "message": "無法載入資料統計設定。"
   },
   "options_analytics_helpImprove": {
-    "message": "協助改進 iBB8"
+    "message": "協助改進 Gamtech"
   },
   "options_analytics_toggle_a11y": {
     "message": "切換使用情況統計"
@@ -359,7 +359,7 @@
     "message": "任何敏感或隱私資料"
   },
   "options_analytics_disabled_notice": {
-    "message": "已關閉資料統計。您可隨時重新開啟，以協助改進 iBB8。"
+    "message": "已關閉資料統計。您可隨時重新開啟，以協助改進 Gamtech。"
   },
 
   "options_general_header": {

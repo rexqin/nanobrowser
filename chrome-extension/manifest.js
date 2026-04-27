@@ -39,7 +39,7 @@ function withOperaSidebar(manifest) {
   return deepmerge(manifest, {
     sidebar_action: {
       default_panel: 'side-panel/index.html',
-      default_title: 'iBB8',
+      default_title: 'Gamtech',
       default_icon: 'logo-32.png',
     },
   });

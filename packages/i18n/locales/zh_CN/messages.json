@@ -1,11 +1,11 @@
 {
   "app_metadata_description": {
     "description": "Extension description",
-    "message": "iBB8 是一款浏览器自动化扩展，定制自定义计划列表，自动化执行网页任务。"
+    "message": "Gamtech 是一款浏览器自动化扩展，定制自定义计划列表，自动化执行网页任务。"
   },
   "app_metadata_name": {
     "description": "Extension name",
-    "message": "iBB8：AI网页自动化工具"
+    "message": "Gamtech：AI网页自动化工具"
   },
   "errors_unknown": {
     "message": "发生未知错误"
@@ -263,7 +263,7 @@
     "message": "启用语音输入"
   },
   "permissions_microphone_description": {
-    "message": "iBB8 需要麦克风存取权限，才能将语音转换为文字。"
+    "message": "Gamtech 需要麦克风存取权限，才能将语音转换为文字。"
   },
   "permissions_microphone_grantButton": {
     "message": "授予麦克风权限"
@@ -315,7 +315,7 @@
     "message": "无法加载数据统计设置。"
   },
   "options_analytics_helpImprove": {
-    "message": "帮助改进 iBB8"
+    "message": "帮助改进 Gamtech"
   },
   "options_analytics_toggle_a11y": {
     "message": "开关使用情况统计"
@@ -357,7 +357,7 @@
     "message": "任何敏感或隐私数据"
   },
   "options_analytics_disabled_notice": {
-    "message": "已关闭数据统计。您可随时重新开启，以帮助改进 iBB8。"
+    "message": "已关闭数据统计。您可随时重新开启，以帮助改进 Gamtech。"
   },
 
   "options_general_header": {
